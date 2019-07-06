@@ -1,0 +1,1 @@
+/home/mateusz/Dokumenty/___STM32/ParaTNC-ARM-lite/system/include/drivers/tx20.h
