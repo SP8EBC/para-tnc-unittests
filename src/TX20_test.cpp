@@ -69,21 +69,21 @@ BOOST_FIXTURE_TEST_CASE(equal_samples, fixture) {
 
 BOOST_FIXTURE_TEST_CASE(equal_samples_above_slew_liit, fixture) {
 	VNAME.Data.WindDirX = (short)(1 * 22.5);
-	VNAME.Data.WindSpeed = (float)60*0.1;
+	VNAME.Data.WindSpeed = (float)100*0.1;
 	VNAME.Data.CalcChecksum = 0;
 	VNAME.Data.Checksum = 0;
 
 	TX20DataAverage();
 
 	VNAME.Data.WindDirX = (short)(1 * 22.5);
-	VNAME.Data.WindSpeed = (float)60*0.1;
+	VNAME.Data.WindSpeed = (float)100*0.1;
 	VNAME.Data.CalcChecksum = 0;
 	VNAME.Data.Checksum = 0;
 
 	TX20DataAverage();
 
 	BOOST_CHECK_EQUAL(rte_wx_tx20_excessive_slew_rate, 0);
-	BOOST_CHECK_CLOSE(VNAME.HistoryAVG[0].WindSpeed, 6.0f, 0.1f);
+	BOOST_CHECK_CLOSE(VNAME.HistoryAVG[0].WindSpeed, 10.0f, 0.1f);
 	BOOST_CHECK_CLOSE(VNAME.HistoryAVG[0].WindDirX, 22.5f, 7.5f);
 
 }
@@ -126,7 +126,7 @@ BOOST_FIXTURE_TEST_CASE(sleew_rate, fixture) {
 	TX20DataAverage();
 
 	VNAME.Data.WindDirX = (short)(1 * 22.5);
-	VNAME.Data.WindSpeed = (float)100*0.1;
+	VNAME.Data.WindSpeed = (float)120*0.1;
 	VNAME.Data.CalcChecksum = 0;
 	VNAME.Data.Checksum = 0;
 
