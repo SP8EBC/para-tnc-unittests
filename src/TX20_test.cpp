@@ -6,7 +6,7 @@
  */
 
 extern "C" {
-#include "tx20.h"
+#include "./drivers/tx20.h"
 #include "stdperiph_stubs.h"
 }
 

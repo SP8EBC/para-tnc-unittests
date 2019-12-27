@@ -1,1 +1,1 @@
-/home/mateusz/Dokumenty/___STM32/ParaTNC-ARM-lite/system/src/drivers/tx20.c
+/home/mateusz/Dokumenty/___STM32/ParaTNC/system/src/drivers/tx20.c

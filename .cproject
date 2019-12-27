@@ -25,10 +25,10 @@
 								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.1468344868" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.dialect.std.1580286033" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1753781259" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ParaTNC-ARM-lite/system/include/cmsis}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ParaTNC-ARM-lite/system/include/stm32f1-stdperiph}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ParaTNC/system/include/cmsis}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ParaTNC/system/include/stm32f1-stdperiph}&quot;"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.1381285897" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
+								<option id="gnu.cpp.compiler.option.preprocessor.def.1381285897" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32F10X_HD_VL"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1964429568" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -37,10 +37,10 @@
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.exe.debug.option.optimization.level.1254549911" name="Optimization Level" superClass="gnu.c.compiler.exe.debug.option.optimization.level" useByScannerDiscovery="false" valueType="enumerated"/>
 								<option id="gnu.c.compiler.exe.debug.option.debugging.level.1374294327" name="Debug Level" superClass="gnu.c.compiler.exe.debug.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.3459070" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ParaTNC-ARM-lite/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ParaTNC-ARM-lite/system/include/stm32f1-stdperiph}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ParaTNC-ARM-lite/system/include/cmsis}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ParaTNC-ARM-lite/system/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ParaTNC/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ParaTNC/system/include/stm32f1-stdperiph}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ParaTNC/system/include/cmsis}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ParaTNC/system/include}&quot;"/>
 								</option>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1011650887" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32F10X_HD_VL"/>

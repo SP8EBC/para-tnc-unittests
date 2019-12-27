@@ -1,0 +1,1 @@
+/home/mateusz/Dokumenty/___STM32/ParaTNC/system/src/drivers/analog_anemometer.c
