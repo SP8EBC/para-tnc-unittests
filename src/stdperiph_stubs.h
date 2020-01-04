@@ -16,8 +16,6 @@ void GPIO_ResetBits(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
 
 void TX20BlinkLed();
 
-extern uint8_t rte_wx_tx20_excessive_slew_rate;
-
 
 
 #endif /* STDPERIPH_STUBS_H_ */

@@ -10,7 +10,7 @@
 extern "C" {
 #include "drivers/analog_anemometer.h"
 #include "stdperiph_stubs.h"
-#include "rte_wx_stubs.h"
+#include "rte_wx.h"
 #include "other_stubs.h"
 }
 

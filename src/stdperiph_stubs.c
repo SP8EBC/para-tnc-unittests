@@ -66,5 +66,3 @@ void DMA_DeInit(DMA_Channel_TypeDef* DMAy_Channelx) {
 void DMA_Init(DMA_Channel_TypeDef* DMAy_Channelx, DMA_InitTypeDef* DMA_InitStruct) {
 
 }
-
-uint8_t rte_wx_tx20_excessive_slew_rate = 0;
