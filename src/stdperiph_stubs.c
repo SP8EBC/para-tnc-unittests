@@ -43,6 +43,19 @@ void TIM_TIxExternalClockConfig(TIM_TypeDef* TIMx, uint16_t TIM_TIxExternalCLKSo
 
 }
 
+void TIM_ETRClockMode2Config(TIM_TypeDef* TIMx, uint16_t TIM_ExtTRGPrescaler,
+                             uint16_t TIM_ExtTRGPolarity, uint16_t ExtTRGFilter) {
+
+}
+
+void TIM_SetCounter(TIM_TypeDef* TIMx, uint16_t Counter) {
+
+}
+
+uint16_t TIM_GetCounter(TIM_TypeDef* TIMx) {
+	return 0;
+}
+
 void TIM_Cmd(TIM_TypeDef* TIMx, FunctionalState NewState) {
 
 }
