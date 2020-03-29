@@ -8,6 +8,8 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include src/tests/subdir.mk
+-include src/stubs/subdir.mk
 -include src/src/umb_master/subdir.mk
 -include src/subdir.mk
 -include subdir.mk

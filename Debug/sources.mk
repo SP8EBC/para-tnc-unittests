@@ -25,4 +25,6 @@ C_DEPS :=
 SUBDIRS := \
 src \
 src/src/umb_master \
+src/stubs \
+src/tests \
 

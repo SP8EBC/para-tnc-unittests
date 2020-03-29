@@ -54,3 +54,7 @@ void srl_keep_timeout(void) {
 void srl_switch_timeout(uint8_t disable_enable, uint32_t value) {
 
 }
+
+void srl_switch_timeout_for_waiting(uint8_t in) {
+
+}
