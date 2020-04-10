@@ -129,6 +129,40 @@ struct fixture_int32 {
 	}
 };
 
+BOOST_FIXTURE_TEST_CASE(status_string, fixture_1) {
+	char buffer[128];
+	memset(buffer, 0x00, 0x80);
+	uint16_t string_ln;
+
+	ctx.trigger_status_msg = 1;
+	ctx.nok_error_codes[0] = 0x12;
+	ctx.nok_error_codes[1] = 0x32;
+	ctx.nok_error_codes[2] = 0x42;
+	ctx.nok_error_codes[3] = 0xF2;
+
+	umb_construct_status_str(&ctx, buffer, 128, &string_ln, 0x1234);
+
+	return;
+
+}
+
+BOOST_FIXTURE_TEST_CASE(status_string_too_small_buff, fixture_1) {
+	char buffer[66];
+	memset(buffer, 0x00, 66);
+	uint16_t string_ln;
+
+	ctx.trigger_status_msg = 1;
+	ctx.nok_error_codes[0] = 0x12;
+	ctx.nok_error_codes[1] = 0x32;
+	ctx.nok_error_codes[2] = 0x42;
+	ctx.nok_error_codes[3] = 0xF2;
+
+	umb_construct_status_str(&ctx, buffer, 66, &string_ln, 0x1234);
+
+	return;
+
+}
+
 BOOST_FIXTURE_TEST_CASE(offline_data_callback_1, fixture_1) {
 	umb_retval_t returnvalue;
 	umb_frame_t frame;
