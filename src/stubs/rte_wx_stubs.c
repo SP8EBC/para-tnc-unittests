@@ -33,10 +33,21 @@ int16_t rte_wx_average_winddirection = 0;
 
 uint8_t rte_wx_tx20_excessive_slew_rate = 0;
 
+int8_t rte_wx_humidity = 0, rte_wx_humidity_valid = 0;
+
 dht22Values rte_wx_dht, rte_wx_dht_valid;		// quality factor inside this structure
 dallas_qf_t rte_wx_current_dallas_qf, rte_wx_error_dallas_qf = DALLAS_QF_UNKNOWN;
 dallas_average_t rte_wx_dallas_average;
-ms5611_qf_t rte_wx_ms5611_qf;
+
+analog_wind_qf_t rte_wx_wind_qf = AN_WIND_QF_UNKNOWN;
+
+#ifdef _SENSOR_MS5611
+extern ms5611_qf_t rte_wx_ms5611_qf;
+#endif
+
+#ifdef _SENSOR_BME280
+extern bme280_qf_t rte_wx_bme280_qf;
+#endif
 
 #ifdef _UMB_MASTER
 umb_frame_t rte_wx_umb;

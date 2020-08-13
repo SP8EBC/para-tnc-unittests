@@ -1,0 +1,7 @@
+#define SYSTICK_TICKS_PER_SECONDS 100
+#define SYSTICK_TICKS_PERIOD 10
+
+#define INTERNAL_WATCHDOG
+#define EXTERNAL_WATCHDOG
+
+extern uint32_t master_time;

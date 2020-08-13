@@ -1,1 +1,0 @@
-/home/mateusz/Dokumenty/___STM32/ParaTNC/include/station_config.h

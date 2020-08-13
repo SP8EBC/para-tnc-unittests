@@ -11,6 +11,7 @@ RM := rm -rf
 -include src/tests/subdir.mk
 -include src/stubs/subdir.mk
 -include src/src/umb_master/subdir.mk
+-include src/src/davis_vantage/subdir.mk
 -include src/subdir.mk
 -include subdir.mk
 -include objects.mk

@@ -23,7 +23,7 @@ C_DEPS += \
 src/%.o: ../src/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C Compiler'
-	gcc -DSTM32F10X_HD_VL -D_ANEMOMETER_ANALOGUE -I"/home/mateusz/Dokumenty/___STM32/ParaTNC/include" -I"/home/mateusz/Dokumenty/___STM32/ParaTNC/system/include/cmsis" -I"/home/mateusz/Dokumenty/___STM32/ParaTNC/system/include/stm32f1-stdperiph" -I"/home/mateusz/Dokumenty/___STM32/ParaTNC_unit_tests/src/inc" -I"/home/mateusz/Dokumenty/___STM32/ParaTNC_unit_tests/src/drivers" -I"/home/mateusz/Dokumenty/___STM32/ParaTNC_unit_tests/src" -I"/home/mateusz/Dokumenty/___STM32/ParaTNC_unit_tests/src/stubs" -I"/home/mateusz/Dokumenty/___STM32/ParaTNC/system/include" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	gcc -DSTM32F10X_HD_VL -D_ANEMOMETER_ANALOGUE -I"/home/mateusz/Dokumenty/___STM32/ParaTNC_unit_tests/src/inc" -I"/home/mateusz/Dokumenty/___STM32/ParaTNC_unit_tests/src/inc/stm32f1-stdperiph" -I"/home/mateusz/Dokumenty/___STM32/ParaTNC_unit_tests/src/inc/cmsis" -I"/home/mateusz/Dokumenty/___STM32/ParaTNC_unit_tests/src/drivers" -I"/home/mateusz/Dokumenty/___STM32/ParaTNC_unit_tests/src" -I"/home/mateusz/Dokumenty/___STM32/ParaTNC_unit_tests/src/stubs" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
