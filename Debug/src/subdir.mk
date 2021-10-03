@@ -5,25 +5,25 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../src/analog_anemometer.c \
-../src/tx20.c \
-../src/wx_handler.c 
+../src/davis_parsers.c \
+../src/io.c 
 
 OBJS += \
 ./src/analog_anemometer.o \
-./src/tx20.o \
-./src/wx_handler.o 
+./src/davis_parsers.o \
+./src/io.o 
 
 C_DEPS += \
 ./src/analog_anemometer.d \
-./src/tx20.d \
-./src/wx_handler.d 
+./src/davis_parsers.d \
+./src/io.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
 src/%.o: ../src/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C Compiler'
-	gcc -DSTM32F10X_HD_VL -D_ANEMOMETER_ANALOGUE -I"/home/mateusz/Dokumenty/___STM32/ParaTNC_unit_tests/src/inc" -I"/home/mateusz/Dokumenty/___STM32/ParaTNC_unit_tests/src/inc/stm32f1-stdperiph" -I"/home/mateusz/Dokumenty/___STM32/ParaTNC_unit_tests/src/inc/cmsis" -I"/home/mateusz/Dokumenty/___STM32/ParaTNC_unit_tests/src/drivers" -I"/home/mateusz/Dokumenty/___STM32/ParaTNC_unit_tests/src" -I"/home/mateusz/Dokumenty/___STM32/ParaTNC_unit_tests/src/stubs" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	gcc -DSTM32F10X_MD_VL -D_ANEMOMETER_ANALOGUE -I"/home/mateusz/Documents/___STM32/ParaTNC_unit_tests/src/drivers" -I"/home/mateusz/Documents/___STM32/ParaTNC_unit_tests/src/stubs" -I"/home/mateusz/Documents/___STM32/ParaTNC_unit_tests/src" -I"/home/mateusz/Documents/___STM32/ParaTNC_unit_tests/src/inc" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

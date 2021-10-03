@@ -5,7 +5,8 @@
  *      Author: mateusz
  */
 
-#include <stm32f10x_dma.h>
+#include "stm32f10x_dma.h"
+#include "stm32f10x.h"
 
 typedef uint32_t bool;
 

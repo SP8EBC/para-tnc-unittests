@@ -8,8 +8,9 @@
 #ifndef STDPERIPH_STUBS_H_
 #define STDPERIPH_STUBS_H_
 
-#include "stm32f10x.h"
+//#include "stm32f10x.h"
 #include "stm32f10x_gpio.h"
+
 
 void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_InitTypeDef* GPIO_InitStruct);
 void GPIO_ResetBits(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);

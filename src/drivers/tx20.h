@@ -1,1 +1,0 @@
-/home/mateusz/Dokumenty/___STM32/ParaTNC/system/include/drivers/tx20.h

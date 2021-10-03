@@ -6,6 +6,6 @@
  */
 
 
-#include <davis_vantage/davis.h>
-#include <davis_vantage/davis_query_state_t.h>
+#include "../davis_vantage/davis.h"
+#include "../davis_vantage/davis_loop_t.h"
 

@@ -6,3 +6,5 @@
  */
 
 #include <stdint.h>
+
+int32_t wx_last_good_wind_time = 0;

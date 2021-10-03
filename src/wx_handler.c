@@ -1,1 +1,0 @@
-/home/mateusz/Dokumenty/___STM32/ParaTNC/src/wx_handler.c

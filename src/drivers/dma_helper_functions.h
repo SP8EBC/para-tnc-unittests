@@ -8,6 +8,7 @@
 #ifndef INCLUDE_DRIVERS_DMA_HELPER_FUNCTIONS_H_
 #define INCLUDE_DRIVERS_DMA_HELPER_FUNCTIONS_H_
 
+#include "stm32f10x_dma.h"
 
 void dma_helper_start_ch7(DMA_InitTypeDef* DMA_InitStruct);
 

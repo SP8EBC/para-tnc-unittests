@@ -11,7 +11,7 @@
 uint8_t srl_tx_buffer[TX_BUFFER_1_LN] = {'\0'};		// dane do wys�ania do zdalnego urz�dzenia
 uint8_t srl_rx_buffer[RX_BUFFER_1_LN] = {'\0'};		// dane odebrane od zdalnego urz�dzenia
 
-void srl_init(srl_context_t *ctx, USART_TypeDef *port, uint8_t *rx_buffer, uint16_t rx_buffer_size, uint8_t *tx_buffer, uint16_t tx_buffer_size, uint32_t baudrate) {
+void srl_init(srl_context_t *ctx, USART_TypeDef *port, uint8_t *rx_buffer, uint16_t rx_buffer_size, uint8_t *tx_buffer, uint16_t tx_buffer_size, uint32_t baudrate, uint8_t stop_bits) {
 
 }
 
