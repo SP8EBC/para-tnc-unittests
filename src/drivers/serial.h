@@ -26,6 +26,24 @@
 #define SRL_TIMEOUT_ENABLE	1
 #define SRL_TIMEOUT_DISABLE 0
 
+#define SRL_INTERNAL 0
+#define SRL_EXTERNAL 1
+
+#define SRL_MODE_ZERO	0
+#define SRL_MODE_DEFLN	1
+
+#define SRL_NO_START_CHR	0
+#define SRL_NO_STOP_CHR		0
+
+#define SRL_ECHO_ENABLE		1
+#define SRL_ECHO_DISABLE	0
+
+/**
+ * Callback definition which may be called after receiving each byte by an UART
+ *
+ * @param current_data	received byte
+ * @param rx_bytes_counter receive bytes counter incremented AFTER this callback is processed so it's point to the byte which triggered this call
+ */
 typedef uint8_t(*srl_rx_termination_callback_t)(uint8_t current_data, const uint8_t * const rx_buffer, uint16_t rx_bytes_counter);
 
 typedef enum srlRxState {
@@ -156,6 +174,11 @@ extern uint8_t srl_usart2_tx_buffer[TX_BUFFER_2_LN];
 extern uint8_t srl_usart2_rx_buffer[RX_BUFFER_2_LN];
 #endif
 
+#ifdef PARAMETEO
+extern uint8_t srl_usart3_tx_buffer[TX_BUFFER_1_LN];
+extern uint8_t srl_usart3_rx_buffer[TX_BUFFER_1_LN];
+#endif
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -163,8 +186,9 @@ extern "C" {
 
 
 void srl_init(srl_context_t *ctx, USART_TypeDef *port, uint8_t *rx_buffer, uint16_t rx_buffer_size, uint8_t *tx_buffer, uint16_t tx_buffer_size, uint32_t baudrate, uint8_t stop_bits);
+void srl_reset(srl_context_t *ctx);
 void srl_close(srl_context_t *ctx);
-uint8_t srl_send_data(srl_context_t *ctx, uint8_t* data, uint8_t mode, uint16_t leng, uint8_t internal_external);
+uint8_t srl_send_data(srl_context_t *ctx, const uint8_t* data, uint8_t mode, uint16_t leng, uint8_t internal_external);
 uint8_t srl_start_tx(srl_context_t *ctx, short leng);
 void srl_wait_for_tx_completion(srl_context_t *ctx);
 uint8_t srl_wait_for_rx_completion_or_timeout(srl_context_t *ctx, uint8_t* output);

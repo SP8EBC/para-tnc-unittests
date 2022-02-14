@@ -15,7 +15,7 @@ void srl_init(srl_context_t *ctx, USART_TypeDef *port, uint8_t *rx_buffer, uint1
 
 }
 
-uint8_t srl_send_data(srl_context_t *ctx, uint8_t* data, uint8_t mode, uint16_t leng, uint8_t internal_external) {
+uint8_t srl_send_data(srl_context_t *ctx, const uint8_t* data, uint8_t mode, uint16_t leng, uint8_t internal_external) {
 	return 0;
 }
 
@@ -60,5 +60,9 @@ void srl_switch_timeout_for_waiting(srl_context_t *ctx, uint8_t disable_enable) 
 }
 
 uint8_t srl_wait_for_rx_completion_or_timeout(srl_context_t *ctx, uint8_t* output) {
+	return 0;
+}
+
+uint8_t srl_receive_data_with_callback(srl_context_t *ctx, srl_rx_termination_callback_t cbk) {
 	return 0;
 }

@@ -65,6 +65,8 @@ typedef struct config_data_mode_t {
 
 	uint8_t digi_viscous_delay_sec;
 
+	uint8_t digi_delay_100msec;		// in 100msec increments
+
 	// only for ParaMETEO
 	config_data_powersave_mode_t powersave;
 
@@ -318,5 +320,17 @@ typedef struct config_data_rtu_t {
 
 } config_data_rtu_t;
 
+typedef struct config_data_gsm_t {
+
+	char pin[5];
+
+	char apn[24];
+
+	char username[24];
+
+	char password[24];
+
+
+} config_data_gsm_t;
 
 #endif /* CONFIG_DATA_H_ */

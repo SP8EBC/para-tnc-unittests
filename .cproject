@@ -78,7 +78,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="tests/analoganemometer_test.cpp|tests/umb_master_test.cpp|tests/wxhandler_test.cpp|tests/TX20_test.cpp|analoganemometer_test.cpp|wxhandler_test.cpp|TX20_test.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="tests/analoganemometer_test.cpp|tests/davis_vantage_test.cpp|tests/umb_master_test.cpp|tests/wxhandler_test.cpp|tests/TX20_test.cpp|analoganemometer_test.cpp|wxhandler_test.cpp|TX20_test.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -127,7 +127,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="tests/analoganemometer_test.cpp|tests/umb_master_test.cpp|tests/wxhandler_test.cpp|tests/TX20_test.cpp|analoganemometer_test.cpp|wxhandler_test.cpp|TX20_test.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="tests/analoganemometer_test.cpp|tests/davis_vantage_test.cpp|tests/umb_master_test.cpp|tests/wxhandler_test.cpp|tests/TX20_test.cpp|analoganemometer_test.cpp|wxhandler_test.cpp|TX20_test.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

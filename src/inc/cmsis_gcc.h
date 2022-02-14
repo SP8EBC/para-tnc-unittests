@@ -10,6 +10,8 @@
 
 
 
+void __DSB();
 
+void __NOP();
 
 #endif /* INC_CMSIS_GCC_H_ */

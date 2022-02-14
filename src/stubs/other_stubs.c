@@ -50,3 +50,11 @@ void led_blink_led2_botoom(void) {
 	led_flip_led2_bottom();
 
 }
+
+void __DSB() {
+
+}
+
+void __NOP() {
+
+}

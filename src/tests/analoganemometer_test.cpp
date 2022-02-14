@@ -5,8 +5,6 @@
  *      Author: mateusz
  */
 
-#include "analoganemometer_test.h"
-
 extern "C" {
 #include "drivers/analog_anemometer.h"
 #include "stdperiph_stubs.h"

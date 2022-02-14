@@ -6,17 +6,29 @@
 C_SRCS += \
 ../src/analog_anemometer.c \
 ../src/davis_parsers.c \
-../src/io.c 
+../src/io.c \
+../src/sim800c.c \
+../src/sim800c_engineering.c \
+../src/sim800c_gprs.c \
+../src/sim800c_poolers.c 
 
 OBJS += \
 ./src/analog_anemometer.o \
 ./src/davis_parsers.o \
-./src/io.o 
+./src/io.o \
+./src/sim800c.o \
+./src/sim800c_engineering.o \
+./src/sim800c_gprs.o \
+./src/sim800c_poolers.o 
 
 C_DEPS += \
 ./src/analog_anemometer.d \
 ./src/davis_parsers.d \
-./src/io.d 
+./src/io.d \
+./src/sim800c.d \
+./src/sim800c_engineering.d \
+./src/sim800c_gprs.d \
+./src/sim800c_poolers.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
