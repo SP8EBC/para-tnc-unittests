@@ -1,0 +1,21 @@
+
+NO CARRIER
+AT
+OK
+
+RING
+
+RING
+
+RING
+AT+CREG?
++CREG: 0,1
+
+OK
+
+RING
+
+RING
+
+NO CARRIER
+
