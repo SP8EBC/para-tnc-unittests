@@ -9,6 +9,7 @@
 #include "gsm/sim800c_engineering.h"
 #include "gsm/sim800c_gprs.h"
 #include "gsm/sim800c_inline.h"
+#include "gsm/sim800c_tcpip.h"
 
 #include "main.h"
 
@@ -24,6 +25,11 @@ static const char * GET_PIN_STATUS 				= "AT+CPIN?\r\0";
 static const char * GET_REGISTERED_NETWORK		= "AT+COPS?\r\0";
 extern const char * START_CONFIG_APN;
 
+static const char * FLOW_CONTROL		= "AT+IFC=2,2\r\0";
+static const char * ENABLE_DTR 			= "AT&D\r\0";
+
+static const char * TRANSPARENT_MODE_ON	= "AT+CIPMODE=1\r\0";
+static const char * TRANSPARENT_MODE_OFF	= "AT+CIPMODE=0\r\0";
 
 static const char * OK = "OK\r\n\0";
 static const char * SIGNAL_LEVEL = "+CSQ:\0";
@@ -104,24 +110,45 @@ void gsm_sim800_check_for_async_messages(uint8_t * ptr, uint16_t size, uint16_t 
 
 	int comparision_result = 123;
 
+	int start_i = 0;
+
 	// simplified check, not to waste time for full strncmp
 	if (*ptr == 'R') {
 		comparision_result = strncmp(INCOMING_CALL, (const char *)ptr, (size_t)INCOMING_CALL_LN);
+
+		if (comparision_result == 0) {
+			start_i = INCOMING_CALL_LN;
+		}
 	}
 	else if (*ptr == 'N') {
 		comparision_result = strncmp(NOCARRIER, (const char *)ptr, (size_t)NOCARRIER_LN);
+
+		if (comparision_result == 0) {
+			start_i = NOCARRIER_LN;
+		}
 	}
 	else if (*ptr == 'S') {
 		comparision_result = strncmp(SMS_RDY, (const char *)ptr, (size_t)SMS_RDY_LN);
+
+		if (comparision_result == 0) {
+			start_i = SMS_RDY_LN;
+		}
 	}
 	else if (*ptr == 'C') {
 		comparision_result = strncmp(CALL_RDY, (const char *)ptr, (size_t)CALL_RDY_LN);
+
+		if (comparision_result == 0) {
+			start_i = CALL_RDY_LN;
+		}
 	}
 	else if (*ptr == 'O') {
 		comparision_result = strncmp(OVP_WARNING, (const char *)ptr, (size_t)OVP_WARNING_LN);
 
 		if (comparision_result != 0) {
 			comparision_result = strncmp(OVP_PDWON, (const char *)ptr, (size_t)IVP_PDWON_LN);
+		}
+		else {
+			start_i = OVP_WARNING_LN;
 		}
 	}
 	else if (*ptr == 'U') {
@@ -130,12 +157,15 @@ void gsm_sim800_check_for_async_messages(uint8_t * ptr, uint16_t size, uint16_t 
 		if (comparision_result != 0) {
 			comparision_result = strncmp(UVP_PDOWN, (const char *)ptr, (size_t)UVP_PDOWN_LN);
 		}
+		else {
+			start_i = UVP_WARNING_LN;
+		}
 	}
 
 	// check if this has been found
 	if (comparision_result == 0) {
 		// if yes rewind to the start of response
-		for (int i = INCOMING_CALL_LN; i < size && *(ptr + i) != 0; i++) {
+		for (int i = start_i; i < size && *(ptr + i) != 0; i++) {
 			if (*(ptr + i) > 0x2A && *(ptr + i) < 0x5B) {
 				// start the check from '+' and end on 'Z'
 				*offset = (uint16_t)i;
@@ -192,6 +222,11 @@ uint8_t gsm_sim800_get_waiting_for_command_response(void) {
 	return gsm_waiting_for_command_response;
 }
 
+//gsm_response_start_idx
+uint16_t gsm_sim800_get_response_start_idx(void) {
+	return gsm_response_start_idx;
+}
+
 void gsm_sim800_init(gsm_sim800_state_t * state, uint8_t enable_echo) {
 
 	gsm_at_comm_echo = enable_echo;
@@ -238,6 +273,45 @@ void gsm_sim800_initialization_pool(srl_context_t * srl_context, gsm_sim800_stat
 			// no command has been send so far
 
 			// ask for network registration status
+			srl_send_data(srl_context, (const uint8_t*) FLOW_CONTROL, SRL_MODE_ZERO, strlen(FLOW_CONTROL), SRL_INTERNAL);
+
+			// wait for command completion
+			srl_wait_for_tx_completion(srl_context);
+
+			gsm_at_command_sent_last = FLOW_CONTROL;
+
+			gsm_waiting_for_command_response = 1;
+
+			srl_receive_data_with_callback(srl_context, gsm_sim800_rx_terminating_callback);
+
+			// start timeout calculation
+			srl_context->srl_rx_timeout_calc_started = 1;
+
+			// record when the command has been sent
+			gsm_time_of_last_command_send_to_module = main_get_master_time();
+
+		}
+		else if (gsm_at_command_sent_last == FLOW_CONTROL) {
+			// ask for network registration status
+			srl_send_data(srl_context, (const uint8_t*) ENABLE_DTR, SRL_MODE_ZERO, strlen(ENABLE_DTR), SRL_INTERNAL);
+
+			// wait for command completion
+			srl_wait_for_tx_completion(srl_context);
+
+			gsm_at_command_sent_last = ENABLE_DTR;
+
+			gsm_waiting_for_command_response = 1;
+
+			srl_receive_data_with_callback(srl_context, gsm_sim800_rx_terminating_callback);
+
+			// start timeout calculation
+			srl_context->srl_rx_timeout_calc_started = 1;
+
+			// record when the command has been sent
+			gsm_time_of_last_command_send_to_module = main_get_master_time();
+		}
+		else if (gsm_at_command_sent_last == ENABLE_DTR) {
+			// ask for network registration status
 			srl_send_data(srl_context, (const uint8_t*) GET_NETWORK_REGISTRATION, SRL_MODE_ZERO, strlen(GET_NETWORK_REGISTRATION), SRL_INTERNAL);
 
 			// wait for command completion
@@ -254,7 +328,6 @@ void gsm_sim800_initialization_pool(srl_context_t * srl_context, gsm_sim800_stat
 
 			// record when the command has been sent
 			gsm_time_of_last_command_send_to_module = main_get_master_time();
-
 		}
 		else if (gsm_at_command_sent_last == GET_NETWORK_REGISTRATION) {
 				// ask for network registration status
@@ -344,6 +417,27 @@ void gsm_sim800_initialization_pool(srl_context_t * srl_context, gsm_sim800_stat
 			gsm_time_of_last_command_send_to_module = main_get_master_time();
 		}
 		else if (gsm_at_command_sent_last == SHUTDOWN_GPRS) {
+			srl_send_data(srl_context, (const uint8_t*) TRANSPARENT_MODE_ON, SRL_MODE_ZERO, strlen(TRANSPARENT_MODE_ON), SRL_INTERNAL);
+
+			// wait for command completion
+			srl_wait_for_tx_completion(srl_context);
+
+			gsm_at_command_sent_last = TRANSPARENT_MODE_ON;
+
+			gsm_waiting_for_command_response = 1;
+
+			srl_receive_data_with_callback(srl_context, gsm_sim800_rx_terminating_callback);
+
+			// restore default timeout
+			srl_switch_timeout(srl_context, 1, SIM800_DEFAULT_TIMEOUT);
+
+			// start timeout calculation
+			srl_context->srl_rx_timeout_calc_started = 1;
+
+			// record when the command has been sent
+			gsm_time_of_last_command_send_to_module = main_get_master_time();
+		}
+		else if (gsm_at_command_sent_last == TRANSPARENT_MODE_ON) {
 			// create GPRS APN configuration string
 			sim800_gprs_create_apn_config_str((char * )srl_context->srl_tx_buf_pointer, srl_context->srl_tx_buf_ln);
 
@@ -468,9 +562,15 @@ uint8_t gsm_sim800_rx_terminating_callback(uint8_t current_data, const uint8_t *
 
 	// special case for CENG request
 	if (gsm_at_command_sent_last == ENGINEERING_GET) {
-		gsm_terminating_newline_counter = 4;
+		gsm_terminating_newline_counter = 10;
 	}
 	else if (gsm_at_command_sent_last == GET_CONNECTION_STATUS) {
+		gsm_terminating_newline_counter = 4;
+	}
+	else if (gsm_at_command_sent_last == TCP3) {
+		gsm_terminating_newline_counter = 3;
+	}
+	else if (gsm_at_command_sent_last == TCP4) {
 		gsm_terminating_newline_counter = 4;
 	}
 	else {
@@ -514,6 +614,8 @@ void gsm_sim800_rx_done_event_handler(srl_context_t * srl_context, gsm_sim800_st
 
 	uint32_t newlines = 0;
 
+	uint16_t new_start_idx = 0;
+
 	gsm_waiting_for_command_response = 0;
 
 	if (srl_context->srl_rx_state == SRL_RX_ERROR) {
@@ -523,16 +625,28 @@ void gsm_sim800_rx_done_event_handler(srl_context_t * srl_context, gsm_sim800_st
 	// check how many lines of text
 	newlines = gsm_sim800_check_for_extra_newlines(srl_context->srl_rx_buf_pointer + gsm_response_start_idx, srl_context->srl_rx_buf_ln);
 
-	// if a library expects only single line of response
-	if (gsm_terminating_newline_counter == 1) {
+	// if more than single line of response has been received
+	if ((newlines & 0xFFFFFF00) != 0) {
 		// if more than one line of response has been received
 		second_line = (newlines & 0x0000FF00) >> 8;
 		third_line = (newlines & 0x00FF0000) >> 16;
 		fourth_line = (newlines & 0xFF000000) >> 24;
 
 		if (second_line != 0) {
-			gsm_sim800_check_for_async_messages(srl_context->srl_rx_buf_pointer + gsm_response_start_idx + second_line, srl_context->srl_rx_buf_ln, & gsm_response_start_idx);
+			gsm_sim800_check_for_async_messages(srl_context->srl_rx_buf_pointer + gsm_response_start_idx + second_line, srl_context->srl_rx_buf_ln, & new_start_idx);
 		}
+
+		if (third_line != 0) {
+			gsm_sim800_check_for_async_messages(srl_context->srl_rx_buf_pointer + gsm_response_start_idx + third_line, srl_context->srl_rx_buf_ln, & new_start_idx);
+		}
+
+		if (fourth_line != 0) {
+			gsm_sim800_check_for_async_messages(srl_context->srl_rx_buf_pointer + gsm_response_start_idx + fourth_line, srl_context->srl_rx_buf_ln, & new_start_idx);
+		}
+	}
+
+	if (new_start_idx != 0 && new_start_idx != gsm_response_start_idx) {
+
 	}
 
 	// if the library expects to receive a handshake from gsm module

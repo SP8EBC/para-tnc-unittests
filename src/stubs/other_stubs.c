@@ -10,6 +10,11 @@
 
 typedef uint32_t bool;
 
+const char * TCP2 = "TCP2\0";
+const char * TCP3 = "TCP3\0";
+const char * TCP4 = "TCP4\0";
+
+
 void dma_helper_start_ch7(DMA_InitTypeDef* DMA_InitStruct) {
 
 }
