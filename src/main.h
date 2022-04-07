@@ -4,4 +4,7 @@
 #define INTERNAL_WATCHDOG
 #define EXTERNAL_WATCHDOG
 
+#define SW_VER "EA05"
+#define SW_DATE "06042022"
+
 extern uint32_t master_time;

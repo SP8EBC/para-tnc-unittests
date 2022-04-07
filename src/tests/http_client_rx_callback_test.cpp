@@ -13,6 +13,8 @@ extern "C" {
 #include "other_stubs.h"
 #include "http_client/http_client.h"
 #include "http_client/http_client_rx_callback.h"
+#include "http_client/http_client_headers.h"
+
 }
 
 
@@ -36,15 +38,15 @@ int16_t http_client_http_code = 0;
  */
 uint16_t http_client_content_lenght = 0;
 
-/**
- * Temporary buffer for processing
- */
-char http_client_header_buffer[HEADER_BUFFER_LN];
+///**
+// * Temporary buffer for processing
+// */
+//char http_client_header_buffer[HEADER_BUFFER_LN];
 
-/**
- * Index used to walk through 'http_client_header_buffer'
- */
-uint8_t http_client_header_index = 0;
+///**
+// * Index used to walk through 'http_client_header_buffer'
+// */
+//uint8_t http_client_header_index = 0;
 
 uint16_t http_client_max_content_ln = 0;
 
@@ -178,6 +180,20 @@ const char * meteo_backend_404_response_content_ln =
 		"\x2f\x68\x33\x3e\x3c\x2f\x62\x6f\x64\x79\x3e\x3c\x2f\x68\x74\x6d" \
 		"\x6c\x3e";
 
+const char * meteo_backend_disconnect_response =
+		"\x48\x54\x54\x50\x2f\x31\x2e\x31\x20\x34\x30\x34\x20\x0d\x0a\x43" \
+		"\x6f\x6e\x74\x65\x6e\x74\x2d\x54\x79\x70\x65\x3a\x20\x74\x65\x78" \
+		"\x74\x2f\x68\x74\x6d\x6c\x3b\x63\x68\x61\x72\x73\x65\x74\x3d\x75" \
+		"\x74\x66\x2d\x38\x0d\x0a\x43\x6f\x6e\x74\x65\x6e\x74\x2d\x4c\x61" \
+		"\x6e\x67\x75\x61\x67\x65\x3a\x20\x65\x6e\x0d\x0a\x43\x6f\x6e\x74" \
+		"\x65\x6e\x74\x2d\x4c\x65\x6e\x67\x74\x68\x3a\x20\x37\x35\x34\x0d" \
+		"\x0a\x44\x61\x74\x65\x3a\x20\x53\x61\x74\x2c\x20\x31\x39\x20\x4d" \
+		"\x61\x72\x20\x32\x30\x32\x32\x20\x31\x33\x3a\x35\x30\x3a\x35\x36" \
+		"\x20\x47\x4d\x54\x0d\x0a\x4b\x65\x65\x70\x2d\x41\x6c\x69\x76\x65" \
+		"\x3a\x20\x74\x69\x6d\x65\x6f\x75\x74\x3d\x32\x30\x0d\x0a\x43\x6f" \
+		"\x6e\x6e\x65\x63\x74\x69\x6f\x6e\x3a\x20\x6b\x65\x65\x70\x2d\x61" \
+		"\x6c\x69\x76\x65\x0d\x0a\x0d\\CLOSED\0\0";
+
 struct fixture {
 	fixture() {
 		//;
@@ -235,4 +251,45 @@ BOOST_FIXTURE_TEST_CASE(test_404_error, fixture) {
 	BOOST_CHECK_EQUAL(true, success);
 	BOOST_CHECK_EQUAL(404, http_client_http_code);
 	BOOST_CHECK_EQUAL(754, http_client_content_lenght);
+}
+
+BOOST_FIXTURE_TEST_CASE(test_disconnected, fixture) {
+	int len = strlen(meteo_backend_disconnect_response);
+
+	bool success = false;
+
+	uint8_t output = 0;
+
+	for (int i = 0; i < len; i++) {
+		output = http_client_rx_done_callback(*(meteo_backend_disconnect_response + i), reinterpret_cast<const uint8_t*>(meteo_backend_disconnect_response), i);
+
+		if (output > 0) {
+			success =true;
+
+			break;
+		}
+	}
+
+	BOOST_CHECK_EQUAL(true, success);
+	BOOST_CHECK_EQUAL(HTTP_CLIENT_DISCONNECTED, http_client_http_code);
+}
+
+BOOST_AUTO_TEST_CASE(headers_fist) {
+	char buffer[256];
+
+	char * url = "/meteo_backend/status";
+
+	memset(buffer, 0x00, 256);
+
+	uint16_t result = 0;
+
+	result = http_client_headers_preamble(HTTP_GET, url, strlen(url), buffer, 256);
+	result = http_client_headers_user_agent(buffer, 256, result);
+	result = http_client_headers_accept(buffer, 256, result);
+	result = http_client_headers_terminate(buffer, 256, result);
+
+	BOOST_CHECK_EQUAL(false, result == 0);
+
+
+
 }

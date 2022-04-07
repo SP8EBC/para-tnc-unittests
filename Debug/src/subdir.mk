@@ -6,6 +6,7 @@
 C_SRCS += \
 ../src/analog_anemometer.c \
 ../src/davis_parsers.c \
+../src/http_client_headers.c \
 ../src/http_client_rx_callback.c \
 ../src/io.c \
 ../src/sim800c.c \
@@ -16,6 +17,7 @@ C_SRCS += \
 OBJS += \
 ./src/analog_anemometer.o \
 ./src/davis_parsers.o \
+./src/http_client_headers.o \
 ./src/http_client_rx_callback.o \
 ./src/io.o \
 ./src/sim800c.o \
@@ -26,6 +28,7 @@ OBJS += \
 C_DEPS += \
 ./src/analog_anemometer.d \
 ./src/davis_parsers.d \
+./src/http_client_headers.d \
 ./src/http_client_rx_callback.d \
 ./src/io.d \
 ./src/sim800c.d \
