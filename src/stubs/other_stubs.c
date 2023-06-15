@@ -14,7 +14,6 @@ const char * TCP2 = "TCP2\0";
 const char * TCP3 = "TCP3\0";
 const char * TCP4 = "TCP4\0";
 
-
 void dma_helper_start_ch7(DMA_InitTypeDef* DMA_InitStruct) {
 
 }
@@ -61,5 +60,21 @@ void __DSB() {
 }
 
 void __NOP() {
+
+}
+
+void io___cntrl_vbat_g_disable(void) {
+
+}
+
+void 	io___cntrl_vbat_g_enable() {
+
+}
+
+void io___cntrl_gprs_pwrkey_press() {
+
+}
+
+void io___cntrl_gprs_pwrkey_release() {
 
 }

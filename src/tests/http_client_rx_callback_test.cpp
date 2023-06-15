@@ -31,24 +31,24 @@ extern "C" {
  *	function. This indicate that a request is currently in progress. Negative values means some
  *	non HTTP error, like communication timeout or response longer than expected
  */
-int16_t http_client_http_code = 0;
-
-/**
- * Content lenght received from HTTP response headers or chunked encoding
- */
-uint16_t http_client_content_lenght = 0;
-
+//int16_t http_client_http_code = 0;
+//
 ///**
-// * Temporary buffer for processing
+// * Content lenght received from HTTP response headers or chunked encoding
 // */
-//char http_client_header_buffer[HEADER_BUFFER_LN];
-
-///**
-// * Index used to walk through 'http_client_header_buffer'
-// */
-//uint8_t http_client_header_index = 0;
-
-uint16_t http_client_max_content_ln = 0;
+//uint16_t http_client_content_lenght = 0;
+//
+/////**
+//// * Temporary buffer for processing
+//// */
+////char http_client_header_buffer[HEADER_BUFFER_LN];
+//
+/////**
+//// * Index used to walk through 'http_client_header_buffer'
+//// */
+////uint8_t http_client_header_index = 0;
+//
+//uint16_t http_client_max_content_ln = 0;
 
 
 

@@ -15,6 +15,7 @@ const char * ENABLE_EDGE				= "AT+CEGPRS=1,10\r\0";
 const char * START_GPRS					= "AT+CIICR\r\0";
 const char * GET_IP_ADDRESS				= "AT+CIFSR\r\0";
 const char * GET_CONNECTION_STATUS		= "AT+CIPSTATUS\r\0";
+const char * CONFIGURE_DTR				= "AT&D1\r\0";
 
 
 static const char * OK = "OK\r\n\0";
@@ -24,10 +25,18 @@ static const char * NEWLINE = "\r\0";
 static const char * STATE = "STATE: \0";
 static const char * IPSTATUS = "IP STATUS\0";
 
-config_data_gsm_t * gsm_sim800_gprs_config_gsm;
+const config_data_gsm_t * gsm_sim800_gprs_config_gsm;
 
+/**
+ * Set to one if GSM radio is connected to a network and
+ * GPRS connection is established
+ */
 int8_t gsm_sim800_gprs_ready = 0;
 
+/**
+ * IP Address of GPRS connection retrieved from module
+ * using AT commands
+ */
 char gsm_sim800_ip_address[18];
 
 char gsm_sim800_connection_status_str[24];
@@ -44,7 +53,7 @@ inline static void gsm_sim800_replace_non_printable_with_space(char * str) {
 	}
 }
 
-void sim800_gprs_initialize(srl_context_t * srl_context, gsm_sim800_state_t * state, config_data_gsm_t * config_gsm) {
+void sim800_gprs_initialize(srl_context_t * srl_context, gsm_sim800_state_t * state, const config_data_gsm_t * config_gsm) {
 
 	if (*state != SIM800_ALIVE) {
 		return;
@@ -99,6 +108,9 @@ void sim800_gprs_create_apn_config_str(char * buffer, uint16_t buffer_ln) {
 
 }
 
+/**
+ * This callback
+ */
 void sim800_gprs_response_callback(srl_context_t * srl_context, gsm_sim800_state_t * state, uint16_t gsm_response_start_idx) {
 
 	int comparision_result = 0;
@@ -120,6 +132,9 @@ void sim800_gprs_response_callback(srl_context_t * srl_context, gsm_sim800_state
 		strncpy(gsm_sim800_ip_address, (const char *)(srl_context->srl_rx_buf_pointer + gsm_response_start_idx), 18);
 
 		gsm_sim800_replace_non_printable_with_space(gsm_sim800_ip_address);
+	}
+	else if (gsm_at_command_sent_last == CONFIGURE_DTR) {
+		comparision_result = strncmp(OK, (const char *)(srl_context->srl_rx_buf_pointer + gsm_response_start_idx), 2);
 	}
 	else if (gsm_at_command_sent_last == GET_CONNECTION_STATUS ) {
 
@@ -162,6 +177,7 @@ void sim800_gprs_response_callback(srl_context_t * srl_context, gsm_sim800_state
 		comparision_result = strncmp(OK, (const char *)(srl_context->srl_rx_buf_pointer + gsm_response_start_idx), 2);
 	}
 
+
 	// check if modem response is the same with what the library actualy expects to get
 	if (comparision_result != 0) {
 		*state = SIM800_NOT_YET_COMM;	// if not reset the state to start reinitializing
@@ -172,3 +188,8 @@ void sim800_gprs_response_callback(srl_context_t * srl_context, gsm_sim800_state
 	}
 }
 
+void sim800_gprs_reset(void){
+	gsm_sim800_gprs_ready = 0;
+
+	memset (gsm_sim800_ip_address, 0x00, 18);
+}

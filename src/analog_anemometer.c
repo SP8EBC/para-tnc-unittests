@@ -261,6 +261,8 @@ void analog_anemometer_init(uint16_t pulses_per_meter_second, uint8_t anemometer
 	// deinitialize TIM4 (windspeed)
 	LL_TIM_DeInit(TIM4);
 
+	LL_DMA_DeInit(DMA1, LL_DMA_CHANNEL_5);
+
 	// initialize timer basics
 	LL_TIM_Init(TIM4, &TIM_InitTypeDef);
 
@@ -566,10 +568,14 @@ int16_t analog_anemometer_direction_handler(void) {
 
 	uint16_t downscaled_angle = 0;
 
+#ifdef STM32F10X_MD_VL
 	if (io_get_5v_isol_sw___cntrl_vbat_s() == 0) {
+
+#else
+	if (io_get_cntrl_vbat_c() == 0) {
+#endif
 		return rte_wx_winddirection_last;
 	}
-
 
 #ifdef STM32F10X_MD_VL
 	TIM_Cmd(TIM3, DISABLE);

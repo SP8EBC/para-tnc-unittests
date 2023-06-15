@@ -35,13 +35,16 @@ typedef enum config_data_powersave_mode_t {
 
 }config_data_powersave_mode_t;
 
-typedef struct config_data_mode_t {
+typedef struct __attribute__((aligned (4))) config_data_mode_t {
 
 #define WX_ENABLED 					(1)
 #define WX_INTERNAL_AS_BACKUP 		(1 << 1)
 #define WX_INTERNAL_SPARKFUN_WIND	(1 << 2)
 
 #define WX_MODBUS_DEBUG				(1 << 1)
+
+#define WX_DUST_SDS011_PWM			(1 << 1)
+#define WX_DUST_SDS011_SERIAL		(1 << 2)
 
 	uint8_t digi;
 
@@ -57,6 +60,16 @@ typedef struct config_data_mode_t {
 
 	uint8_t wx_anemometer_pulses_constant;		// #define _ANEMOMETER_PULSES_IN_10SEC_PER_ONE_MS_OF_WINDSPEED 10
 
+	uint8_t wx_dust_sensor;
+
+	/**
+	 * 0x00 or 0xFF - PT sensor disabled
+	 * bit0 - enabled / disabled
+	 * bit1 - PT100 (1) or PT1000 (0)
+	 * bit2 through bit7 - resistor value from lookup table
+	 * 	 */
+	uint8_t wx_pt_sensor;
+
 	uint8_t victron;
 
 	uint8_t digi_viscous;
@@ -70,12 +83,27 @@ typedef struct config_data_mode_t {
 	// only for ParaMETEO
 	config_data_powersave_mode_t powersave;
 
+	// only for ParaMETEO - keeps GSM modem always on if GSM is configured to be used
+	uint8_t powersave_keep_gsm_always_enabled;
+
 	// only for ParaMETEO
 	uint8_t gsm;
 
+	// only for ParaMETEO
+	uint8_t nvm_logger;
+
 } config_data_mode_t;
 
-typedef struct config_data_basic_t {
+typedef struct __attribute__((aligned (4))) config_data_basic_t {
+
+	#define ENGINEERING1						(1)
+	#define ENGINEERING1_INH_WX_PWR_HNDL		(1 << 1)
+	#define ENGINEERING1_EARLY_TX_ASSERT		(1 << 2)
+	#define ENGINEERING1_PWRCYCLE_GSM_ON_NOCOMM	(1 << 2)
+
+	#define ENGINEERING2					(1)
+	#define ENGINEERING2_REBOOT_AFTER_24	(1 << 1)
+	#define ENGINEERING2_POWER_CYCLE_R		(1 << 2)
 
 	char callsign[7];
 
@@ -114,6 +142,55 @@ typedef struct config_data_basic_t {
 
 	uint8_t wx_double_transmit;
 
+	/**
+	 *	bit0 - must be set to ZERO to enable this engineering
+	 *	bit1 - inhibit 'wx_pwr_switch_periodic_handle'
+	 *	bit2 - early_tx_assert
+	 *	bit3 -
+	 *	bit4 -
+	 *	bit5 -
+	 *	bit6 -
+	 *	bit7 -
+	 */
+	uint8_t engineering1;
+
+	/**
+	 * Ugly and nasty workarounds of (mostly hardware) problems, which should
+	 * be fixed, not inhibited by stupid workaround. Use only
+	 * where there is no hope left.
+	 *
+	 *	bit0 - must be set to ZERO to enable this engineering
+	 *  bit1 - reboot after 99 telemetry frames
+	 *  bit2 - power cycle vbat_r two minutes before weather frame
+	 */
+	uint8_t engineering2;
+
+	uint16_t battery_scalling_a;
+
+	uint16_t battery_scalling_b;
+
+	/**
+	 * 	BUTTON_SEND_WX = 1,
+	BUTTON_SEND_WX_INTERNET = 2,
+	BUTTON_SEND_BEACON = 3,
+	BUTTON_FORCE_UART_KISS = 4,
+	BUTTON_FORCE_UART_LOG = 5,
+	BUTTON_RESET_GSM_GPRS = 6,
+		BUTTON_RECONNECT_APRSIS = 7,
+	 */
+	#define BUTTON_FUNCTION_SEND_WX				1U
+	#define BUTTON_FUNCTION_SEND_WX_INET		2U
+	#define BUTTON_FUNCTION_SEND_BEACON			3U
+	#define BUTTON_FUNCTION_UART_KISS			4U
+	#define BUTTON_FUNCTION_UART_LOG			5U
+	#define BUTTON_FUNCION_RESET_GSM_GPRS		6U
+	#define BUTTON_FUNCTION_RECONNECT_APRSIS	7U
+
+
+	uint8_t button_one_left;
+
+	uint8_t button_two_right;
+
 } config_data_basic_t;
 
 typedef enum config_data_wx_sources_enum_t {
@@ -124,6 +201,7 @@ typedef enum config_data_wx_sources_enum_t {
 	 * 	- analog/mechanical anemometer for wind
 	 */
 	WX_SOURCE_INTERNAL = 1,
+	WX_SOURCE_INTERNAL_PT100 = 6,
 
 	/**
 	 * Lufft UMB devices
@@ -148,16 +226,19 @@ typedef enum config_data_wx_sources_enum_t {
 	WX_SOURCE_DAVIS_SERIAL = 5
 } config_data_wx_sources_enum_t;
 
-typedef struct config_data_wx_sources_t {
+typedef struct __attribute__((aligned (4))) config_data_wx_sources_t {
 
 	config_data_wx_sources_enum_t temperature;
 	config_data_wx_sources_enum_t pressure;
 	config_data_wx_sources_enum_t humidity;
 	config_data_wx_sources_enum_t wind;
 
+	config_data_wx_sources_enum_t temperature_telemetry;
+
+
 } config_data_wx_sources_t;
 
-typedef struct config_data_umb_t {
+typedef struct __attribute__((aligned (4))) config_data_umb_t {
 
 	uint16_t slave_class;
 
@@ -172,6 +253,8 @@ typedef struct config_data_umb_t {
 	uint16_t channel_temperature;
 
 	uint16_t channel_qnh;
+
+	uint16_t serial_speed;
 /**
  * #define _UMB_CHANNEL_WINDSPEED			460
 #define _UMB_CHANNEL_WINDGUSTS			440
@@ -181,7 +264,7 @@ typedef struct config_data_umb_t {
  */
 } config_data_umb_t;
 
-typedef struct config_data_rtu_t {
+typedef struct __attribute__((aligned (4))) config_data_rtu_t {
 	uint16_t slave_speed;
 
 	uint8_t slave_parity;
@@ -320,16 +403,38 @@ typedef struct config_data_rtu_t {
 
 } config_data_rtu_t;
 
-typedef struct config_data_gsm_t {
+typedef struct __attribute__((aligned (4))) config_data_gsm_t {
 
 	char pin[5];
 
 	char apn[24];
 
+	// username for APN connection
 	char username[24];
 
+	// password for APN connection
 	char password[24];
 
+	uint8_t api_enable;
+
+	// http://pogoda.cc:8080/meteo_backend
+	char api_base_url[64];
+
+	char api_station_name[32];
+
+	uint8_t aprsis_enable;
+
+	char aprsis_server_address[64];
+
+	uint16_t aprsis_server_port;
+
+	uint32_t aprsis_passcode;
+
+	uint8_t sms_wx_info;
+
+	char sms_wx_inf_first[12];
+
+	char sms_wx_inf_second[12];
 
 } config_data_gsm_t;
 

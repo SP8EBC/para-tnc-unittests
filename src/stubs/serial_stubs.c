@@ -66,3 +66,7 @@ uint8_t srl_wait_for_rx_completion_or_timeout(srl_context_t *ctx, uint8_t* outpu
 uint8_t srl_receive_data_with_callback(srl_context_t *ctx, srl_rx_termination_callback_t cbk) {
 	return 0;
 }
+
+void srl_reset(srl_context_t *ctx) {
+
+}
