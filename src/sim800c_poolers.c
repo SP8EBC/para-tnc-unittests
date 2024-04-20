@@ -12,6 +12,8 @@
 
 #include "aprsis.h"
 
+#include "packet_tx_handler.h"
+
 #include <stdint.h>
 
 //!< Set to one externally to request engineering, get one time at startup by default
@@ -26,6 +28,8 @@ void gsm_sim800_poolers_ten_seconds(srl_context_t * srl_context, gsm_sim800_stat
 			aprsis_connected == 0) {
 		aprsis_connect_and_login_default(1);
 	}
+
+	gsm_sim800_decrease_counter();
 
 }
 
@@ -62,6 +66,9 @@ void gsm_sim800_poolers_one_second(srl_context_t * srl_context, gsm_sim800_state
 					// engineering request is single shot
 					sim800_poolers_request_engineering = 0;
 
+					// request
+					packet_tx_force_gsm_status();
+
 					return;
 				}
 			}
@@ -71,4 +78,8 @@ void gsm_sim800_poolers_one_second(srl_context_t * srl_context, gsm_sim800_state
 
 	}
 
+}
+
+void gsm_sim800_poolers_request_engineering(void) {
+	sim800_poolers_request_engineering = 1;
 }

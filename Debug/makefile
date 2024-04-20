@@ -8,9 +8,11 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include src/tests/subdir.mk
--include src/stubs/subdir.mk
+-include src/ve_direct_protocol/subdir.mk
 -include src/http_client/subdir.mk
+-include src/aprs/subdir.mk
+-include src/___tests___/subdir.mk
+-include src/___stubs___/subdir.mk
 -include src/subdir.mk
 ifneq ($(MAKECMDGOALS),clean)
 ifneq ($(strip $(C++_DEPS)),)

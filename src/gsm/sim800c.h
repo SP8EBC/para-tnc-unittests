@@ -34,4 +34,9 @@ void gsm_sim800_reset(gsm_sim800_state_t * state);
 uint8_t gsm_sim800_get_waiting_for_command_response(void);
 uint16_t gsm_sim800_get_response_start_idx(void);
 
+void gsm_sim800_create_status(char * buffer, int ln);
+
+void gsm_sim800_decrease_counter(void);
+void gsm_sim800_inhibit(uint8_t _inhibit);
+
 #endif /* INCLUDE_GSM_SIM800C_H_ */

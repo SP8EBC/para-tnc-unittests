@@ -6,9 +6,8 @@
  */
 
 extern "C" {
-#include "inc/umb_master/umb_master.h"
-#include "inc/umb_master/umb_0x23_offline_data.h"
-#include "inc/umb_master/umb_0x26_status.h"
+#include "./umb_master/umb_master.h"
+#include "./umb_master/umb_0x23_offline_data.h"
 #include "stdperiph_stubs.h"
 #include "rte_wx.h"
 #include "other_stubs.h"

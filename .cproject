@@ -26,9 +26,10 @@
 								<option id="gnu.cpp.compiler.option.dialect.std.1580286033" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.c++11" valueType="enumerated"/>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.include.paths.1753781259" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/drivers}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/aprs}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/inc/cmsis}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/inc/stm32f1-stdperiph}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/stubs}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/___stubs___}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/inc}&quot;"/>
@@ -48,7 +49,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/drivers}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/inc/cmsis}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/inc/stm32f1-stdperiph}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/stubs}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/___stubs___}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/etc}&quot;"/>
@@ -81,7 +82,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="tests/gsm_rx_handler_test.cpp|tests/analoganemometer_test.cpp|tests/davis_vantage_test.cpp|tests/umb_master_test.cpp|tests/wxhandler_test.cpp|tests/TX20_test.cpp|analoganemometer_test.cpp|wxhandler_test.cpp|TX20_test.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="___tests___/http_client_rx_callback_test.cpp|___tests___/gsm_rx_handler_test.cpp|___tests___/davis_vantage_test.cpp|___tests___/analoganemometer_test.cpp|___tests___/umb_master_test.cpp|TX20_test.cpp|tests/gsm_rx_handler_test.cpp|tests/davis_vantage_test.cpp|wxhandler_test.cpp|tests/analoganemometer_test.cpp|analoganemometer_test.cpp|tests/wxhandler_test.cpp|tests/TX20_test.cpp|tests/http_client_rx_callback_test.cpp|tests/umb_master_test.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -130,7 +131,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="tests/gsm_rx_handler_test.cpp|tests/analoganemometer_test.cpp|tests/davis_vantage_test.cpp|tests/umb_master_test.cpp|tests/wxhandler_test.cpp|tests/TX20_test.cpp|analoganemometer_test.cpp|wxhandler_test.cpp|TX20_test.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="___tests___/http_client_rx_callback_test.cpp|___tests___/gsm_rx_handler_test.cpp|___tests___/davis_vantage_test.cpp|___tests___/analoganemometer_test.cpp|___tests___/umb_master_test.cpp|TX20_test.cpp|tests/gsm_rx_handler_test.cpp|tests/davis_vantage_test.cpp|wxhandler_test.cpp|tests/analoganemometer_test.cpp|analoganemometer_test.cpp|tests/wxhandler_test.cpp|tests/TX20_test.cpp|tests/http_client_rx_callback_test.cpp|tests/umb_master_test.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

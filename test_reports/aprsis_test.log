@@ -1,0 +1,11 @@
+Running 5 test cases...
+Entering test module "APRSIS"
+../src/___tests___/aprsis_test.cpp(52): Entering test case "igate_packet_one"
+SP8EBC-7>AKLPRZ,WIDE1-1,qAR,SR9NSK-3:dupa
+
+../src/___tests___/aprsis_test.cpp(80): error: in "igate_packet_one": check "SP8EBC-7>AKLPRZ,WIDE1-1,qAR,SR9NSK-3:dupa" == ouput_tx_buffer has failed [SP8EBC-7>AKLPRZ,WIDE1-1,qAR,SR9NSK-3:dupa != SP8EBC-7>AKLPRZ,WIDE1-1,qAR,SR9NSK-3:dupa
+]
+../src/___tests___/aprsis_test.cpp(52): Leaving test case "igate_packet_one"; testing time: 162us
+../src/___tests___/aprsis_test.cpp(83): Entering test case "igate_packet_two"
+SP8EBC>AKLPRZ,WIDE1-1,qAR,SR9NSK-3:dupa
+

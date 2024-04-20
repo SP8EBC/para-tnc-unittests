@@ -5,9 +5,9 @@
  *      Author: mateusz
  */
 
+#include <___stubs___/stdperiph_stubs.h>
 #include "stm32f10x_tim.h"
 #include "stm32f10x_dma.h"
-#include "stdperiph_stubs.h"
 #include <stdint.h>
 
 void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_InitTypeDef* GPIO_InitStruct) {

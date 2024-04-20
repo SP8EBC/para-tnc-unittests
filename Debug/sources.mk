@@ -23,8 +23,10 @@ OBJS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
+src/___stubs___ \
+src/___tests___ \
 src \
+src/aprs \
 src/http_client \
-src/stubs \
-src/tests \
+src/ve_direct_protocol \
 
