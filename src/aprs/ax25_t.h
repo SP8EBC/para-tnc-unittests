@@ -8,6 +8,9 @@
 #ifndef INCLUDE_APRS_AX25_T_H_
 #define INCLUDE_APRS_AX25_T_H_
 
+#include "stdint.h"
+#include "ax25_config.h"
+
 /**
  * Maximum number of Repeaters in a AX25 message.
  */

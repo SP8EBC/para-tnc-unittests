@@ -7,11 +7,17 @@
  */
 
 extern "C" {
-#include "aprsis.h"
-#include <___stubs___/stdperiph_stubs.h>
-#include "rte_wx.h"
 #include <___stubs___/other_stubs.h>
+#include <___stubs___/stdperiph_stubs.h>
+#include "aprsis.h"
+#include "rte_wx.h"
+#include "message.h"
+
+extern int aprsis_check_is_message(const uint8_t * const message, const uint16_t message_ln);
+extern void aprsis_receive_callback(srl_context_t* srl_context);
 }
+
+#include "boost/lexical_cast.hpp"
 
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE APRSIS
@@ -30,6 +36,34 @@ const char sr9wxs[6] = {0x53, 0x52, 0x39, 0x57, 0x58, 0x53};
 static const char * aprsis_callsign_with_ssid = "SR9NSK-3";
 
 extern uint8_t aprsis_logged;
+
+// trim from end (in place)
+inline void rtrim(std::string &s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
+        return !std::isspace(ch);
+    }).base(), s.end());
+}
+
+inline bool has_newline(std::string &s) {
+
+	auto iterator = std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+	        return (ch == '\r') ? true : false;
+	    });
+
+	std::string::const_iterator e = s.end();
+
+	if (iterator == e) {
+		return false;
+	}
+
+	if (iterator == (e - 2)) {
+		return true;
+	}
+	else {
+		return false;
+	}
+
+}
 
 struct MyConfig
 {
@@ -74,6 +108,8 @@ BOOST_AUTO_TEST_CASE(igate_packet_one) {
 	const char * tx_buffer = aprsis_get_tx_buffer();
 
 	std::string ouput_tx_buffer = std::string(tx_buffer);
+	BOOST_CHECK(has_newline(ouput_tx_buffer));
+	::rtrim(ouput_tx_buffer);
 
 	BOOST_TEST_MESSAGE(ouput_tx_buffer);
 
@@ -107,6 +143,8 @@ BOOST_AUTO_TEST_CASE(igate_packet_two) {
 	std::string ouput_tx_buffer = std::string(tx_buffer);
 
 	BOOST_TEST_MESSAGE(ouput_tx_buffer);
+	BOOST_CHECK(has_newline(ouput_tx_buffer));
+	::rtrim(ouput_tx_buffer);
 
 	BOOST_CHECK_EQUAL("SP8EBC>AKLPRZ,WIDE1-1,qAR,SR9NSK-3:dupa", ouput_tx_buffer);
 }
@@ -136,6 +174,8 @@ BOOST_AUTO_TEST_CASE(igate_packet_three) {
 	const char * tx_buffer = aprsis_get_tx_buffer();
 
 	std::string ouput_tx_buffer = std::string(tx_buffer);
+	BOOST_CHECK(has_newline(ouput_tx_buffer));
+	::rtrim(ouput_tx_buffer);
 
 	BOOST_TEST_MESSAGE(ouput_tx_buffer);
 
@@ -167,6 +207,8 @@ BOOST_AUTO_TEST_CASE(igate_packet_four) {
 	const char * tx_buffer = aprsis_get_tx_buffer();
 
 	std::string ouput_tx_buffer = std::string(tx_buffer);
+	BOOST_CHECK(has_newline(ouput_tx_buffer));
+	::rtrim(ouput_tx_buffer);
 
 	BOOST_TEST_MESSAGE(ouput_tx_buffer);
 
@@ -198,9 +240,431 @@ BOOST_AUTO_TEST_CASE(igate_packet_five) {
 	const char * tx_buffer = aprsis_get_tx_buffer();
 
 	std::string ouput_tx_buffer = std::string(tx_buffer);
+	BOOST_CHECK(has_newline(ouput_tx_buffer));
+	::rtrim(ouput_tx_buffer);
 
 	BOOST_TEST_MESSAGE(ouput_tx_buffer);
 
 	BOOST_CHECK_EQUAL("SP8EBC-2>AKLPRZ,SR9WXS-1*,qAR,SR9NSK-3:dupa", ouput_tx_buffer);
 }
 
+BOOST_AUTO_TEST_CASE(is_message_one) {
+
+	const char * message = "SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ   :tedt{0s}\r\n";
+
+	const int result = aprsis_check_is_message((const uint8_t*)message, strlen(message));
+
+	BOOST_CHECK_EQUAL(result, 32);
+}
+
+// SP3LYR>APRS,WIDE2-2::AB9FX    :test{1
+BOOST_AUTO_TEST_CASE(is_message_two) {
+	const char * message = "SP3LYR>APRS,WIDE2-2::AB9FX    :test{1\r\n";
+
+	const int result = aprsis_check_is_message((const uint8_t*)message, strlen(message));
+
+	BOOST_CHECK_EQUAL(result, 21);
+}
+
+BOOST_AUTO_TEST_CASE(no_message) {
+	const char * message = "dupajasia123";
+
+	const int result = aprsis_check_is_message((const uint8_t*)message, strlen(message));
+
+	BOOST_CHECK_EQUAL(result, 0);
+}
+
+BOOST_AUTO_TEST_CASE(decode_message_one) {
+	const std::string recipient{"SR9WXZ"};
+	const std::string message_content{"tedt"};
+	const char * message = "SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ   :tedt{0s}\r\n";
+	message_t decoded;
+	BOOST_TEST_MESSAGE(message);
+
+	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
+	BOOST_CHECK_EQUAL(result, 0);
+
+	std::string decoded_recipient{decoded.to.call, 6};
+	BOOST_TEST_MESSAGE(decoded_recipient);
+	BOOST_TEST_MESSAGE(boost::lexical_cast<std::string>((int)decoded.to.ssid));
+
+	BOOST_CHECK_EQUAL(decoded_recipient, recipient);
+
+	std::string decoded_message_content{(char*)decoded.content};
+	BOOST_CHECK_EQUAL(message_content, decoded_message_content);
+
+	BOOST_CHECK_EQUAL(0, decoded.number);
+}
+
+BOOST_AUTO_TEST_CASE(decode_message_with_ssid) {
+	const std::string sender{"SP8EBC"};
+	const std::string recipient{"SR9WXZ"};
+	const std::string message_content{"tedt"};
+	const char * message = "SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ-9 :tedt{0s}\r\n";
+	message_t decoded;
+	BOOST_TEST_MESSAGE(message);
+
+	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
+	BOOST_CHECK_EQUAL(result, 0);
+
+	std::string decoded_sender{decoded.from.call, 6};
+	BOOST_TEST_MESSAGE(decoded_sender);
+	BOOST_TEST_MESSAGE(boost::lexical_cast<std::string>((int)decoded.from.ssid));
+
+	BOOST_CHECK_EQUAL(decoded_sender, sender);
+	BOOST_CHECK_EQUAL(decoded.from.ssid, 0);
+
+	std::string decoded_recipient{decoded.to.call, 6};
+	BOOST_TEST_MESSAGE(decoded_recipient);
+	BOOST_TEST_MESSAGE(boost::lexical_cast<std::string>((int)decoded.to.ssid));
+
+	BOOST_CHECK_EQUAL(decoded_recipient, recipient);
+	BOOST_CHECK_EQUAL(decoded.to.ssid, 9);
+
+	std::string decoded_message_content{(char*)decoded.content};
+	BOOST_CHECK_EQUAL(message_content, decoded_message_content);
+
+	BOOST_CHECK_EQUAL(0, decoded.number);
+}
+
+BOOST_AUTO_TEST_CASE(decode_message_with_twodigit_ssid) {
+	const std::string recipient{"SR9WXZ"};
+	const std::string message_content{"tedt"};
+	const char * message = "SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ-12:tedt{0s}\r\n";
+	message_t decoded;
+	BOOST_TEST_MESSAGE(message);
+
+	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
+	BOOST_CHECK_EQUAL(result, 0);
+
+	std::string decoded_recipient{decoded.to.call, 6};
+	BOOST_TEST_MESSAGE(decoded_recipient);
+	BOOST_TEST_MESSAGE(boost::lexical_cast<std::string>((int)decoded.to.ssid));
+
+	BOOST_CHECK_EQUAL(decoded_recipient, recipient);
+	BOOST_CHECK_EQUAL(decoded.to.ssid, 12);
+
+	std::string decoded_message_content{(char*)decoded.content};
+	BOOST_CHECK_EQUAL(message_content, decoded_message_content);
+
+	BOOST_CHECK_EQUAL(0, decoded.number);
+}
+
+BOOST_AUTO_TEST_CASE(decode_message_with_sender_and_recipient_ssid) {
+	const std::string sender{"SP8EBC"};
+	const std::string recipient{"SR9WXZ"};
+	const std::string message_content{"rgagagtest1234556785465AH   "};
+	const char * message = "SP8EBC-11>APX216,TCPIP*,qAC,NINTH::SR9WXZ-9 :rgagagtest1234556785465AH   {0s}\r\n";
+	message_t decoded;
+	BOOST_TEST_MESSAGE(message);
+
+	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
+	BOOST_CHECK_EQUAL(result, 0);
+
+	std::string decoded_sender{decoded.from.call, 6};
+	BOOST_TEST_MESSAGE(decoded_sender);
+	BOOST_TEST_MESSAGE(boost::lexical_cast<std::string>((int)decoded.from.ssid));
+
+	BOOST_CHECK_EQUAL(decoded_sender, sender);
+	BOOST_CHECK_EQUAL(decoded.from.ssid, 11);
+
+	std::string decoded_recipient{decoded.to.call, 6};
+	BOOST_TEST_MESSAGE(decoded_recipient);
+	BOOST_TEST_MESSAGE(boost::lexical_cast<std::string>((int)decoded.to.ssid));
+
+	BOOST_CHECK_EQUAL(decoded_recipient, recipient);
+	BOOST_CHECK_EQUAL(decoded.to.ssid, 9);
+
+	std::string decoded_message_content{(char*)decoded.content};
+	BOOST_CHECK_EQUAL(message_content, decoded_message_content);
+
+	BOOST_CHECK_EQUAL(0, decoded.number);
+}
+
+
+BOOST_AUTO_TEST_CASE(decode_message_with_ssid_nonzero_counter) {
+	const std::string recipient{"SR9WXZ"};
+	const std::string message_content{"tedt"};
+	const char * message = "SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ-9 :tedt{4s}\r\n";
+	message_t decoded;
+	BOOST_TEST_MESSAGE(message);
+
+	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
+	BOOST_CHECK_EQUAL(result, 0);
+
+	std::string decoded_recipient{decoded.to.call, 6};
+	BOOST_TEST_MESSAGE(decoded_recipient);
+	BOOST_TEST_MESSAGE(boost::lexical_cast<std::string>((int)decoded.to.ssid));
+
+	BOOST_CHECK_EQUAL(decoded_recipient, recipient);
+	BOOST_CHECK_EQUAL(decoded.to.ssid, 9);
+
+	std::string decoded_message_content{(char*)decoded.content};
+	BOOST_CHECK_EQUAL(message_content, decoded_message_content);
+
+	BOOST_CHECK_EQUAL(4, decoded.number);
+}
+
+BOOST_AUTO_TEST_CASE(decode_message_with_ssid_twodigits_counter) {
+	const std::string recipient{"SR9WXZ"};
+	const std::string message_content{"tedt"};
+	const char * message = "SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ-9 :tedt{14s}\r\n";
+	message_t decoded;
+	BOOST_TEST_MESSAGE(message);
+
+	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
+	BOOST_CHECK_EQUAL(result, 0);
+
+	std::string decoded_recipient{decoded.to.call, 6};
+	BOOST_TEST_MESSAGE(decoded_recipient);
+	BOOST_TEST_MESSAGE(boost::lexical_cast<std::string>((int)decoded.to.ssid));
+
+	BOOST_CHECK_EQUAL(decoded_recipient, recipient);
+	BOOST_CHECK_EQUAL(decoded.to.ssid, 9);
+
+	std::string decoded_message_content{(char*)decoded.content};
+	BOOST_CHECK_EQUAL(message_content, decoded_message_content);
+
+	BOOST_CHECK_EQUAL(14, decoded.number);
+}
+
+BOOST_AUTO_TEST_CASE(decode_message_with_ssid_twodigits_counter_provided_content_position) {
+	const std::string recipient{"SR9WXZ"};
+	const std::string message_content{"tedt"};
+	const char * message = "SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ-9 :tedt{14s}\r\n";
+	message_t decoded;
+	BOOST_TEST_MESSAGE(message);
+
+	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 32, MESSAGE_SOURCE_APRSIS, &decoded);
+	BOOST_CHECK_EQUAL(result, 0);
+
+	std::string decoded_recipient{decoded.to.call, 6};
+	BOOST_TEST_MESSAGE(decoded_recipient);
+	BOOST_TEST_MESSAGE(boost::lexical_cast<std::string>((int)decoded.to.ssid));
+
+	BOOST_CHECK_EQUAL(decoded_recipient, recipient);
+	BOOST_CHECK_EQUAL(decoded.to.ssid, 9);
+
+	std::string decoded_message_content{(char*)decoded.content};
+	BOOST_CHECK_EQUAL(message_content, decoded_message_content);
+
+	BOOST_CHECK_EQUAL(14, decoded.number);
+}
+
+BOOST_AUTO_TEST_CASE(decode_message_wrong_content_position) {
+	const std::string recipient{"SR9WXZ"};
+	const std::string message_content{"tedt"};
+	const char * message = "SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ-9 :tedt{14s}\r\n";
+	message_t decoded;
+	BOOST_TEST_MESSAGE(message);
+
+	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 44, MESSAGE_SOURCE_APRSIS, &decoded);
+	BOOST_CHECK_NE(result, 0);
+}
+
+BOOST_AUTO_TEST_CASE(decode_message_wrong_content_position_to_small) {
+	const std::string recipient{"SR9WXZ"};
+	const std::string message_content{"tedt"};
+	const char * message = "SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ-9 :tedt{14s}\r\n";
+	message_t decoded;
+	BOOST_TEST_MESSAGE(message);
+
+	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 4, MESSAGE_SOURCE_APRSIS, &decoded);
+	BOOST_CHECK_NE(result, 0);
+}
+
+BOOST_AUTO_TEST_CASE(decode_message_malformed_structure) {
+	const std::string recipient{"SR9WXZ"};
+	const std::string message_content{"tedt"};
+	const char * message = "SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ-9  :tedt{14s}\r\n";
+	message_t decoded;
+	BOOST_TEST_MESSAGE(message);
+
+	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
+	BOOST_CHECK_NE(result, 0);
+}
+
+BOOST_AUTO_TEST_CASE(decode_message_from_radio_one) {
+	const std::string recipient{"SR9WXZ"};
+	const std::string message_content{"tedt"};
+	const char * message = ":SR9WXZ-9 :tedt{14s}\r\n";
+	message_t decoded;
+	BOOST_TEST_MESSAGE(message);
+
+	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_RADIO, &decoded);
+	BOOST_CHECK_EQUAL(result, 0);
+
+	std::string decoded_recipient{decoded.to.call, 6};
+	BOOST_TEST_MESSAGE(decoded_recipient);
+	BOOST_TEST_MESSAGE(boost::lexical_cast<std::string>((int)decoded.to.ssid));
+
+	BOOST_CHECK_EQUAL(decoded_recipient, recipient);
+	BOOST_CHECK_EQUAL(decoded.to.ssid, 9);
+
+	std::string decoded_message_content{(char*)decoded.content};
+	BOOST_CHECK_EQUAL(message_content, decoded_message_content);
+
+	BOOST_CHECK_EQUAL(14, decoded.number);
+}
+
+BOOST_AUTO_TEST_CASE(decode_message_from_radio_twodigit_ssid) {
+	const std::string recipient{"SR9WXZ"};
+	const std::string message_content{"tedt"};
+	const char * message = ":SR9WXZ-13:tedt{14s}\r\n";
+	message_t decoded;
+	BOOST_TEST_MESSAGE(message);
+
+	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_RADIO, &decoded);
+	BOOST_CHECK_EQUAL(result, 0);
+
+	std::string decoded_recipient{decoded.to.call, 6};
+	BOOST_TEST_MESSAGE(decoded_recipient);
+	BOOST_TEST_MESSAGE(boost::lexical_cast<std::string>((int)decoded.to.ssid));
+
+	BOOST_CHECK_EQUAL(decoded_recipient, recipient);
+	BOOST_CHECK_EQUAL(decoded.to.ssid, 13);
+
+	std::string decoded_message_content{(char*)decoded.content};
+	BOOST_CHECK_EQUAL(message_content, decoded_message_content);
+
+	BOOST_CHECK_EQUAL(14, decoded.number);
+}
+
+BOOST_AUTO_TEST_CASE(decode_message_from_radio_twodigit_ssid_whitespaces) {
+	const std::string recipient{"SR9WXZ"};
+	const std::string message_content{"tedt"};
+	const char * message = "    :SR9WXZ-13:tedt{14s}\r\n";
+	message_t decoded;
+	BOOST_TEST_MESSAGE(message);
+
+	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_RADIO, &decoded);
+	BOOST_CHECK_EQUAL(result, 0);
+
+	std::string decoded_recipient{decoded.to.call, 6};
+	BOOST_TEST_MESSAGE(decoded_recipient);
+	BOOST_TEST_MESSAGE(boost::lexical_cast<std::string>((int)decoded.to.ssid));
+
+	BOOST_CHECK_EQUAL(decoded_recipient, recipient);
+	BOOST_CHECK_EQUAL(decoded.to.ssid, 13);
+
+	std::string decoded_message_content{(char*)decoded.content};
+	BOOST_CHECK_EQUAL(message_content, decoded_message_content);
+
+	BOOST_CHECK_EQUAL(14, decoded.number);
+}
+
+BOOST_AUTO_TEST_CASE(decode_message_from_radio_random_garbage) {
+	const char * message = " dupa dupa dupa cycki";
+	message_t decoded;
+	BOOST_TEST_MESSAGE(message);
+
+	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_RADIO, &decoded);
+	BOOST_CHECK_NE(result, 0);		// check not equal
+}
+
+BOOST_AUTO_TEST_CASE(decode_message_from_aprsis_random_garbage) {
+	const uint8_t message[] = {0xDEu, 0xADu, 0xBEu, 0xEFu, 0xBAu, 0xDCu, 0x0Fu, 0xFE,
+			0xDEu, 0xADu, 0xBEu, 0xEFu, 0xBAu, 0xDCu, 0x0Fu, 0xFE,
+			0xDEu, 0xADu, 0xBEu, 0xEFu, 0xBAu, 0xDCu, 0x0Fu, 0xFE,
+			0x00u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u};
+	message_t decoded;
+
+	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, 32, 0, MESSAGE_SOURCE_RADIO, &decoded);
+	BOOST_CHECK_NE(result, 0);		// check not equal
+}
+
+BOOST_AUTO_TEST_CASE(message_for_me) {
+	config_data_basic_t config;
+
+	config.ssid = 7;
+	strncpy(config.callsign, "SP8EBC\0", 7);
+
+	message_t message;
+	message.to.ssid = 7;
+	memcpy(message.to.call, "SP8EBC", 6);
+
+	BOOST_CHECK_EQUAL(0, message_is_for_me(&config, &message));
+}
+
+BOOST_AUTO_TEST_CASE(message_for_me_second) {
+	config_data_basic_t config;
+
+	config.ssid = 7;
+	strncpy(config.callsign, "SR0L\0", 7);
+
+	message_t message;
+	message.to.ssid = 7;
+	memcpy(message.to.call, "SR0L\0", 6);
+
+	BOOST_CHECK_EQUAL(0, message_is_for_me(&config, &message));
+}
+
+BOOST_AUTO_TEST_CASE(message_not_for_me) {
+	config_data_basic_t config;
+
+	config.ssid = 7;
+	strncpy(config.callsign, "SR0L\0", 7);
+
+	message_t message;
+	message.to.ssid = 7;
+	memcpy(message.to.call, "SR9WXM", 6);
+
+	BOOST_CHECK_EQUAL(1, message_is_for_me(&config, &message));
+}
+
+BOOST_AUTO_TEST_CASE(create_ack_aprsis_theirs_ssid) {
+
+	message_source_t source = MESSAGE_SOURCE_APRSIS;
+	message_t message;
+	char buffer[128];
+
+	message.number = 9;
+	memcpy(message.to.call, "SR9WXZ", 6);
+	message.to.ssid = 1;
+	memcpy(message.from.call, "SP8EBC", 6);
+	message.from.ssid = 0;
+
+	message_create_ack_for((uint8_t*) buffer, 128, &message, source);
+	BOOST_TEST_MESSAGE(buffer);
+
+	std::string ack{buffer};
+	BOOST_CHECK_EQUAL(ack, "SR9WXZ-1>AKLPRZ::SP8EBC   :ack9");
+}
+
+BOOST_AUTO_TEST_CASE(create_ack_aprsis_theirs_no_ssid) {
+
+	message_source_t source = MESSAGE_SOURCE_APRSIS;
+	message_t message;
+	char buffer[128];
+
+	message.number = 9;
+	memcpy(message.to.call, "SR9WXZ", 6);
+	message.to.ssid = 0;
+	memcpy(message.from.call, "SP8EBC", 6);
+	message.from.ssid = 0;
+
+	message_create_ack_for((uint8_t*) buffer, 128, &message, source);
+	BOOST_TEST_MESSAGE(buffer);
+
+	std::string ack{buffer};
+	BOOST_CHECK_EQUAL(ack, "SR9WXZ>AKLPRZ::SP8EBC   :ack9");
+}
+
+BOOST_AUTO_TEST_CASE(create_ack_aprsis_mine_ssid) {
+
+	message_source_t source = MESSAGE_SOURCE_APRSIS;
+	message_t message;
+	char buffer[128];
+
+	message.number = 9;
+	memcpy(message.to.call, "SR9WXZ", 6);
+	message.to.ssid = 0;
+	memcpy(message.from.call, "SP8EBC", 6);
+	message.from.ssid = 11;
+
+	message_create_ack_for((uint8_t*) buffer, 128, &message, source);
+	BOOST_TEST_MESSAGE(buffer);
+
+	std::string ack{buffer};
+	BOOST_CHECK_EQUAL(ack, "SR9WXZ>AKLPRZ::SP8EBC-11:ack9");
+}

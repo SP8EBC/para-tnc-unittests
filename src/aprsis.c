@@ -20,6 +20,12 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef UNIT_TEST
+#define STATIC
+#else
+#define STATIC static
+#endif
+
 srl_context_t * aprsis_serial_port;
 
 /**
@@ -185,9 +191,9 @@ char aprsis_login_string_reveived[APRSIS_LOGIN_STRING_RECEIVED_LN];
  * Checks if data in a buffer contains APRS message
  * @param message
  * @param message_ln
- * @return
+ * @return position at which content of message starts
  */
-static int aprsis_check_is_message(const uint8_t * const message, const uint16_t message_ln) {
+STATIC int aprsis_check_is_message(const uint8_t * const message, const uint16_t message_ln) {
 	// example message
 	//			Details:"SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ   :tedt{0s}\r\n", '\0' <repeats 715 times>
 
@@ -217,7 +223,7 @@ static int aprsis_check_is_message(const uint8_t * const message, const uint16_t
  *
  * @param srl_context
  */
-static void aprsis_receive_callback(srl_context_t* srl_context) {
+STATIC void aprsis_receive_callback(srl_context_t* srl_context) {
 
 	const uint8_t * buffer = srl_get_rx_buffer(srl_context);
 
