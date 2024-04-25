@@ -186,5 +186,8 @@ void gsm_sim800_tcpip_reset(void) {
 
 }
 
+uint8_t gsm_sim800_tcpip_tx_busy(void) {
+	return 0;
+}
 
 

@@ -15,6 +15,7 @@ extern "C" {
 
 extern int aprsis_check_is_message(const uint8_t * const message, const uint16_t message_ln);
 extern void aprsis_receive_callback(srl_context_t* srl_context);
+extern uint32_t message_atoi_message_counter(const uint8_t * string, uint8_t string_ln, message_t * output);
 }
 
 #include "boost/lexical_cast.hpp"
@@ -281,7 +282,7 @@ BOOST_AUTO_TEST_CASE(decode_message_one) {
 	message_t decoded;
 	BOOST_TEST_MESSAGE(message);
 
-	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
+	const uint8_t result = message_decode((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
 	BOOST_CHECK_EQUAL(result, 0);
 
 	std::string decoded_recipient{decoded.to.call, 6};
@@ -304,7 +305,7 @@ BOOST_AUTO_TEST_CASE(decode_message_with_ssid) {
 	message_t decoded;
 	BOOST_TEST_MESSAGE(message);
 
-	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
+	const uint8_t result = message_decode((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
 	BOOST_CHECK_EQUAL(result, 0);
 
 	std::string decoded_sender{decoded.from.call, 6};
@@ -334,7 +335,7 @@ BOOST_AUTO_TEST_CASE(decode_message_with_twodigit_ssid) {
 	message_t decoded;
 	BOOST_TEST_MESSAGE(message);
 
-	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
+	const uint8_t result = message_decode((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
 	BOOST_CHECK_EQUAL(result, 0);
 
 	std::string decoded_recipient{decoded.to.call, 6};
@@ -358,7 +359,7 @@ BOOST_AUTO_TEST_CASE(decode_message_with_sender_and_recipient_ssid) {
 	message_t decoded;
 	BOOST_TEST_MESSAGE(message);
 
-	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
+	const uint8_t result = message_decode((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
 	BOOST_CHECK_EQUAL(result, 0);
 
 	std::string decoded_sender{decoded.from.call, 6};
@@ -389,7 +390,7 @@ BOOST_AUTO_TEST_CASE(decode_message_with_ssid_nonzero_counter) {
 	message_t decoded;
 	BOOST_TEST_MESSAGE(message);
 
-	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
+	const uint8_t result = message_decode((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
 	BOOST_CHECK_EQUAL(result, 0);
 
 	std::string decoded_recipient{decoded.to.call, 6};
@@ -412,7 +413,7 @@ BOOST_AUTO_TEST_CASE(decode_message_with_ssid_twodigits_counter) {
 	message_t decoded;
 	BOOST_TEST_MESSAGE(message);
 
-	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
+	const uint8_t result = message_decode((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
 	BOOST_CHECK_EQUAL(result, 0);
 
 	std::string decoded_recipient{decoded.to.call, 6};
@@ -435,7 +436,7 @@ BOOST_AUTO_TEST_CASE(decode_message_with_ssid_twodigits_counter_provided_content
 	message_t decoded;
 	BOOST_TEST_MESSAGE(message);
 
-	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 32, MESSAGE_SOURCE_APRSIS, &decoded);
+	const uint8_t result = message_decode((const uint8_t*)message, strlen(message), 32, MESSAGE_SOURCE_APRSIS, &decoded);
 	BOOST_CHECK_EQUAL(result, 0);
 
 	std::string decoded_recipient{decoded.to.call, 6};
@@ -458,7 +459,7 @@ BOOST_AUTO_TEST_CASE(decode_message_wrong_content_position) {
 	message_t decoded;
 	BOOST_TEST_MESSAGE(message);
 
-	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 44, MESSAGE_SOURCE_APRSIS, &decoded);
+	const uint8_t result = message_decode((const uint8_t*)message, strlen(message), 44, MESSAGE_SOURCE_APRSIS, &decoded);
 	BOOST_CHECK_NE(result, 0);
 }
 
@@ -469,7 +470,7 @@ BOOST_AUTO_TEST_CASE(decode_message_wrong_content_position_to_small) {
 	message_t decoded;
 	BOOST_TEST_MESSAGE(message);
 
-	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 4, MESSAGE_SOURCE_APRSIS, &decoded);
+	const uint8_t result = message_decode((const uint8_t*)message, strlen(message), 4, MESSAGE_SOURCE_APRSIS, &decoded);
 	BOOST_CHECK_NE(result, 0);
 }
 
@@ -480,7 +481,7 @@ BOOST_AUTO_TEST_CASE(decode_message_malformed_structure) {
 	message_t decoded;
 	BOOST_TEST_MESSAGE(message);
 
-	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
+	const uint8_t result = message_decode((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_APRSIS, &decoded);
 	BOOST_CHECK_NE(result, 0);
 }
 
@@ -491,7 +492,7 @@ BOOST_AUTO_TEST_CASE(decode_message_from_radio_one) {
 	message_t decoded;
 	BOOST_TEST_MESSAGE(message);
 
-	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_RADIO, &decoded);
+	const uint8_t result = message_decode((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_RADIO, &decoded);
 	BOOST_CHECK_EQUAL(result, 0);
 
 	std::string decoded_recipient{decoded.to.call, 6};
@@ -514,7 +515,7 @@ BOOST_AUTO_TEST_CASE(decode_message_from_radio_twodigit_ssid) {
 	message_t decoded;
 	BOOST_TEST_MESSAGE(message);
 
-	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_RADIO, &decoded);
+	const uint8_t result = message_decode((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_RADIO, &decoded);
 	BOOST_CHECK_EQUAL(result, 0);
 
 	std::string decoded_recipient{decoded.to.call, 6};
@@ -537,7 +538,7 @@ BOOST_AUTO_TEST_CASE(decode_message_from_radio_twodigit_ssid_whitespaces) {
 	message_t decoded;
 	BOOST_TEST_MESSAGE(message);
 
-	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_RADIO, &decoded);
+	const uint8_t result = message_decode((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_RADIO, &decoded);
 	BOOST_CHECK_EQUAL(result, 0);
 
 	std::string decoded_recipient{decoded.to.call, 6};
@@ -558,7 +559,7 @@ BOOST_AUTO_TEST_CASE(decode_message_from_radio_random_garbage) {
 	message_t decoded;
 	BOOST_TEST_MESSAGE(message);
 
-	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_RADIO, &decoded);
+	const uint8_t result = message_decode((const uint8_t*)message, strlen(message), 0, MESSAGE_SOURCE_RADIO, &decoded);
 	BOOST_CHECK_NE(result, 0);		// check not equal
 }
 
@@ -569,7 +570,7 @@ BOOST_AUTO_TEST_CASE(decode_message_from_aprsis_random_garbage) {
 			0x00u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u, 0x00u};
 	message_t decoded;
 
-	const uint8_t result = message_decode_from_aprsis((const uint8_t*)message, 32, 0, MESSAGE_SOURCE_RADIO, &decoded);
+	const uint8_t result = message_decode((const uint8_t*)message, 32, 0, MESSAGE_SOURCE_RADIO, &decoded);
 	BOOST_CHECK_NE(result, 0);		// check not equal
 }
 
@@ -583,7 +584,7 @@ BOOST_AUTO_TEST_CASE(message_for_me) {
 	message.to.ssid = 7;
 	memcpy(message.to.call, "SP8EBC", 6);
 
-	BOOST_CHECK_EQUAL(0, message_is_for_me(&config, &message));
+	BOOST_CHECK_EQUAL(0, message_is_for_me(config.callsign, config.ssid, &message));
 }
 
 BOOST_AUTO_TEST_CASE(message_for_me_second) {
@@ -596,7 +597,7 @@ BOOST_AUTO_TEST_CASE(message_for_me_second) {
 	message.to.ssid = 7;
 	memcpy(message.to.call, "SR0L\0", 6);
 
-	BOOST_CHECK_EQUAL(0, message_is_for_me(&config, &message));
+	BOOST_CHECK_EQUAL(0, message_is_for_me(config.callsign, config.ssid, &message));
 }
 
 BOOST_AUTO_TEST_CASE(message_not_for_me) {
@@ -609,7 +610,7 @@ BOOST_AUTO_TEST_CASE(message_not_for_me) {
 	message.to.ssid = 7;
 	memcpy(message.to.call, "SR9WXM", 6);
 
-	BOOST_CHECK_EQUAL(1, message_is_for_me(&config, &message));
+	BOOST_CHECK_EQUAL(1, message_is_for_me(config.callsign, config.ssid, &message));
 }
 
 BOOST_AUTO_TEST_CASE(create_ack_aprsis_theirs_ssid) {
@@ -628,7 +629,7 @@ BOOST_AUTO_TEST_CASE(create_ack_aprsis_theirs_ssid) {
 	BOOST_TEST_MESSAGE(buffer);
 
 	std::string ack{buffer};
-	BOOST_CHECK_EQUAL(ack, "SR9WXZ-1>AKLPRZ::SP8EBC   :ack9");
+	BOOST_CHECK_EQUAL(ack, "SR9WXZ-1>AKLPRZ::SP8EBC   :ack9\r\n");
 }
 
 BOOST_AUTO_TEST_CASE(create_ack_aprsis_theirs_no_ssid) {
@@ -647,7 +648,7 @@ BOOST_AUTO_TEST_CASE(create_ack_aprsis_theirs_no_ssid) {
 	BOOST_TEST_MESSAGE(buffer);
 
 	std::string ack{buffer};
-	BOOST_CHECK_EQUAL(ack, "SR9WXZ>AKLPRZ::SP8EBC   :ack9");
+	BOOST_CHECK_EQUAL(ack, "SR9WXZ>AKLPRZ::SP8EBC   :ack9\r\n");
 }
 
 BOOST_AUTO_TEST_CASE(create_ack_aprsis_mine_ssid) {
@@ -666,5 +667,109 @@ BOOST_AUTO_TEST_CASE(create_ack_aprsis_mine_ssid) {
 	BOOST_TEST_MESSAGE(buffer);
 
 	std::string ack{buffer};
-	BOOST_CHECK_EQUAL(ack, "SR9WXZ>AKLPRZ::SP8EBC-11:ack9");
+	BOOST_CHECK_EQUAL(ack, "SR9WXZ>AKLPRZ::SP8EBC-11:ack9\r\n");
+}
+
+BOOST_AUTO_TEST_CASE(message_number_str_to_int_hex_1digits) {
+
+	const char * test = "f";
+	message_t message;
+
+	const uint32_t result = message_atoi_message_counter((const uint8_t*)test, 1, &message);
+
+	BOOST_CHECK_EQUAL(15, result);
+	BOOST_CHECK_EQUAL(15, message.number);
+}
+
+BOOST_AUTO_TEST_CASE(message_number_str_to_int_hex_1digits_) {
+
+	const char * test = "F";
+	message_t message;
+
+	const uint32_t result = message_atoi_message_counter((const uint8_t*)test, 1, &message);
+
+	BOOST_CHECK_EQUAL(15, result);
+	BOOST_CHECK_EQUAL(15, message.number);
+}
+
+BOOST_AUTO_TEST_CASE(message_number_str_to_int_hex_2digits) {
+
+	const char * test = "ff";
+	message_t message;
+
+	const uint32_t result = message_atoi_message_counter((const uint8_t*)test, 2, &message);
+
+	BOOST_CHECK_EQUAL(255, result);
+	BOOST_CHECK_EQUAL(255, message.number);
+}
+
+BOOST_AUTO_TEST_CASE(message_number_str_to_int_hex_2digits_) {
+
+	const char * test = "FA";
+	message_t message;
+
+	const uint32_t result = message_atoi_message_counter((const uint8_t*)test, 2, &message);
+
+	BOOST_CHECK_EQUAL(250, result);
+	BOOST_CHECK_EQUAL(250, message.number);
+}
+
+BOOST_AUTO_TEST_CASE(message_number_str_to_int_dec_1digits) {
+
+	const char * test = "1";
+	message_t message;
+
+	const uint32_t result = message_atoi_message_counter((const uint8_t*)test, 1, &message);
+
+	BOOST_CHECK_EQUAL(1, result);
+}
+
+BOOST_AUTO_TEST_CASE(message_number_str_to_int_dec_2digits) {
+
+	const char * test = "12";
+	message_t message;
+
+	const uint32_t result = message_atoi_message_counter((const uint8_t*)test, 2, &message);
+
+	BOOST_CHECK_EQUAL(12, result);
+}
+
+BOOST_AUTO_TEST_CASE(message_number_str_to_int_dec_3digits) {
+
+	const char * test = "123";
+	message_t message;
+
+	const uint32_t result = message_atoi_message_counter((const uint8_t*)test, 3, &message);
+
+	BOOST_CHECK_EQUAL(123, result);
+}
+
+BOOST_AUTO_TEST_CASE(message_number_str_to_int_dec_4digits) {
+
+	const char * test = "1234";
+	message_t message;
+
+	const uint32_t result = message_atoi_message_counter((const uint8_t*)test, 4, &message);
+
+	BOOST_CHECK_EQUAL(1234, result);
+}
+
+BOOST_AUTO_TEST_CASE(message_number_str_to_int_dec_5digits) {
+
+	const char * test = "12345";
+	message_t message;
+
+	const uint32_t result = message_atoi_message_counter((const uint8_t*)test, 5, &message);
+
+	BOOST_CHECK_EQUAL(12345, result);
+}
+
+BOOST_AUTO_TEST_CASE(message_number_str_to_int_dec_6digits) {
+
+	const char * test = "123456";
+	message_t message;
+
+	const uint32_t result = message_atoi_message_counter((const uint8_t*)test, 6, &message);
+
+	BOOST_CHECK_EQUAL(123456, result);
 }
