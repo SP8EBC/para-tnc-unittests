@@ -1,0 +1,31 @@
+Running 6 test cases...
+Entering test module "KISS_DIAGNOSTIC"
+../src/___tests___/kiss_diagnostics_test.cpp(47): Entering test case "decode_hexstring_first"
+../src/___tests___/kiss_diagnostics_test.cpp(60): info: check result == 11 has passed
+../src/___tests___/kiss_diagnostics_test.cpp(61): info: check { decoded_binary, decoded_binary + 10 } == { expected, expected + 10 } has passed
+../src/___tests___/kiss_diagnostics_test.cpp(62): info: check decoded_binary[11] == 0x00 has passed
+../src/___tests___/kiss_diagnostics_test.cpp(47): Leaving test case "decode_hexstring_first"; testing time: 74us
+../src/___tests___/kiss_diagnostics_test.cpp(65): Entering test case "decode_hexstring_corrupted"
+../src/___tests___/kiss_diagnostics_test.cpp(78): info: check result == 7 has passed
+../src/___tests___/kiss_diagnostics_test.cpp(79): info: check { decoded_binary, decoded_binary + 6 } == { expected, expected + 6 } has passed
+../src/___tests___/kiss_diagnostics_test.cpp(80): info: check decoded_binary[7] == 0x00 has passed
+../src/___tests___/kiss_diagnostics_test.cpp(65): Leaving test case "decode_hexstring_corrupted"; testing time: 61us
+../src/___tests___/kiss_diagnostics_test.cpp(83): Entering test case "decode_hexstring_text"
+../src/___tests___/kiss_diagnostics_test.cpp(96): info: check result == 8 has passed
+../src/___tests___/kiss_diagnostics_test.cpp(97): info: check { decoded_binary, decoded_binary + 7 } == { expected, expected + 7 } has passed
+../src/___tests___/kiss_diagnostics_test.cpp(98): info: check decoded_binary[8] == 0x00 has passed
+../src/___tests___/kiss_diagnostics_test.cpp(83): Leaving test case "decode_hexstring_text"; testing time: 59us
+../src/___tests___/kiss_diagnostics_test.cpp(101): Entering test case "encode_binary_1"
+../src/___tests___/kiss_diagnostics_test.cpp(112): info: check result == expected_ln has passed
+../src/___tests___/kiss_diagnostics_test.cpp(113): info: check { expected, expected + expected_end } == { decoded_binary, decoded_binary + expected_end } has passed
+../src/___tests___/kiss_diagnostics_test.cpp(101): Leaving test case "encode_binary_1"; testing time: 58us
+../src/___tests___/kiss_diagnostics_test.cpp(116): Entering test case "encode_binary_2"
+../src/___tests___/kiss_diagnostics_test.cpp(127): info: check result == expected_ln has passed
+../src/___tests___/kiss_diagnostics_test.cpp(128): info: check { expected, expected + expected_end } == { decoded_binary, decoded_binary + expected_end } has passed
+../src/___tests___/kiss_diagnostics_test.cpp(116): Leaving test case "encode_binary_2"; testing time: 57us
+../src/___tests___/kiss_diagnostics_test.cpp(131): Entering test case "encode_binary_outputbuff_to_small"
+../src/___tests___/kiss_diagnostics_test.cpp(142): info: check result == 0 has passed
+../src/___tests___/kiss_diagnostics_test.cpp(143): info: check decoded_binary[0] == 0 has passed
+../src/___tests___/kiss_diagnostics_test.cpp(144): info: check decoded_binary[1] == 0 has passed
+../src/___tests___/kiss_diagnostics_test.cpp(131): Leaving test case "encode_binary_outputbuff_to_small"; testing time: 58us
+Leaving test module "KISS_DIAGNOSTIC"; testing time: 395us
