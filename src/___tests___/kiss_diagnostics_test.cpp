@@ -98,6 +98,22 @@ BOOST_AUTO_TEST_CASE(decode_hexstring_text) {
 	BOOST_CHECK_EQUAL(decoded_binary[8], 0x00);
 }
 
+BOOST_AUTO_TEST_CASE(decode_hexstring_missing_prefix) {
+
+	uint8_t testhexstring[] = "4A4B4C4D4E4F5051\0\0";
+	const uint16_t hexstring_ln = strlen((const char*)testhexstring);
+
+	memset(decoded_binary, 0x00, DECODED_BINARY_LN);
+
+	const uint8_t expected[] = "JKLMNOPQ";
+
+	// uint8_t kiss_communication_aprsmsg_decode_hexstring(uint8_t * message_payload, uint16_t message_payload_ln, uint8_t * output_binary_buffer, uint16_t output_ln);
+
+	const uint8_t result = kiss_communication_aprsmsg_decode_hexstring(testhexstring, hexstring_ln, decoded_binary, DECODED_BINARY_LN);
+
+	BOOST_CHECK_EQUAL(result, 0);
+}
+
 BOOST_AUTO_TEST_CASE(encode_binary_1) {
 
 	uint8_t input[] 	= {0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x00, 0x11, 0x22, 0x33, 0x44};
@@ -143,5 +159,38 @@ BOOST_AUTO_TEST_CASE(encode_binary_outputbuff_to_small) {
 	BOOST_CHECK_EQUAL(decoded_binary[0], 0);
 	BOOST_CHECK_EQUAL(decoded_binary[1], 0);
 
+}
+
+BOOST_AUTO_TEST_CASE(check_type_hs) {
+	uint8_t testhexstring[] = "HS4A4B4C4D4E4F5051\0\0";
+
+	const kiss_communication_aprsmsg_transport_t current = kiss_communication_aprsmsg_check_type(testhexstring, strlen((const char*)testhexstring));
+
+	BOOST_CHECK_EQUAL(current, APRSMSG_TRANSPORT_HEXSTRING);
+}
+
+BOOST_AUTO_TEST_CASE(check_type_hs_missingprefix) {
+	uint8_t testhexstring[] = "4A4B4C4D4E4F5051\0\0";
+
+	const kiss_communication_aprsmsg_transport_t current = kiss_communication_aprsmsg_check_type(testhexstring, strlen((const char*)testhexstring));
+
+	BOOST_CHECK_EQUAL(current, APRSMSG_TRANSPORT_NOT_KISS);
+}
+
+BOOST_AUTO_TEST_CASE(check_type_hs_random) {
+	uint8_t testhexstring[] = "    random deadBEEAF\0\0";
+
+	const kiss_communication_aprsmsg_transport_t current = kiss_communication_aprsmsg_check_type(testhexstring, strlen((const char*)testhexstring));
+
+	BOOST_CHECK_EQUAL(current, APRSMSG_TRANSPORT_NOT_KISS);
+}
+
+BOOST_AUTO_TEST_CASE(check_type_hs_too_long) {
+	uint8_t testhexstring[] = "    random deadBEEAFdeadBEEAFdeadBEEAFdeadBEEAFdeadBEEAFdeadBEEAFdeadBEEAFdeadBEEAFdeadBEEAFdeadBEEAFdeadBEEAFdeadBEEAF\0\0";
+	const size_t ln = strlen((const char*)testhexstring);
+
+	const kiss_communication_aprsmsg_transport_t current = kiss_communication_aprsmsg_check_type(testhexstring, ln);
+
+	BOOST_CHECK_EQUAL(current, APRSMSG_TRANSPORT_UNINITIALIZED);
 }
 

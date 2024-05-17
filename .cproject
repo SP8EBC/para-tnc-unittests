@@ -84,7 +84,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="___tests___/aprsis_test.cpp|___tests___/gsm_rx_handler_test.cpp|TX20_test.cpp|tests/gsm_rx_handler_test.cpp|___tests___/davis_vantage_test.cpp|tests/TX20_test.cpp|tests/http_client_rx_callback_test.cpp|___tests___/http_client_rx_callback_test.cpp|tests/davis_vantage_test.cpp|___tests___/umb_master_test.cpp|wxhandler_test.cpp|tests/analoganemometer_test.cpp|___tests___/analoganemometer_test.cpp|analoganemometer_test.cpp|tests/wxhandler_test.cpp|tests/umb_master_test.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="___tests___/kiss_diagnostics_test.cpp|___tests___/gsm_rx_handler_test.cpp|TX20_test.cpp|tests/gsm_rx_handler_test.cpp|___tests___/davis_vantage_test.cpp|tests/TX20_test.cpp|tests/http_client_rx_callback_test.cpp|___tests___/http_client_rx_callback_test.cpp|tests/davis_vantage_test.cpp|___tests___/umb_master_test.cpp|wxhandler_test.cpp|tests/analoganemometer_test.cpp|___tests___/analoganemometer_test.cpp|analoganemometer_test.cpp|tests/wxhandler_test.cpp|tests/umb_master_test.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -143,7 +143,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="___tests___/aprsis_test.cpp|___tests___/gsm_rx_handler_test.cpp|TX20_test.cpp|tests/gsm_rx_handler_test.cpp|___tests___/davis_vantage_test.cpp|tests/TX20_test.cpp|tests/http_client_rx_callback_test.cpp|___tests___/http_client_rx_callback_test.cpp|tests/davis_vantage_test.cpp|___tests___/umb_master_test.cpp|wxhandler_test.cpp|tests/analoganemometer_test.cpp|___tests___/analoganemometer_test.cpp|analoganemometer_test.cpp|tests/wxhandler_test.cpp|tests/umb_master_test.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="___tests___/kiss_diagnostics_test.cpp|___tests___/gsm_rx_handler_test.cpp|TX20_test.cpp|tests/gsm_rx_handler_test.cpp|___tests___/davis_vantage_test.cpp|tests/TX20_test.cpp|tests/http_client_rx_callback_test.cpp|___tests___/http_client_rx_callback_test.cpp|tests/davis_vantage_test.cpp|___tests___/umb_master_test.cpp|wxhandler_test.cpp|tests/analoganemometer_test.cpp|___tests___/analoganemometer_test.cpp|analoganemometer_test.cpp|tests/wxhandler_test.cpp|tests/umb_master_test.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

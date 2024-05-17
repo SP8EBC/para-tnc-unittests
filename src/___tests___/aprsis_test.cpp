@@ -327,6 +327,7 @@ BOOST_AUTO_TEST_CASE(decode_message_with_ssid) {
 
 	std::string decoded_message_content{(char*)decoded.content};
 	BOOST_CHECK_EQUAL(message_content, decoded_message_content);
+	BOOST_CHECK_EQUAL(message_content.size(), decoded.content_ln);
 
 	BOOST_CHECK_EQUAL(0, decoded.number);
 }
@@ -350,6 +351,7 @@ BOOST_AUTO_TEST_CASE(decode_message_with_twodigit_ssid) {
 
 	std::string decoded_message_content{(char*)decoded.content};
 	BOOST_CHECK_EQUAL(message_content, decoded_message_content);
+	BOOST_CHECK_EQUAL(message_content.size(), decoded.content_ln);
 
 	BOOST_CHECK_EQUAL(0, decoded.number);
 }
@@ -381,6 +383,7 @@ BOOST_AUTO_TEST_CASE(decode_message_with_sender_and_recipient_ssid) {
 
 	std::string decoded_message_content{(char*)decoded.content};
 	BOOST_CHECK_EQUAL(message_content, decoded_message_content);
+	BOOST_CHECK_EQUAL(message_content.size(), decoded.content_ln);
 
 	BOOST_CHECK_EQUAL(0, decoded.number);
 }
@@ -405,6 +408,7 @@ BOOST_AUTO_TEST_CASE(decode_message_with_ssid_nonzero_counter) {
 
 	std::string decoded_message_content{(char*)decoded.content};
 	BOOST_CHECK_EQUAL(message_content, decoded_message_content);
+	BOOST_CHECK_EQUAL(message_content.size(), decoded.content_ln);
 
 	BOOST_CHECK_EQUAL(4, decoded.number);
 }
@@ -428,6 +432,7 @@ BOOST_AUTO_TEST_CASE(decode_message_with_ssid_twodigits_counter) {
 
 	std::string decoded_message_content{(char*)decoded.content};
 	BOOST_CHECK_EQUAL(message_content, decoded_message_content);
+	BOOST_CHECK_EQUAL(message_content.size(), decoded.content_ln);
 
 	BOOST_CHECK_EQUAL(14, decoded.number);
 }
@@ -451,6 +456,7 @@ BOOST_AUTO_TEST_CASE(decode_message_with_ssid_twodigits_counter_provided_content
 
 	std::string decoded_message_content{(char*)decoded.content};
 	BOOST_CHECK_EQUAL(message_content, decoded_message_content);
+	BOOST_CHECK_EQUAL(message_content.size(), decoded.content_ln);
 
 	BOOST_CHECK_EQUAL(14, decoded.number);
 }
