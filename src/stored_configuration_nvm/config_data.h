@@ -199,19 +199,45 @@ typedef struct __attribute__((aligned (4))) config_data_basic_t {
 	#define CONFIGURATION_SEC_MEDIUM_KISS	4U
 	/**
 	 * Configuration of how UDS diagnostics are secured access different
-	 * mediums. GET_VERSION_AND_ID and SECURITY_ACCESS are never locked
+	 * mediums. GET_VERSION_AND_ID and SECURITY_ACCESS are never locked.
+	 * If the service shall not(!!) be locked respective bit should be set to 0.
+	 * By default, when memory is fully erased everything is locked
 	 *
-	 * 	READ_DID and READ_MEMORY
-	 * bit 1 - APRSIS
-	 * bit 2 - RF network communication
-	 * bit 3 - KISS serial port communication
+	 * Serial Port
+	 *  	0 -	Read DID
+	 *  	1 - Read Memory by address (RAM2, RAM2_NOINIT, everything > FLASH)
+	 *  	2 - Read Memory by address (without limit)
+	 *  	3 - Restart Reset
+	 *  	4 - Configuration reset
+	 *		5 - Write memory by address
+	 *		6 - Erase and program startup config
+	 *		7 - Get running config
+	 *		8 - Request file transfer and transfer data
 	 *
-	 *  everything else
-	 * bit 4 - APRSIS
-	 * bit 5 - RF network communication
-	 * bit 6 - KISS serial port communication
+	 *  	13 -
+	 *
+	 * Validity bits
+	 * 		14
+	 * 		15
+	 * 	these bits are sum of ( (uds_diagnostics_security_access & 0x3FFF) +
+	 * 	(uds_diagnostics_security_access & 3FFF0000) >> 16) & 0x3. If this value
+	 * 	doesn't match a configuration from here is discarded completely and
+	 * 	default settings are applied:
+	 * 	1. Everything over serial port is unlocked
+	 * 	2. Read DID and one restart per day
+	 *
+	 * APRS Message (Radio network or APRS-IS server)
+	 *
+	 *  	16 -
+	 *  	17 -
+	 *
+	 *		29 -
+	 *
+	 * Unlock all services by default when accessed via APRSMSG_TRANSPORT_ENCRYPTED_HEXSTRING
+	 *		30 - this should be zero to enable
+	 *		31 - this should be one to enable
 	 */
-	uint8_t uds_diagnostics_security_access;
+	uint32_t uds_diagnostics_security_access;
 
 } config_data_basic_t;
 

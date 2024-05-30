@@ -275,6 +275,113 @@ BOOST_AUTO_TEST_CASE(no_message) {
 	BOOST_CHECK_EQUAL(result, 0);
 }
 
+/**
+ * Begining of encode message tests. This shall not be swapped around. Message counter depends
+ * on how many times before 'message_encode' was called
+ */
+BOOST_AUTO_TEST_CASE(encode_message_from_ssid) {
+	message_t encode;
+	uint8_t output_buffer[256];
+	const std::string expected{"SR9WXZ-1>AKLPRZ::SP8EBC-2 :test123{0}"};
+
+	memset(&encode, 0x00, sizeof(message_t));
+
+	strncpy(encode.from.call, "SR9WXZ", 7);
+	encode.from.ssid = 1;
+	strncpy(encode.to.call, "SP8EBC", 7);
+	encode.to.ssid = 2;
+
+	strncpy((char*)encode.content, "test123", MESSAGE_MAX_LENGHT);
+
+	const uint16_t ln = message_encode(&encode, output_buffer, 256, MESSAGE_SOURCE_APRSIS);
+	const std::string output_buffer_str{(const char*)output_buffer};
+
+	BOOST_CHECK_EQUAL(ln, output_buffer_str.size());
+}
+
+BOOST_AUTO_TEST_CASE(encode_message_from_two_digit_ssid) {
+	message_t encode;
+	uint8_t output_buffer[256];
+	const std::string expected{"SR9WXZ-1>AKLPRZ::SP8EBC-12:fadgafjgjfaiogjao3434===____33{1}"};
+
+	memset(&encode, 0x00, sizeof(message_t));
+
+	strncpy(encode.from.call, "SR9WXZ", 7);
+	encode.from.ssid = 1;
+	strncpy(encode.to.call, "SP8EBC", 12);
+	encode.to.ssid = 2;
+
+	strncpy((char*)encode.content, "fadgafjgjfaiogjao3434===____33", MESSAGE_MAX_LENGHT);
+
+	const uint16_t ln = message_encode(&encode, output_buffer, 256, MESSAGE_SOURCE_APRSIS);
+	const std::string output_buffer_str{(const char*)output_buffer};
+
+	BOOST_CHECK_EQUAL(ln, output_buffer_str.size());
+}
+
+BOOST_AUTO_TEST_CASE(encode_message_from_no_ssid) {
+	message_t encode;
+	uint8_t output_buffer[256];
+	const std::string expected{"SR9WXZ-1>AKLPRZ::SP8EBC   :fadgafjgjfaiogjao3434===____33{2}"};
+
+	memset(&encode, 0x00, sizeof(message_t));
+
+	strncpy(encode.from.call, "SR9WXZ", 7);
+	encode.from.ssid = 1;
+	strncpy(encode.to.call, "SP8EBC", 7);
+	encode.to.ssid = 0;
+
+	strncpy((char*)encode.content, "fadgafjgjfaiogjao3434===____33", MESSAGE_MAX_LENGHT);
+
+	const uint16_t ln = message_encode(&encode, output_buffer, 256, MESSAGE_SOURCE_APRSIS);
+	const std::string output_buffer_str{(const char*)output_buffer};
+
+	BOOST_CHECK_EQUAL(ln, output_buffer_str.size());
+}
+
+BOOST_AUTO_TEST_CASE(encode_message_from_short_call) {
+	message_t encode;
+	uint8_t output_buffer[256];
+	const std::string expected{"SR9WX>AKLPRZ::SP8BC    :fadgafjgjfaiogjao3434===____33{3}"};
+
+	memset(&encode, 0x00, sizeof(message_t));
+
+	strncpy(encode.from.call, "SR9WX", 7);
+	encode.from.ssid = 0;
+	strncpy(encode.to.call, "SP8BC", 7);
+	encode.to.ssid = 0;
+
+	strncpy((char*)encode.content, "fadgafjgjfaiogjao3434===____33", MESSAGE_MAX_LENGHT);
+
+	const uint16_t ln = message_encode(&encode, output_buffer, 256, MESSAGE_SOURCE_APRSIS);
+	const std::string output_buffer_str{(const char*)output_buffer};
+
+	BOOST_CHECK_EQUAL(ln, output_buffer_str.size());
+}
+
+BOOST_AUTO_TEST_CASE(encode_message_from_short_call_with_ssid) {
+	message_t encode;
+	uint8_t output_buffer[256];
+	const std::string expected{"SR9WX-11>AKLPRZ::SP8BC-12 :fadgafjgjfaiogjao3434===____33{3}"};
+
+	memset(&encode, 0x00, sizeof(message_t));
+
+	strncpy(encode.from.call, "SR9WX", 7);
+	encode.from.ssid = 11;
+	strncpy(encode.to.call, "SP8BC", 7);
+	encode.to.ssid = 12;
+
+	strncpy((char*)encode.content, "fadgafjgjfaiogjao3434===____33", MESSAGE_MAX_LENGHT);
+
+	const uint16_t ln = message_encode(&encode, output_buffer, 256, MESSAGE_SOURCE_APRSIS);
+	const std::string output_buffer_str{(const char*)output_buffer};
+
+	BOOST_CHECK_EQUAL(ln, output_buffer_str.size());
+}
+/**
+ * end of message encode test
+ */
+
 BOOST_AUTO_TEST_CASE(decode_message_one) {
 	const std::string recipient{"SR9WXZ"};
 	const std::string message_content{"tedt"};

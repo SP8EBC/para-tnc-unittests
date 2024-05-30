@@ -1,0 +1,9 @@
+Running 1 test case...
+Entering test module "NVM"
+../src/___tests___/nvm_tests.cpp(72): Entering test case "find_first_oldest_newest____no_overrun"
+../src/___tests___/nvm_tests.cpp(93): info: check oldest->lparam == startTimesync.lparam has passed
+../src/___tests___/nvm_tests.cpp(94): info: check oldest->lparam2 == startTimesync.lparam2 has passed
+../src/___tests___/nvm_tests.cpp(96): info: check newest->event_master_time == ev.event_master_time has passed
+../src/___tests___/nvm_tests.cpp(97): info: check newest->wparam == ev.wparam has passed
+../src/___tests___/nvm_tests.cpp(72): Leaving test case "find_first_oldest_newest____no_overrun"; testing time: 92us
+Leaving test module "NVM"; testing time: 100us

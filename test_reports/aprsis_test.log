@@ -1,256 +1,271 @@
-Running 41 test cases...
+Running 46 test cases...
 Entering test module "APRSIS"
 ../src/___tests___/aprsis_test.cpp(87): Entering test case "igate_packet_one"
 ../src/___tests___/aprsis_test.cpp(112): info: check has_newline(ouput_tx_buffer) has passed
 SP8EBC-7>AKLPRZ,WIDE1-1,qAR,SR9NSK-3:dupa
 ../src/___tests___/aprsis_test.cpp(117): info: check "SP8EBC-7>AKLPRZ,WIDE1-1,qAR,SR9NSK-3:dupa" == ouput_tx_buffer has passed
-../src/___tests___/aprsis_test.cpp(87): Leaving test case "igate_packet_one"; testing time: 285us
+../src/___tests___/aprsis_test.cpp(87): Leaving test case "igate_packet_one"; testing time: 80us
 ../src/___tests___/aprsis_test.cpp(120): Entering test case "igate_packet_two"
 SP8EBC>AKLPRZ,WIDE1-1,qAR,SR9NSK-3:dupa
 
 ../src/___tests___/aprsis_test.cpp(147): info: check has_newline(ouput_tx_buffer) has passed
 ../src/___tests___/aprsis_test.cpp(150): info: check "SP8EBC>AKLPRZ,WIDE1-1,qAR,SR9NSK-3:dupa" == ouput_tx_buffer has passed
-../src/___tests___/aprsis_test.cpp(120): Leaving test case "igate_packet_two"; testing time: 284us
+../src/___tests___/aprsis_test.cpp(120): Leaving test case "igate_packet_two"; testing time: 67us
 ../src/___tests___/aprsis_test.cpp(153): Entering test case "igate_packet_three"
 ../src/___tests___/aprsis_test.cpp(178): info: check has_newline(ouput_tx_buffer) has passed
 SP8EBC>AKLPRZ,WIDE1*,qAR,SR9NSK-3:dupa
 ../src/___tests___/aprsis_test.cpp(183): info: check "SP8EBC>AKLPRZ,WIDE1*,qAR,SR9NSK-3:dupa" == ouput_tx_buffer has passed
-../src/___tests___/aprsis_test.cpp(153): Leaving test case "igate_packet_three"; testing time: 253us
+../src/___tests___/aprsis_test.cpp(153): Leaving test case "igate_packet_three"; testing time: 65us
 ../src/___tests___/aprsis_test.cpp(186): Entering test case "igate_packet_four"
 ../src/___tests___/aprsis_test.cpp(211): info: check has_newline(ouput_tx_buffer) has passed
 SP8EBC>AKLPRZ,SR9WXS-1*,qAR,SR9NSK-3:dupa
 ../src/___tests___/aprsis_test.cpp(216): info: check "SP8EBC>AKLPRZ,SR9WXS-1*,qAR,SR9NSK-3:dupa" == ouput_tx_buffer has passed
-../src/___tests___/aprsis_test.cpp(186): Leaving test case "igate_packet_four"; testing time: 258us
+../src/___tests___/aprsis_test.cpp(186): Leaving test case "igate_packet_four"; testing time: 65us
 ../src/___tests___/aprsis_test.cpp(219): Entering test case "igate_packet_five"
 ../src/___tests___/aprsis_test.cpp(244): info: check has_newline(ouput_tx_buffer) has passed
 SP8EBC-2>AKLPRZ,SR9WXS-1*,qAR,SR9NSK-3:dupa
 ../src/___tests___/aprsis_test.cpp(249): info: check "SP8EBC-2>AKLPRZ,SR9WXS-1*,qAR,SR9NSK-3:dupa" == ouput_tx_buffer has passed
-../src/___tests___/aprsis_test.cpp(219): Leaving test case "igate_packet_five"; testing time: 252us
+../src/___tests___/aprsis_test.cpp(219): Leaving test case "igate_packet_five"; testing time: 65us
 ../src/___tests___/aprsis_test.cpp(252): Entering test case "is_message_one"
 ../src/___tests___/aprsis_test.cpp(258): info: check result == 32 has passed
-../src/___tests___/aprsis_test.cpp(252): Leaving test case "is_message_one"; testing time: 232us
+../src/___tests___/aprsis_test.cpp(252): Leaving test case "is_message_one"; testing time: 59us
 ../src/___tests___/aprsis_test.cpp(262): Entering test case "is_message_two"
 ../src/___tests___/aprsis_test.cpp(267): info: check result == 21 has passed
-../src/___tests___/aprsis_test.cpp(262): Leaving test case "is_message_two"; testing time: 228us
+../src/___tests___/aprsis_test.cpp(262): Leaving test case "is_message_two"; testing time: 59us
 ../src/___tests___/aprsis_test.cpp(270): Entering test case "no_message"
 ../src/___tests___/aprsis_test.cpp(275): info: check result == 0 has passed
-../src/___tests___/aprsis_test.cpp(270): Leaving test case "no_message"; testing time: 229us
-../src/___tests___/aprsis_test.cpp(278): Entering test case "decode_message_one"
+../src/___tests___/aprsis_test.cpp(270): Leaving test case "no_message"; testing time: 58us
+../src/___tests___/aprsis_test.cpp(282): Entering test case "encode_message_from_ssid"
+../src/___tests___/aprsis_test.cpp(299): info: check ln == output_buffer_str.size() has passed
+../src/___tests___/aprsis_test.cpp(282): Leaving test case "encode_message_from_ssid"; testing time: 60us
+../src/___tests___/aprsis_test.cpp(302): Entering test case "encode_message_from_two_digit_ssid"
+../src/___tests___/aprsis_test.cpp(319): info: check ln == output_buffer_str.size() has passed
+../src/___tests___/aprsis_test.cpp(302): Leaving test case "encode_message_from_two_digit_ssid"; testing time: 60us
+../src/___tests___/aprsis_test.cpp(322): Entering test case "encode_message_from_no_ssid"
+../src/___tests___/aprsis_test.cpp(339): info: check ln == output_buffer_str.size() has passed
+../src/___tests___/aprsis_test.cpp(322): Leaving test case "encode_message_from_no_ssid"; testing time: 59us
+../src/___tests___/aprsis_test.cpp(342): Entering test case "encode_message_from_short_call"
+../src/___tests___/aprsis_test.cpp(359): info: check ln == output_buffer_str.size() has passed
+../src/___tests___/aprsis_test.cpp(342): Leaving test case "encode_message_from_short_call"; testing time: 59us
+../src/___tests___/aprsis_test.cpp(362): Entering test case "encode_message_from_short_call_with_ssid"
+../src/___tests___/aprsis_test.cpp(379): info: check ln == output_buffer_str.size() has passed
+../src/___tests___/aprsis_test.cpp(362): Leaving test case "encode_message_from_short_call_with_ssid"; testing time: 60us
+../src/___tests___/aprsis_test.cpp(385): Entering test case "decode_message_one"
 SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ   :tedt{0s}
 
-../src/___tests___/aprsis_test.cpp(286): info: check result == 0 has passed
+../src/___tests___/aprsis_test.cpp(393): info: check result == 0 has passed
 SR9WXZ
 0
-../src/___tests___/aprsis_test.cpp(292): info: check decoded_recipient == recipient has passed
-../src/___tests___/aprsis_test.cpp(295): info: check message_content == decoded_message_content has passed
-../src/___tests___/aprsis_test.cpp(298): info: check 0 == decoded.number has passed
-../src/___tests___/aprsis_test.cpp(299): info: check "0s" == number_str has passed
-../src/___tests___/aprsis_test.cpp(278): Leaving test case "decode_message_one"; testing time: 289us
-../src/___tests___/aprsis_test.cpp(303): Entering test case "decode_message_with_ssid"
+../src/___tests___/aprsis_test.cpp(399): info: check decoded_recipient == recipient has passed
+../src/___tests___/aprsis_test.cpp(402): info: check message_content == decoded_message_content has passed
+../src/___tests___/aprsis_test.cpp(405): info: check 0 == decoded.number has passed
+../src/___tests___/aprsis_test.cpp(406): info: check "0s" == number_str has passed
+../src/___tests___/aprsis_test.cpp(385): Leaving test case "decode_message_one"; testing time: 73us
+../src/___tests___/aprsis_test.cpp(410): Entering test case "decode_message_with_ssid"
 SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ-9 :tedt{0s}
 
-../src/___tests___/aprsis_test.cpp(312): info: check result == 0 has passed
+../src/___tests___/aprsis_test.cpp(419): info: check result == 0 has passed
 SP8EBC
 0
-../src/___tests___/aprsis_test.cpp(318): info: check decoded_sender == sender has passed
-../src/___tests___/aprsis_test.cpp(319): info: check decoded.from.ssid == 0 has passed
+../src/___tests___/aprsis_test.cpp(425): info: check decoded_sender == sender has passed
+../src/___tests___/aprsis_test.cpp(426): info: check decoded.from.ssid == 0 has passed
 SR9WXZ
 9
-../src/___tests___/aprsis_test.cpp(325): info: check decoded_recipient == recipient has passed
-../src/___tests___/aprsis_test.cpp(326): info: check decoded.to.ssid == 9 has passed
-../src/___tests___/aprsis_test.cpp(329): info: check message_content == decoded_message_content has passed
-../src/___tests___/aprsis_test.cpp(330): info: check message_content.size() == decoded.content_ln has passed
-../src/___tests___/aprsis_test.cpp(332): info: check 0 == decoded.number has passed
-../src/___tests___/aprsis_test.cpp(303): Leaving test case "decode_message_with_ssid"; testing time: 338us
-../src/___tests___/aprsis_test.cpp(335): Entering test case "decode_message_with_twodigit_ssid"
+../src/___tests___/aprsis_test.cpp(432): info: check decoded_recipient == recipient has passed
+../src/___tests___/aprsis_test.cpp(433): info: check decoded.to.ssid == 9 has passed
+../src/___tests___/aprsis_test.cpp(436): info: check message_content == decoded_message_content has passed
+../src/___tests___/aprsis_test.cpp(437): info: check message_content.size() == decoded.content_ln has passed
+../src/___tests___/aprsis_test.cpp(439): info: check 0 == decoded.number has passed
+../src/___tests___/aprsis_test.cpp(410): Leaving test case "decode_message_with_ssid"; testing time: 81us
+../src/___tests___/aprsis_test.cpp(442): Entering test case "decode_message_with_twodigit_ssid"
 SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ-12:tedt{0s}
 
-../src/___tests___/aprsis_test.cpp(343): info: check result == 0 has passed
+../src/___tests___/aprsis_test.cpp(450): info: check result == 0 has passed
 SR9WXZ
 12
-../src/___tests___/aprsis_test.cpp(349): info: check decoded_recipient == recipient has passed
-../src/___tests___/aprsis_test.cpp(350): info: check decoded.to.ssid == 12 has passed
-../src/___tests___/aprsis_test.cpp(353): info: check message_content == decoded_message_content has passed
-../src/___tests___/aprsis_test.cpp(354): info: check message_content.size() == decoded.content_ln has passed
-../src/___tests___/aprsis_test.cpp(356): info: check 0 == decoded.number has passed
-../src/___tests___/aprsis_test.cpp(335): Leaving test case "decode_message_with_twodigit_ssid"; testing time: 295us
-../src/___tests___/aprsis_test.cpp(359): Entering test case "decode_message_with_sender_and_recipient_ssid"
+../src/___tests___/aprsis_test.cpp(456): info: check decoded_recipient == recipient has passed
+../src/___tests___/aprsis_test.cpp(457): info: check decoded.to.ssid == 12 has passed
+../src/___tests___/aprsis_test.cpp(460): info: check message_content == decoded_message_content has passed
+../src/___tests___/aprsis_test.cpp(461): info: check message_content.size() == decoded.content_ln has passed
+../src/___tests___/aprsis_test.cpp(463): info: check 0 == decoded.number has passed
+../src/___tests___/aprsis_test.cpp(442): Leaving test case "decode_message_with_twodigit_ssid"; testing time: 74us
+../src/___tests___/aprsis_test.cpp(466): Entering test case "decode_message_with_sender_and_recipient_ssid"
 SP8EBC-11>APX216,TCPIP*,qAC,NINTH::SR9WXZ-9 :rgagagtest1234556785465AH   {0s}
 
-../src/___tests___/aprsis_test.cpp(368): info: check result == 0 has passed
+../src/___tests___/aprsis_test.cpp(475): info: check result == 0 has passed
 SP8EBC
 11
-../src/___tests___/aprsis_test.cpp(374): info: check decoded_sender == sender has passed
-../src/___tests___/aprsis_test.cpp(375): info: check decoded.from.ssid == 11 has passed
+../src/___tests___/aprsis_test.cpp(481): info: check decoded_sender == sender has passed
+../src/___tests___/aprsis_test.cpp(482): info: check decoded.from.ssid == 11 has passed
 SR9WXZ
 9
-../src/___tests___/aprsis_test.cpp(381): info: check decoded_recipient == recipient has passed
-../src/___tests___/aprsis_test.cpp(382): info: check decoded.to.ssid == 9 has passed
-../src/___tests___/aprsis_test.cpp(385): info: check message_content == decoded_message_content has passed
-../src/___tests___/aprsis_test.cpp(386): info: check message_content.size() == decoded.content_ln has passed
-../src/___tests___/aprsis_test.cpp(388): info: check 0 == decoded.number has passed
-../src/___tests___/aprsis_test.cpp(359): Leaving test case "decode_message_with_sender_and_recipient_ssid"; testing time: 331us
-../src/___tests___/aprsis_test.cpp(392): Entering test case "decode_message_with_ssid_nonzero_counter"
+../src/___tests___/aprsis_test.cpp(488): info: check decoded_recipient == recipient has passed
+../src/___tests___/aprsis_test.cpp(489): info: check decoded.to.ssid == 9 has passed
+../src/___tests___/aprsis_test.cpp(492): info: check message_content == decoded_message_content has passed
+../src/___tests___/aprsis_test.cpp(493): info: check message_content.size() == decoded.content_ln has passed
+../src/___tests___/aprsis_test.cpp(495): info: check 0 == decoded.number has passed
+../src/___tests___/aprsis_test.cpp(466): Leaving test case "decode_message_with_sender_and_recipient_ssid"; testing time: 83us
+../src/___tests___/aprsis_test.cpp(499): Entering test case "decode_message_with_ssid_nonzero_counter"
 SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ-9 :tedt{4s}
 
-../src/___tests___/aprsis_test.cpp(400): info: check result == 0 has passed
+../src/___tests___/aprsis_test.cpp(507): info: check result == 0 has passed
 SR9WXZ
 9
-../src/___tests___/aprsis_test.cpp(406): info: check decoded_recipient == recipient has passed
-../src/___tests___/aprsis_test.cpp(407): info: check decoded.to.ssid == 9 has passed
-../src/___tests___/aprsis_test.cpp(410): info: check message_content == decoded_message_content has passed
-../src/___tests___/aprsis_test.cpp(411): info: check message_content.size() == decoded.content_ln has passed
-../src/___tests___/aprsis_test.cpp(413): info: check 4 == decoded.number has passed
-../src/___tests___/aprsis_test.cpp(392): Leaving test case "decode_message_with_ssid_nonzero_counter"; testing time: 299us
-../src/___tests___/aprsis_test.cpp(416): Entering test case "decode_message_with_ssid_twodigits_counter"
+../src/___tests___/aprsis_test.cpp(513): info: check decoded_recipient == recipient has passed
+../src/___tests___/aprsis_test.cpp(514): info: check decoded.to.ssid == 9 has passed
+../src/___tests___/aprsis_test.cpp(517): info: check message_content == decoded_message_content has passed
+../src/___tests___/aprsis_test.cpp(518): info: check message_content.size() == decoded.content_ln has passed
+../src/___tests___/aprsis_test.cpp(520): info: check 4 == decoded.number has passed
+../src/___tests___/aprsis_test.cpp(499): Leaving test case "decode_message_with_ssid_nonzero_counter"; testing time: 81us
+../src/___tests___/aprsis_test.cpp(523): Entering test case "decode_message_with_ssid_twodigits_counter"
 SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ-9 :tedt{14s}
 
-../src/___tests___/aprsis_test.cpp(424): info: check result == 0 has passed
+../src/___tests___/aprsis_test.cpp(531): info: check result == 0 has passed
 SR9WXZ
 9
-../src/___tests___/aprsis_test.cpp(430): info: check decoded_recipient == recipient has passed
-../src/___tests___/aprsis_test.cpp(431): info: check decoded.to.ssid == 9 has passed
-../src/___tests___/aprsis_test.cpp(434): info: check message_content == decoded_message_content has passed
-../src/___tests___/aprsis_test.cpp(435): info: check message_content.size() == decoded.content_ln has passed
-../src/___tests___/aprsis_test.cpp(437): info: check 14 == decoded.number has passed
-../src/___tests___/aprsis_test.cpp(416): Leaving test case "decode_message_with_ssid_twodigits_counter"; testing time: 295us
-../src/___tests___/aprsis_test.cpp(440): Entering test case "decode_message_with_ssid_twodigits_counter_provided_content_position"
+../src/___tests___/aprsis_test.cpp(537): info: check decoded_recipient == recipient has passed
+../src/___tests___/aprsis_test.cpp(538): info: check decoded.to.ssid == 9 has passed
+../src/___tests___/aprsis_test.cpp(541): info: check message_content == decoded_message_content has passed
+../src/___tests___/aprsis_test.cpp(542): info: check message_content.size() == decoded.content_ln has passed
+../src/___tests___/aprsis_test.cpp(544): info: check 14 == decoded.number has passed
+../src/___tests___/aprsis_test.cpp(523): Leaving test case "decode_message_with_ssid_twodigits_counter"; testing time: 74us
+../src/___tests___/aprsis_test.cpp(547): Entering test case "decode_message_with_ssid_twodigits_counter_provided_content_position"
 SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ-9 :tedt{14s}
 
-../src/___tests___/aprsis_test.cpp(448): info: check result == 0 has passed
+../src/___tests___/aprsis_test.cpp(555): info: check result == 0 has passed
 SR9WXZ
 9
-../src/___tests___/aprsis_test.cpp(454): info: check decoded_recipient == recipient has passed
-../src/___tests___/aprsis_test.cpp(455): info: check decoded.to.ssid == 9 has passed
-../src/___tests___/aprsis_test.cpp(458): info: check message_content == decoded_message_content has passed
-../src/___tests___/aprsis_test.cpp(459): info: check message_content.size() == decoded.content_ln has passed
-../src/___tests___/aprsis_test.cpp(461): info: check 14 == decoded.number has passed
-../src/___tests___/aprsis_test.cpp(440): Leaving test case "decode_message_with_ssid_twodigits_counter_provided_content_position"; testing time: 501us
-../src/___tests___/aprsis_test.cpp(464): Entering test case "decode_message_wrong_content_position"
+../src/___tests___/aprsis_test.cpp(561): info: check decoded_recipient == recipient has passed
+../src/___tests___/aprsis_test.cpp(562): info: check decoded.to.ssid == 9 has passed
+../src/___tests___/aprsis_test.cpp(565): info: check message_content == decoded_message_content has passed
+../src/___tests___/aprsis_test.cpp(566): info: check message_content.size() == decoded.content_ln has passed
+../src/___tests___/aprsis_test.cpp(568): info: check 14 == decoded.number has passed
+../src/___tests___/aprsis_test.cpp(547): Leaving test case "decode_message_with_ssid_twodigits_counter_provided_content_position"; testing time: 73us
+../src/___tests___/aprsis_test.cpp(571): Entering test case "decode_message_wrong_content_position"
 SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ-9 :tedt{14s}
 
-../src/___tests___/aprsis_test.cpp(472): info: check result != 0 has passed
-../src/___tests___/aprsis_test.cpp(464): Leaving test case "decode_message_wrong_content_position"; testing time: 251us
-../src/___tests___/aprsis_test.cpp(475): Entering test case "decode_message_wrong_content_position_to_small"
+../src/___tests___/aprsis_test.cpp(579): info: check result != 0 has passed
+../src/___tests___/aprsis_test.cpp(571): Leaving test case "decode_message_wrong_content_position"; testing time: 60us
+../src/___tests___/aprsis_test.cpp(582): Entering test case "decode_message_wrong_content_position_to_small"
 SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ-9 :tedt{14s}
 
-../src/___tests___/aprsis_test.cpp(483): info: check result != 0 has passed
-../src/___tests___/aprsis_test.cpp(475): Leaving test case "decode_message_wrong_content_position_to_small"; testing time: 238us
-../src/___tests___/aprsis_test.cpp(486): Entering test case "decode_message_malformed_structure"
+../src/___tests___/aprsis_test.cpp(590): info: check result != 0 has passed
+../src/___tests___/aprsis_test.cpp(582): Leaving test case "decode_message_wrong_content_position_to_small"; testing time: 59us
+../src/___tests___/aprsis_test.cpp(593): Entering test case "decode_message_malformed_structure"
 SP8EBC>APX216,TCPIP*,qAC,NINTH::SR9WXZ-9  :tedt{14s}
 
-../src/___tests___/aprsis_test.cpp(494): info: check result != 0 has passed
-../src/___tests___/aprsis_test.cpp(486): Leaving test case "decode_message_malformed_structure"; testing time: 193us
-../src/___tests___/aprsis_test.cpp(497): Entering test case "decode_message_from_radio_one"
+../src/___tests___/aprsis_test.cpp(601): info: check result != 0 has passed
+../src/___tests___/aprsis_test.cpp(593): Leaving test case "decode_message_malformed_structure"; testing time: 59us
+../src/___tests___/aprsis_test.cpp(604): Entering test case "decode_message_from_radio_one"
 :SR9WXZ-9 :tedt{14s}
 
-../src/___tests___/aprsis_test.cpp(505): info: check result == 0 has passed
+../src/___tests___/aprsis_test.cpp(612): info: check result == 0 has passed
 SR9WXZ
 9
-../src/___tests___/aprsis_test.cpp(511): info: check decoded_recipient == recipient has passed
-../src/___tests___/aprsis_test.cpp(512): info: check decoded.to.ssid == 9 has passed
-../src/___tests___/aprsis_test.cpp(515): info: check message_content == decoded_message_content has passed
-../src/___tests___/aprsis_test.cpp(517): info: check 14 == decoded.number has passed
-../src/___tests___/aprsis_test.cpp(497): Leaving test case "decode_message_from_radio_one"; testing time: 292us
-../src/___tests___/aprsis_test.cpp(520): Entering test case "decode_message_from_radio_twodigit_ssid"
+../src/___tests___/aprsis_test.cpp(618): info: check decoded_recipient == recipient has passed
+../src/___tests___/aprsis_test.cpp(619): info: check decoded.to.ssid == 9 has passed
+../src/___tests___/aprsis_test.cpp(622): info: check message_content == decoded_message_content has passed
+../src/___tests___/aprsis_test.cpp(624): info: check 14 == decoded.number has passed
+../src/___tests___/aprsis_test.cpp(604): Leaving test case "decode_message_from_radio_one"; testing time: 73us
+../src/___tests___/aprsis_test.cpp(627): Entering test case "decode_message_from_radio_twodigit_ssid"
 :SR9WXZ-13:tedt{14s}
 
-../src/___tests___/aprsis_test.cpp(528): info: check result == 0 has passed
+../src/___tests___/aprsis_test.cpp(635): info: check result == 0 has passed
 SR9WXZ
 13
-../src/___tests___/aprsis_test.cpp(534): info: check decoded_recipient == recipient has passed
-../src/___tests___/aprsis_test.cpp(535): info: check decoded.to.ssid == 13 has passed
-../src/___tests___/aprsis_test.cpp(538): info: check message_content == decoded_message_content has passed
-../src/___tests___/aprsis_test.cpp(540): info: check 14 == decoded.number has passed
-../src/___tests___/aprsis_test.cpp(520): Leaving test case "decode_message_from_radio_twodigit_ssid"; testing time: 286us
-../src/___tests___/aprsis_test.cpp(543): Entering test case "decode_message_from_radio_twodigit_ssid_whitespaces"
+../src/___tests___/aprsis_test.cpp(641): info: check decoded_recipient == recipient has passed
+../src/___tests___/aprsis_test.cpp(642): info: check decoded.to.ssid == 13 has passed
+../src/___tests___/aprsis_test.cpp(645): info: check message_content == decoded_message_content has passed
+../src/___tests___/aprsis_test.cpp(647): info: check 14 == decoded.number has passed
+../src/___tests___/aprsis_test.cpp(627): Leaving test case "decode_message_from_radio_twodigit_ssid"; testing time: 71us
+../src/___tests___/aprsis_test.cpp(650): Entering test case "decode_message_from_radio_twodigit_ssid_whitespaces"
     :SR9WXZ-13:tedt{14s}
 
-../src/___tests___/aprsis_test.cpp(551): info: check result == 0 has passed
+../src/___tests___/aprsis_test.cpp(658): info: check result == 0 has passed
 SR9WXZ
 13
-../src/___tests___/aprsis_test.cpp(557): info: check decoded_recipient == recipient has passed
-../src/___tests___/aprsis_test.cpp(558): info: check decoded.to.ssid == 13 has passed
-../src/___tests___/aprsis_test.cpp(561): info: check message_content == decoded_message_content has passed
-../src/___tests___/aprsis_test.cpp(563): info: check 14 == decoded.number has passed
-../src/___tests___/aprsis_test.cpp(543): Leaving test case "decode_message_from_radio_twodigit_ssid_whitespaces"; testing time: 289us
-../src/___tests___/aprsis_test.cpp(566): Entering test case "decode_message_from_radio_random_garbage"
+../src/___tests___/aprsis_test.cpp(664): info: check decoded_recipient == recipient has passed
+../src/___tests___/aprsis_test.cpp(665): info: check decoded.to.ssid == 13 has passed
+../src/___tests___/aprsis_test.cpp(668): info: check message_content == decoded_message_content has passed
+../src/___tests___/aprsis_test.cpp(670): info: check 14 == decoded.number has passed
+../src/___tests___/aprsis_test.cpp(650): Leaving test case "decode_message_from_radio_twodigit_ssid_whitespaces"; testing time: 71us
+../src/___tests___/aprsis_test.cpp(673): Entering test case "decode_message_from_radio_random_garbage"
  dupa dupa dupa cycki
-../src/___tests___/aprsis_test.cpp(572): info: check result != 0 has passed
-../src/___tests___/aprsis_test.cpp(566): Leaving test case "decode_message_from_radio_random_garbage"; testing time: 241us
-../src/___tests___/aprsis_test.cpp(575): Entering test case "decode_message_from_aprsis_random_garbage"
-../src/___tests___/aprsis_test.cpp(583): info: check result != 0 has passed
-../src/___tests___/aprsis_test.cpp(575): Leaving test case "decode_message_from_aprsis_random_garbage"; testing time: 236us
-../src/___tests___/aprsis_test.cpp(586): Entering test case "message_for_me"
-../src/___tests___/aprsis_test.cpp(596): info: check 0 == message_is_for_me(config.callsign, config.ssid, &message) has passed
-../src/___tests___/aprsis_test.cpp(586): Leaving test case "message_for_me"; testing time: 208us
-../src/___tests___/aprsis_test.cpp(599): Entering test case "message_for_me_second"
-../src/___tests___/aprsis_test.cpp(609): info: check 0 == message_is_for_me(config.callsign, config.ssid, &message) has passed
-../src/___tests___/aprsis_test.cpp(599): Leaving test case "message_for_me_second"; testing time: 182us
-../src/___tests___/aprsis_test.cpp(612): Entering test case "message_not_for_me"
-../src/___tests___/aprsis_test.cpp(622): info: check 1 == message_is_for_me(config.callsign, config.ssid, &message) has passed
-../src/___tests___/aprsis_test.cpp(612): Leaving test case "message_not_for_me"; testing time: 181us
-../src/___tests___/aprsis_test.cpp(625): Entering test case "create_ack_aprsis_theirs_ssid"
+../src/___tests___/aprsis_test.cpp(679): info: check result != 0 has passed
+../src/___tests___/aprsis_test.cpp(673): Leaving test case "decode_message_from_radio_random_garbage"; testing time: 60us
+../src/___tests___/aprsis_test.cpp(682): Entering test case "decode_message_from_aprsis_random_garbage"
+../src/___tests___/aprsis_test.cpp(690): info: check result != 0 has passed
+../src/___tests___/aprsis_test.cpp(682): Leaving test case "decode_message_from_aprsis_random_garbage"; testing time: 59us
+../src/___tests___/aprsis_test.cpp(693): Entering test case "message_for_me"
+../src/___tests___/aprsis_test.cpp(703): info: check 0 == message_is_for_me(config.callsign, config.ssid, &message) has passed
+../src/___tests___/aprsis_test.cpp(693): Leaving test case "message_for_me"; testing time: 58us
+../src/___tests___/aprsis_test.cpp(706): Entering test case "message_for_me_second"
+../src/___tests___/aprsis_test.cpp(716): info: check 0 == message_is_for_me(config.callsign, config.ssid, &message) has passed
+../src/___tests___/aprsis_test.cpp(706): Leaving test case "message_for_me_second"; testing time: 57us
+../src/___tests___/aprsis_test.cpp(719): Entering test case "message_not_for_me"
+../src/___tests___/aprsis_test.cpp(729): info: check 1 == message_is_for_me(config.callsign, config.ssid, &message) has passed
+../src/___tests___/aprsis_test.cpp(719): Leaving test case "message_not_for_me"; testing time: 58us
+../src/___tests___/aprsis_test.cpp(732): Entering test case "create_ack_aprsis_theirs_ssid"
 SR9WXZ-1>AKLPRZ::SP8EBC   :ack9
 
-../src/___tests___/aprsis_test.cpp(643): info: check ack == "SR9WXZ-1>AKLPRZ::SP8EBC   :ack9\r\n" has passed
-../src/___tests___/aprsis_test.cpp(625): Leaving test case "create_ack_aprsis_theirs_ssid"; testing time: 192us
-../src/___tests___/aprsis_test.cpp(646): Entering test case "create_ack_aprsis_theirs_no_ssid"
+../src/___tests___/aprsis_test.cpp(750): info: check ack == "SR9WXZ-1>AKLPRZ::SP8EBC   :ack9\r\n" has passed
+../src/___tests___/aprsis_test.cpp(732): Leaving test case "create_ack_aprsis_theirs_ssid"; testing time: 61us
+../src/___tests___/aprsis_test.cpp(753): Entering test case "create_ack_aprsis_theirs_no_ssid"
 SR9WXZ>AKLPRZ::SP8EBC   :ack9
 
-../src/___tests___/aprsis_test.cpp(665): info: check ack == "SR9WXZ>AKLPRZ::SP8EBC   :ack9\r\n" has passed
-../src/___tests___/aprsis_test.cpp(646): Leaving test case "create_ack_aprsis_theirs_no_ssid"; testing time: 189us
-../src/___tests___/aprsis_test.cpp(668): Entering test case "create_ack_aprsis_mine_ssid"
+../src/___tests___/aprsis_test.cpp(772): info: check ack == "SR9WXZ>AKLPRZ::SP8EBC   :ack9\r\n" has passed
+../src/___tests___/aprsis_test.cpp(753): Leaving test case "create_ack_aprsis_theirs_no_ssid"; testing time: 60us
+../src/___tests___/aprsis_test.cpp(775): Entering test case "create_ack_aprsis_mine_ssid"
 SR9WXZ>AKLPRZ::SP8EBC-11:ack9
 
-../src/___tests___/aprsis_test.cpp(687): info: check ack == "SR9WXZ>AKLPRZ::SP8EBC-11:ack9\r\n" has passed
-../src/___tests___/aprsis_test.cpp(668): Leaving test case "create_ack_aprsis_mine_ssid"; testing time: 189us
-../src/___tests___/aprsis_test.cpp(690): Entering test case "create_ack_aprsis_mine_ssid_hex"
+../src/___tests___/aprsis_test.cpp(794): info: check ack == "SR9WXZ>AKLPRZ::SP8EBC-11:ack9\r\n" has passed
+../src/___tests___/aprsis_test.cpp(775): Leaving test case "create_ack_aprsis_mine_ssid"; testing time: 61us
+../src/___tests___/aprsis_test.cpp(797): Entering test case "create_ack_aprsis_mine_ssid_hex"
 SR9WXZ>AKLPRZ::SP8EBC-11:ack10
 
-../src/___tests___/aprsis_test.cpp(709): info: check ack == "SR9WXZ>AKLPRZ::SP8EBC-11:ack10\r\n" has passed
-../src/___tests___/aprsis_test.cpp(690): Leaving test case "create_ack_aprsis_mine_ssid_hex"; testing time: 193us
-../src/___tests___/aprsis_test.cpp(712): Entering test case "create_ack_aprsis_mine_ssid_hex_counter"
+../src/___tests___/aprsis_test.cpp(816): info: check ack == "SR9WXZ>AKLPRZ::SP8EBC-11:ack10\r\n" has passed
+../src/___tests___/aprsis_test.cpp(797): Leaving test case "create_ack_aprsis_mine_ssid_hex"; testing time: 61us
+../src/___tests___/aprsis_test.cpp(819): Entering test case "create_ack_aprsis_mine_ssid_hex_counter"
 SR9WXZ>AKLPRZ::SP8EBC-11:ack1K
 
-../src/___tests___/aprsis_test.cpp(731): info: check ack == "SR9WXZ>AKLPRZ::SP8EBC-11:ack1K\r\n" has passed
-../src/___tests___/aprsis_test.cpp(712): Leaving test case "create_ack_aprsis_mine_ssid_hex_counter"; testing time: 208us
-../src/___tests___/aprsis_test.cpp(734): Entering test case "message_number_str_to_int_hex_1digits"
-../src/___tests___/aprsis_test.cpp(741): info: check 15 == result has passed
-../src/___tests___/aprsis_test.cpp(742): info: check 15 == message.number has passed
-../src/___tests___/aprsis_test.cpp(734): Leaving test case "message_number_str_to_int_hex_1digits"; testing time: 190us
-../src/___tests___/aprsis_test.cpp(745): Entering test case "message_number_str_to_int_hex_1digits_"
-../src/___tests___/aprsis_test.cpp(752): info: check 15 == result has passed
-../src/___tests___/aprsis_test.cpp(753): info: check 15 == message.number has passed
-../src/___tests___/aprsis_test.cpp(754): info: check MESSAGE_SOURCE_RADIO_HEXCNTR == message.source has passed
-../src/___tests___/aprsis_test.cpp(745): Leaving test case "message_number_str_to_int_hex_1digits_"; testing time: 210us
-../src/___tests___/aprsis_test.cpp(757): Entering test case "message_number_str_to_int_hex_2digits"
-../src/___tests___/aprsis_test.cpp(764): info: check 255 == result has passed
-../src/___tests___/aprsis_test.cpp(765): info: check 255 == message.number has passed
-../src/___tests___/aprsis_test.cpp(766): info: check MESSAGE_SOURCE_APRSIS_HEXCNTR == message.source has passed
-../src/___tests___/aprsis_test.cpp(757): Leaving test case "message_number_str_to_int_hex_2digits"; testing time: 197us
-../src/___tests___/aprsis_test.cpp(769): Entering test case "message_number_str_to_int_hex_2digits_"
-../src/___tests___/aprsis_test.cpp(776): info: check 250 == result has passed
-../src/___tests___/aprsis_test.cpp(777): info: check 250 == message.number has passed
-../src/___tests___/aprsis_test.cpp(778): info: check MESSAGE_SOURCE_APRSIS_HEXCNTR == message.source has passed
-../src/___tests___/aprsis_test.cpp(769): Leaving test case "message_number_str_to_int_hex_2digits_"; testing time: 197us
-../src/___tests___/aprsis_test.cpp(781): Entering test case "message_number_str_to_int_dec_1digits"
-../src/___tests___/aprsis_test.cpp(788): info: check 1 == result has passed
-../src/___tests___/aprsis_test.cpp(781): Leaving test case "message_number_str_to_int_dec_1digits"; testing time: 188us
-../src/___tests___/aprsis_test.cpp(791): Entering test case "message_number_str_to_int_dec_2digits"
-../src/___tests___/aprsis_test.cpp(798): info: check 12 == result has passed
-../src/___tests___/aprsis_test.cpp(791): Leaving test case "message_number_str_to_int_dec_2digits"; testing time: 182us
-../src/___tests___/aprsis_test.cpp(801): Entering test case "message_number_str_to_int_dec_3digits"
-../src/___tests___/aprsis_test.cpp(808): info: check 123 == result has passed
-../src/___tests___/aprsis_test.cpp(801): Leaving test case "message_number_str_to_int_dec_3digits"; testing time: 184us
-../src/___tests___/aprsis_test.cpp(811): Entering test case "message_number_str_to_int_dec_4digits"
-../src/___tests___/aprsis_test.cpp(818): info: check 1234 == result has passed
-../src/___tests___/aprsis_test.cpp(811): Leaving test case "message_number_str_to_int_dec_4digits"; testing time: 183us
-../src/___tests___/aprsis_test.cpp(821): Entering test case "message_number_str_to_int_dec_5digits"
-../src/___tests___/aprsis_test.cpp(828): info: check 12345 == result has passed
-../src/___tests___/aprsis_test.cpp(821): Leaving test case "message_number_str_to_int_dec_5digits"; testing time: 180us
-../src/___tests___/aprsis_test.cpp(831): Entering test case "message_number_str_to_int_dec_6digits"
-../src/___tests___/aprsis_test.cpp(838): info: check 123456 == result has passed
-../src/___tests___/aprsis_test.cpp(839): info: check MESSAGE_SOURCE_APRSIS == message.source has passed
-../src/___tests___/aprsis_test.cpp(831): Leaving test case "message_number_str_to_int_dec_6digits"; testing time: 188us
-Leaving test module "APRSIS"; testing time: 10568us
+../src/___tests___/aprsis_test.cpp(838): info: check ack == "SR9WXZ>AKLPRZ::SP8EBC-11:ack1K\r\n" has passed
+../src/___tests___/aprsis_test.cpp(819): Leaving test case "create_ack_aprsis_mine_ssid_hex_counter"; testing time: 61us
+../src/___tests___/aprsis_test.cpp(841): Entering test case "message_number_str_to_int_hex_1digits"
+../src/___tests___/aprsis_test.cpp(848): info: check 15 == result has passed
+../src/___tests___/aprsis_test.cpp(849): info: check 15 == message.number has passed
+../src/___tests___/aprsis_test.cpp(841): Leaving test case "message_number_str_to_int_hex_1digits"; testing time: 61us
+../src/___tests___/aprsis_test.cpp(852): Entering test case "message_number_str_to_int_hex_1digits_"
+../src/___tests___/aprsis_test.cpp(859): info: check 15 == result has passed
+../src/___tests___/aprsis_test.cpp(860): info: check 15 == message.number has passed
+../src/___tests___/aprsis_test.cpp(861): info: check MESSAGE_SOURCE_RADIO_HEXCNTR == message.source has passed
+../src/___tests___/aprsis_test.cpp(852): Leaving test case "message_number_str_to_int_hex_1digits_"; testing time: 62us
+../src/___tests___/aprsis_test.cpp(864): Entering test case "message_number_str_to_int_hex_2digits"
+../src/___tests___/aprsis_test.cpp(871): info: check 255 == result has passed
+../src/___tests___/aprsis_test.cpp(872): info: check 255 == message.number has passed
+../src/___tests___/aprsis_test.cpp(873): info: check MESSAGE_SOURCE_APRSIS_HEXCNTR == message.source has passed
+../src/___tests___/aprsis_test.cpp(864): Leaving test case "message_number_str_to_int_hex_2digits"; testing time: 62us
+../src/___tests___/aprsis_test.cpp(876): Entering test case "message_number_str_to_int_hex_2digits_"
+../src/___tests___/aprsis_test.cpp(883): info: check 250 == result has passed
+../src/___tests___/aprsis_test.cpp(884): info: check 250 == message.number has passed
+../src/___tests___/aprsis_test.cpp(885): info: check MESSAGE_SOURCE_APRSIS_HEXCNTR == message.source has passed
+../src/___tests___/aprsis_test.cpp(876): Leaving test case "message_number_str_to_int_hex_2digits_"; testing time: 62us
+../src/___tests___/aprsis_test.cpp(888): Entering test case "message_number_str_to_int_dec_1digits"
+../src/___tests___/aprsis_test.cpp(895): info: check 1 == result has passed
+../src/___tests___/aprsis_test.cpp(888): Leaving test case "message_number_str_to_int_dec_1digits"; testing time: 58us
+../src/___tests___/aprsis_test.cpp(898): Entering test case "message_number_str_to_int_dec_2digits"
+../src/___tests___/aprsis_test.cpp(905): info: check 12 == result has passed
+../src/___tests___/aprsis_test.cpp(898): Leaving test case "message_number_str_to_int_dec_2digits"; testing time: 58us
+../src/___tests___/aprsis_test.cpp(908): Entering test case "message_number_str_to_int_dec_3digits"
+../src/___tests___/aprsis_test.cpp(915): info: check 123 == result has passed
+../src/___tests___/aprsis_test.cpp(908): Leaving test case "message_number_str_to_int_dec_3digits"; testing time: 58us
+../src/___tests___/aprsis_test.cpp(918): Entering test case "message_number_str_to_int_dec_4digits"
+../src/___tests___/aprsis_test.cpp(925): info: check 1234 == result has passed
+../src/___tests___/aprsis_test.cpp(918): Leaving test case "message_number_str_to_int_dec_4digits"; testing time: 58us
+../src/___tests___/aprsis_test.cpp(928): Entering test case "message_number_str_to_int_dec_5digits"
+../src/___tests___/aprsis_test.cpp(935): info: check 12345 == result has passed
+../src/___tests___/aprsis_test.cpp(928): Leaving test case "message_number_str_to_int_dec_5digits"; testing time: 59us
+../src/___tests___/aprsis_test.cpp(938): Entering test case "message_number_str_to_int_dec_6digits"
+../src/___tests___/aprsis_test.cpp(945): info: check 123456 == result has passed
+../src/___tests___/aprsis_test.cpp(946): info: check MESSAGE_SOURCE_APRSIS == message.source has passed
+../src/___tests___/aprsis_test.cpp(938): Leaving test case "message_number_str_to_int_dec_6digits"; testing time: 61us
+Leaving test module "APRSIS"; testing time: 3173us
