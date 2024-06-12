@@ -8,7 +8,9 @@
 extern "C" {
 #include <___stubs___/other_stubs.h>
 #include <___stubs___/stdperiph_stubs.h>
+#include <___stubs___/flash_stubs.h>
 #include "nvm.h"
+#include "memory_map.h"
 }
 
 #include "memory_map_stubs.h"
@@ -21,6 +23,8 @@ extern "C" {
 #include <cstring>
 #include <iostream>
 #include <fstream>
+
+static uint32_t EraseTestCallback_index = 0;
 
 static event_log_t EventLogTimesyncFactory(uint32_t time, uint32_t date) {
 
@@ -262,4 +266,63 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____empty)
 
 	BOOST_CHECK_EQUAL(res, NVM_EVENT_EMPTY);
 
+}
+
+void erase_test_callback(uint32_t address) {
+	char message[128];
+
+	const uint32_t start = (uint32_t)((uintptr_t)MEMORY_MAP_EVENT_LOG_START & (uintptr_t)0xFFFFFFFFu);
+	const uint32_t end = (uint32_t)((uintptr_t)MEMORY_MAP_EVENT_LOG_END & (uintptr_t)0xFFFFFFFFu);
+
+	EraseTestCallback_index = (address - start) / sizeof(event_log_t);
+
+	snprintf(message, 128, "0x%X, start 0x%X, end 0x%X, index %d", address, start, end, EraseTestCallback_index);
+
+	BOOST_TEST_MESSAGE(message);
+}
+
+BOOST_AUTO_TEST_CASE(push_new_event)
+{
+	event_log_t ev, pre, aft, neew;
+
+	EraseTestCallback_index = 0;
+
+	// initialize to all FFs, which is default memory content in erase state
+	memset(EventLogStub, 0xFF, LOG_ENTRY_SIZE * LOG_ENTRIES);
+
+	const event_log_t startTimesync = EventLogTimesyncFactory(123, 456);
+
+	memcpy(EventLogStub, (void*)&startTimesync, sizeof(event_log_t));
+
+	// emulated page size is LOG_ENTRIES / 5 * sizeof(event_log_t), which is
+	// 4 * sizeof(event_log_t), which equals to 4 * LOG_ENTRY_SIZE = 64
+	for (int i = 0; i < LOG_ENTRIES; i++) {
+
+		if (i == LOG_ENTRIES / 5) {
+			ev = startTimesync;
+		}
+		else if (i < LOG_ENTRIES / 5) {
+			pre = EventLogEventFactory(234 * i, 11);
+			ev = pre;
+		}
+		else if (i > LOG_ENTRIES / 5) {
+			aft = EventLogEventFactory(23 * i, 1);
+			ev = aft;
+		}
+
+		memcpy(EventLogStub + i * sizeof(event_log_t), (void*)&ev, sizeof(event_log_t));
+	}
+
+	event_log_t* oldest;
+	event_log_t* newest;
+
+	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest);
+
+	BOOST_CHECK_EQUAL(res, NVM_EVENT_OVERRUN);
+
+	neew.event_master_time = 123456;
+
+	checkFunction = erase_test_callback;
+
+	nvm_event_log_push_new_event(&neew, &oldest, &newest);
 }
