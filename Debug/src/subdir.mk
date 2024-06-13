@@ -47,7 +47,7 @@ OBJS += \
 src/%.o: ../src/%.c src/subdir.mk
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C Compiler'
-	gcc -DSTM32F10X_MD_VL -DNVM_PAGE_SIZE=64 -DUNIT_TEST -D_ANEMOMETER_ANALOGUE -I"/home/mateusz/Documents/___STM32/ParaTNC_unit_tests/src/drivers" -I"/home/mateusz/Documents/___STM32/ParaTNC_unit_tests/src/___stubs___" -I"/home/mateusz/Documents/___STM32/ParaTNC_unit_tests/src/___memory_map___" -I"/home/mateusz/Documents/___STM32/ParaTNC_unit_tests/src" -I"/home/mateusz/Documents/___STM32/ParaTNC_unit_tests/src/inc" -I"/home/mateusz/Documents/___STM32/ParaTNC_unit_tests/src/etc" -I"/home/mateusz/Documents/___STM32/ParaTNC_unit_tests/src/aprs" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
+	gcc -DSTM32F10X_MD_VL -DUNIT_TEST -D_ANEMOMETER_ANALOGUE -I"/home/mateusz/Documents/___STM32/ParaTNC_unit_tests/src/drivers" -I"/home/mateusz/Documents/___STM32/ParaTNC_unit_tests/src/___stubs___" -I"/home/mateusz/Documents/___STM32/ParaTNC_unit_tests/src/___memory_map___" -I"/home/mateusz/Documents/___STM32/ParaTNC_unit_tests/src" -I"/home/mateusz/Documents/___STM32/ParaTNC_unit_tests/src/inc" -I"/home/mateusz/Documents/___STM32/ParaTNC_unit_tests/src/etc" -I"/home/mateusz/Documents/___STM32/ParaTNC_unit_tests/src/aprs" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

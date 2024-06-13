@@ -24,6 +24,9 @@ extern "C" {
 #include <iostream>
 #include <fstream>
 
+
+
+
 static uint32_t EraseTestCallback_index = 0;
 
 static event_log_t EventLogTimesyncFactory(uint32_t time, uint32_t date) {
@@ -277,8 +280,17 @@ void erase_test_callback(uint32_t address) {
 	EraseTestCallback_index = (address - start) / sizeof(event_log_t);
 
 	snprintf(message, 128, "0x%X, start 0x%X, end 0x%X, index %d", address, start, end, EraseTestCallback_index);
-
 	BOOST_TEST_MESSAGE(message);
+
+	BOOST_ASSERT(EMULATED_PAGE_EVENTS_NUM == EraseTestCallback_index);
+	BOOST_ASSERT((address - start) % EMULATED_PAGE_SIZE == 0);
+
+	// memory offset to current
+	uint64_t offset = (EraseTestCallback_index) * sizeof(event_log_t);
+
+	for (unsigned i = 0; i < EMULATED_PAGE_SIZE; i++) {
+		*(MEMORY_MAP_EVENT_LOG_START + offset + i) = 0xFF;
+	}
 }
 
 BOOST_AUTO_TEST_CASE(push_new_event)
@@ -298,14 +310,14 @@ BOOST_AUTO_TEST_CASE(push_new_event)
 	// 4 * sizeof(event_log_t), which equals to 4 * LOG_ENTRY_SIZE = 64
 	for (int i = 0; i < LOG_ENTRIES; i++) {
 
-		if (i == LOG_ENTRIES / 5) {
+		if (i == EMULATED_PAGE_EVENTS_NUM) {
 			ev = startTimesync;
 		}
-		else if (i < LOG_ENTRIES / 5) {
+		else if (i < EMULATED_PAGE_EVENTS_NUM) {
 			pre = EventLogEventFactory(234 * i, 11);
 			ev = pre;
 		}
-		else if (i > LOG_ENTRIES / 5) {
+		else if (i > EMULATED_PAGE_EVENTS_NUM) {
 			aft = EventLogEventFactory(23 * i, 1);
 			ev = aft;
 		}
@@ -318,11 +330,18 @@ BOOST_AUTO_TEST_CASE(push_new_event)
 
 	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest);
 
+	const uint8_t* oldest_buf_ptr = (uint8_t*)&EventLogStub[EMULATED_PAGE_EVENTS_NUM * sizeof(event_log_t)];
+	const uint8_t* newest_buf_ptr = (uint8_t*)&EventLogStub[(EMULATED_PAGE_EVENTS_NUM - 1) * sizeof(event_log_t)];
+
 	BOOST_CHECK_EQUAL(res, NVM_EVENT_OVERRUN);
+	BOOST_CHECK_EQUAL((uint8_t*)oldest, oldest_buf_ptr);
+	BOOST_CHECK_EQUAL((uint8_t*)newest, newest_buf_ptr);
 
 	neew.event_master_time = 123456;
 
 	checkFunction = erase_test_callback;
 
 	nvm_event_log_push_new_event(&neew, &oldest, &newest);
+
+
 }
