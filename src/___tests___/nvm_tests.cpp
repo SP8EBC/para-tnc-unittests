@@ -23,7 +23,7 @@ extern "C" {
 #include <cstring>
 #include <iostream>
 #include <fstream>
-
+#include <sstream>
 
 
 
@@ -279,7 +279,7 @@ void erase_test_callback(uint32_t address) {
 
 	EraseTestCallback_index = (address - start) / sizeof(event_log_t);
 
-	snprintf(message, 128, "0x%X, start 0x%X, end 0x%X, index %d", address, start, end, EraseTestCallback_index);
+	snprintf(message, 128, "called address: 0x%X, start 0x%X, end 0x%X, index %d", address, start, end, EraseTestCallback_index);
 	BOOST_TEST_MESSAGE(message);
 
 	BOOST_ASSERT(EMULATED_PAGE_EVENTS_NUM == EraseTestCallback_index);
@@ -293,9 +293,10 @@ void erase_test_callback(uint32_t address) {
 	}
 }
 
-BOOST_AUTO_TEST_CASE(push_new_event)
+BOOST_AUTO_TEST_CASE(push_new_event_single_timesync)
 {
-	event_log_t ev, pre, aft, neew;
+	event_log_t ev, pre, aft, newly_inserted;
+	event_log_t oldest_not_erased_ev;
 
 	EraseTestCallback_index = 0;
 
@@ -322,26 +323,154 @@ BOOST_AUTO_TEST_CASE(push_new_event)
 			ev = aft;
 		}
 
+		if (i == (EMULATED_PAGE_EVENTS_NUM * 2)) {
+			oldest_not_erased_ev = ev;
+		}
+
 		memcpy(EventLogStub + i * sizeof(event_log_t), (void*)&ev, sizeof(event_log_t));
 	}
 
 	event_log_t* oldest;
 	event_log_t* newest;
 
-	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest);
+	for (int i = 0; i < 3; i++)
+	{
+		std::stringstream msg_log;
+		msg_log << "push_new_event_two_timesync, Inserting event, iteration: " << i;
+		BOOST_TEST_MESSAGE(msg_log.str());
+		const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest);
 
-	const uint8_t* oldest_buf_ptr = (uint8_t*)&EventLogStub[EMULATED_PAGE_EVENTS_NUM * sizeof(event_log_t)];
-	const uint8_t* newest_buf_ptr = (uint8_t*)&EventLogStub[(EMULATED_PAGE_EVENTS_NUM - 1) * sizeof(event_log_t)];
+		const uint8_t* oldest_buf_ptr = (uint8_t*)&EventLogStub[(i == 0) ? (EMULATED_PAGE_EVENTS_NUM * sizeof(event_log_t)) : (EMULATED_PAGE_EVENTS_NUM * 2 * sizeof(event_log_t))];
+		const uint8_t* newest_buf_ptr = (uint8_t*)&EventLogStub[(i == 0) ? ((EMULATED_PAGE_EVENTS_NUM - 1) * sizeof(event_log_t)) : ((EMULATED_PAGE_EVENTS_NUM - 1 + i) * sizeof(event_log_t))];
 
-	BOOST_CHECK_EQUAL(res, NVM_EVENT_OVERRUN);
-	BOOST_CHECK_EQUAL((uint8_t*)oldest, oldest_buf_ptr);
-	BOOST_CHECK_EQUAL((uint8_t*)newest, newest_buf_ptr);
+		if (i == 0)
+		{
+			BOOST_CHECK_EQUAL(res, NVM_EVENT_OVERRUN);
+		}
+		else
+		{
+			// timesync was at index 4 which was erased
+			BOOST_CHECK_EQUAL(res, NVM_EVENT_OVERRUN_NO_TS);
+		}
 
-	neew.event_master_time = 123456;
+		BOOST_CHECK_EQUAL((uint8_t*)oldest, oldest_buf_ptr);
+		BOOST_CHECK_EQUAL((uint8_t*)newest, newest_buf_ptr);
 
-	checkFunction = erase_test_callback;
+		newly_inserted.event_master_time = 123456 + i;
 
-	nvm_event_log_push_new_event(&neew, &oldest, &newest);
+		checkFunction = erase_test_callback;
 
+		nvm_event_log_push_new_event(&newly_inserted, &oldest, &newest);
+
+		const uint8_t* oldest_buf_postinst_ptr = (uint8_t*)&EventLogStub[(EMULATED_PAGE_EVENTS_NUM * 2) * sizeof(event_log_t)];
+		const uint8_t* newest_buf_postinst_ptr = (uint8_t*)&EventLogStub[((EMULATED_PAGE_EVENTS_NUM + i) * sizeof(event_log_t))];
+		const event_log_t * oldest_postinst_event_type_ptr = (event_log_t*)oldest_buf_postinst_ptr;
+		const event_log_t * newest_postinst_event_type_ptr = (event_log_t*)newest_buf_postinst_ptr;
+
+		BOOST_CHECK_EQUAL((uint8_t*)oldest, oldest_buf_postinst_ptr);
+		BOOST_CHECK_EQUAL((uint8_t*)newest, newest_buf_postinst_ptr);
+		BOOST_CHECK_EQUAL(oldest_not_erased_ev.event_id, oldest_postinst_event_type_ptr->event_id);
+		BOOST_CHECK_EQUAL(oldest_not_erased_ev.event_master_time, oldest_postinst_event_type_ptr->event_master_time);
+
+		const nvm_event_result_t res_postinst = nvm_event_log_find_first_oldest_newest(&oldest, &newest);
+
+		BOOST_CHECK_EQUAL((uint8_t*)oldest, oldest_buf_postinst_ptr);
+		BOOST_CHECK_EQUAL((uint8_t*)newest, newest_buf_postinst_ptr);
+	}
 
 }
+
+BOOST_AUTO_TEST_CASE(push_new_event_two_timesync)
+{
+	event_log_t ev, pre, aft, newly_inserted;
+	event_log_t oldest_not_erased_ev;
+
+	EraseTestCallback_index = 0;
+
+	// initialize to all FFs, which is default memory content in erase state
+	memset(EventLogStub, 0xFF, LOG_ENTRY_SIZE * LOG_ENTRIES);
+
+	const event_log_t startTimesync = EventLogTimesyncFactory(123, 456);
+
+	memcpy(EventLogStub, (void*)&startTimesync, sizeof(event_log_t));
+
+	// emulated page size is LOG_ENTRIES / 5 * sizeof(event_log_t), which is
+	// 4 * sizeof(event_log_t), which equals to 4 * LOG_ENTRY_SIZE = 64
+	for (int i = 0; i < LOG_ENTRIES; i++) {
+
+		if (i == EMULATED_PAGE_EVENTS_NUM || i == EMULATED_PAGE_EVENTS_NUM * 2) {
+			ev = startTimesync;
+		}
+		else if (i < EMULATED_PAGE_EVENTS_NUM) {
+			pre = EventLogEventFactory(234 * i, 11);
+			ev = pre;
+		}
+		else if (i > EMULATED_PAGE_EVENTS_NUM && i != EMULATED_PAGE_EVENTS_NUM * 2) {
+			aft = EventLogEventFactory(23 * i, 1);
+			ev = aft;
+		}
+
+		if (i == (EMULATED_PAGE_EVENTS_NUM * 2)) {
+			oldest_not_erased_ev = ev;
+		}
+
+		memcpy(EventLogStub + i * sizeof(event_log_t), (void*)&ev, sizeof(event_log_t));
+	}
+
+	event_log_t* oldest;
+	event_log_t* newest;
+
+	for (int i = 0; i < 4; i++)
+	{
+		std::stringstream msg_log;
+		msg_log << "push_new_event_two_timesync, Inserting event, iteration: " << i;
+		BOOST_TEST_MESSAGE(msg_log.str());
+		const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest);
+
+		const uint8_t* oldest_buf_ptr = (uint8_t*)&EventLogStub[(i == 0) ? (EMULATED_PAGE_EVENTS_NUM * sizeof(event_log_t)) : (EMULATED_PAGE_EVENTS_NUM * 2 * sizeof(event_log_t))];
+		const uint8_t* newest_buf_ptr = (uint8_t*)&EventLogStub[(i == 0) ? ((EMULATED_PAGE_EVENTS_NUM - 1) * sizeof(event_log_t)) : ((EMULATED_PAGE_EVENTS_NUM - 1 + i) * sizeof(event_log_t))];
+
+			BOOST_CHECK_EQUAL(res, NVM_EVENT_OVERRUN);
+
+		BOOST_CHECK_EQUAL((uint8_t*)oldest, oldest_buf_ptr);
+		BOOST_CHECK_EQUAL((uint8_t*)newest, newest_buf_ptr);
+
+		newly_inserted.event_master_time = 123456 + i;
+
+		checkFunction = erase_test_callback;
+
+		nvm_event_log_push_new_event(&newly_inserted, &oldest, &newest);
+
+		const uint8_t* oldest_buf_postinst_ptr = (uint8_t*)&EventLogStub[(EMULATED_PAGE_EVENTS_NUM * 2) * sizeof(event_log_t)];
+		const uint8_t* newest_buf_postinst_ptr = (uint8_t*)&EventLogStub[((EMULATED_PAGE_EVENTS_NUM + i) * sizeof(event_log_t))];
+		const event_log_t * oldest_postinst_event_type_ptr = (event_log_t*)oldest_buf_postinst_ptr;
+		const event_log_t * newest_postinst_event_type_ptr = (event_log_t*)newest_buf_postinst_ptr;
+
+		BOOST_CHECK_EQUAL((uint8_t*)oldest, oldest_buf_postinst_ptr);
+		BOOST_CHECK_EQUAL((uint8_t*)newest, newest_buf_postinst_ptr);
+		BOOST_CHECK_EQUAL(oldest_not_erased_ev.event_id, oldest_postinst_event_type_ptr->event_id);
+		BOOST_CHECK_EQUAL(oldest_not_erased_ev.event_master_time, oldest_postinst_event_type_ptr->event_master_time);
+
+		const nvm_event_result_t res_postinst = nvm_event_log_find_first_oldest_newest(&oldest, &newest);
+
+		BOOST_CHECK_EQUAL(res_postinst, NVM_EVENT_OVERRUN);
+
+
+		BOOST_CHECK_EQUAL((uint8_t*)oldest, oldest_buf_postinst_ptr);
+		BOOST_CHECK_EQUAL((uint8_t*)newest, newest_buf_postinst_ptr);
+	}
+
+}
+
+//BOOST_AUTO_TEST_CASE(push_lot_of_events)
+//{
+//	event_log_t ev, pre, aft, neew;
+//
+//	EraseTestCallback_index = 0;
+//
+//	// initialize to all FFs, which is default memory content in erase state
+//	memset(EventLogStub, 0xFF, LOG_ENTRY_SIZE * LOG_ENTRIES);
+//
+//	const event_log_t startTimesync = EventLogTimesyncFactory(123, 456);
+//}
+

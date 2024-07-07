@@ -20,3 +20,14 @@ FLASH_Status FLASH_ErasePage(uint32_t Page_Address) {
 	return out;
 }
 
+void FLASH_Unlock(void)
+{
+
+}
+
+FLASH_Status FLASH_GetBank1Status(void)
+{
+  FLASH_Status flashstatus = FLASH_COMPLETE;
+
+  return flashstatus;
+}

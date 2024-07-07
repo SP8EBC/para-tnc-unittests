@@ -17,4 +17,13 @@
 
 extern uint8_t EventLogStub[LOG_ENTRY_SIZE * LOG_ENTRIES];
 
+//typedef enum
+//{
+//  FLASH_BUSY = 1,
+//  FLASH_ERROR_PG,
+//  FLASH_ERROR_WRP,
+//  FLASH_COMPLETE,
+//  FLASH_TIMEOUT
+//}FLASH_Status;
+
 #endif /* STUBS____MEMORY_MAP_STUBS_H_ */
