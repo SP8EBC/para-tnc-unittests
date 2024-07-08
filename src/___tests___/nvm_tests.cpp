@@ -9,7 +9,7 @@ extern "C" {
 #include <___stubs___/other_stubs.h>
 #include <___stubs___/stdperiph_stubs.h>
 #include <___stubs___/flash_stubs.h>
-#include "nvm.h"
+#include "nvm_event.h"
 #include "memory_map.h"
 }
 

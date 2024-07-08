@@ -9,16 +9,17 @@
 #define STUBS____FLASH_STUBS_H_
 
 #include <stdint.h>
+#include "nvm_internals.h"
 
-// currently defined here for unit tests
-typedef enum
-{
-  FLASH_BUSY = 1,
-  FLASH_ERROR_PG,
-  FLASH_ERROR_WRP,
-  FLASH_COMPLETE,
-  FLASH_TIMEOUT
-}FLASH_Status;
+//// currently defined here for unit tests
+//typedef enum
+//{
+//  FLASH_BUSY = 1,
+//  FLASH_ERROR_PG,
+//  FLASH_ERROR_WRP,
+//  FLASH_COMPLETE,
+//  FLASH_TIMEOUT
+//}FLASH_Status;
 
 typedef void(*FLASH_ErasePage_CheckFn_t)(uint32_t PageAddress);
 
