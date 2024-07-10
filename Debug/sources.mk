@@ -28,5 +28,6 @@ src/___tests___ \
 src \
 src/aprs \
 src/http_client \
+src/nvm \
 src/ve_direct_protocol \
 

@@ -10,8 +10,6 @@ C_SRCS += \
 ../src/float_to_string.c \
 ../src/io.c \
 ../src/kiss_communication_aprsmsg.c \
-../src/nvm.c \
-../src/nvm_event.c \
 ../src/sim800c.c \
 ../src/sim800c_engineering.c \
 ../src/sim800c_gprs.c \
@@ -24,8 +22,6 @@ C_DEPS += \
 ./src/float_to_string.d \
 ./src/io.d \
 ./src/kiss_communication_aprsmsg.d \
-./src/nvm.d \
-./src/nvm_event.d \
 ./src/sim800c.d \
 ./src/sim800c_engineering.d \
 ./src/sim800c_gprs.d \
@@ -38,8 +34,6 @@ OBJS += \
 ./src/float_to_string.o \
 ./src/io.o \
 ./src/kiss_communication_aprsmsg.o \
-./src/nvm.o \
-./src/nvm_event.o \
 ./src/sim800c.o \
 ./src/sim800c_engineering.o \
 ./src/sim800c_gprs.o \
@@ -58,7 +52,7 @@ src/%.o: ../src/%.c src/subdir.mk
 clean: clean-src
 
 clean-src:
-	-$(RM) ./src/analog_anemometer.d ./src/analog_anemometer.o ./src/aprsis.d ./src/aprsis.o ./src/davis_parsers.d ./src/davis_parsers.o ./src/float_to_string.d ./src/float_to_string.o ./src/io.d ./src/io.o ./src/kiss_communication_aprsmsg.d ./src/kiss_communication_aprsmsg.o ./src/nvm.d ./src/nvm.o ./src/nvm_event.d ./src/nvm_event.o ./src/sim800c.d ./src/sim800c.o ./src/sim800c_engineering.d ./src/sim800c_engineering.o ./src/sim800c_gprs.d ./src/sim800c_gprs.o ./src/sim800c_poolers.d ./src/sim800c_poolers.o
+	-$(RM) ./src/analog_anemometer.d ./src/analog_anemometer.o ./src/aprsis.d ./src/aprsis.o ./src/davis_parsers.d ./src/davis_parsers.o ./src/float_to_string.d ./src/float_to_string.o ./src/io.d ./src/io.o ./src/kiss_communication_aprsmsg.d ./src/kiss_communication_aprsmsg.o ./src/sim800c.d ./src/sim800c.o ./src/sim800c_engineering.d ./src/sim800c_engineering.o ./src/sim800c_gprs.d ./src/sim800c_gprs.o ./src/sim800c_poolers.d ./src/sim800c_poolers.o
 
 .PHONY: clean-src
 

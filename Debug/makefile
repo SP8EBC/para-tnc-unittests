@@ -9,6 +9,7 @@ RM := rm -rf
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include src/ve_direct_protocol/subdir.mk
+-include src/nvm/subdir.mk
 -include src/http_client/subdir.mk
 -include src/aprs/subdir.mk
 -include src/___tests___/subdir.mk

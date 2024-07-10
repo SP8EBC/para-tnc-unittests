@@ -9,7 +9,7 @@ extern "C" {
 #include <___stubs___/other_stubs.h>
 #include <___stubs___/stdperiph_stubs.h>
 #include <___stubs___/flash_stubs.h>
-#include "nvm_event.h"
+#include "./nvm/nvm_event.h"
 #include "memory_map.h"
 #include "nvm_configuration.h"
 }
@@ -39,7 +39,7 @@ static event_log_t EventLogTimesyncFactory(uint32_t time, uint32_t date) {
 	out.lparam2 = time;
 
 	out.event_id = EVENT_TIMESYNC;
-	out.wparam = 0x77;
+	out.wparam = EVENT_LOG_TIMESYNC_BOOTUP_WPARAM;
 
 	return out;
 }

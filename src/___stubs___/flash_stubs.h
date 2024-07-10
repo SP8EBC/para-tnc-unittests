@@ -9,7 +9,7 @@
 #define STUBS____FLASH_STUBS_H_
 
 #include <stdint.h>
-#include "nvm_internals.h"
+#include "./nvm/nvm_internals.h"
 
 //// currently defined here for unit tests
 //typedef enum
