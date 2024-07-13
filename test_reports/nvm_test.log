@@ -1,121 +1,124 @@
-Running 8 test cases...
+Running 9 test cases...
 Entering test module "NVM"
-../src/___tests___/nvm_tests.cpp(80): Entering test case "find_first_oldest_newest____no_overrun"
-../src/___tests___/nvm_tests.cpp(101): info: check res == NVM_EVENT_OK has passed
-../src/___tests___/nvm_tests.cpp(103): info: check oldest->lparam == startTimesync.lparam has passed
-../src/___tests___/nvm_tests.cpp(104): info: check oldest->lparam2 == startTimesync.lparam2 has passed
-../src/___tests___/nvm_tests.cpp(106): info: check newest->event_master_time == ev.event_master_time has passed
-../src/___tests___/nvm_tests.cpp(107): info: check newest->wparam == ev.wparam has passed
-../src/___tests___/nvm_tests.cpp(80): Leaving test case "find_first_oldest_newest____no_overrun"; testing time: 153us
-../src/___tests___/nvm_tests.cpp(110): Entering test case "find_first_oldest_newest____not_filled_completely"
-../src/___tests___/nvm_tests.cpp(131): info: check res == NVM_EVENT_OK has passed
-../src/___tests___/nvm_tests.cpp(133): info: check oldest->lparam == startTimesync.lparam has passed
-../src/___tests___/nvm_tests.cpp(134): info: check oldest->lparam2 == startTimesync.lparam2 has passed
-../src/___tests___/nvm_tests.cpp(136): info: check newest->event_master_time == ev.event_master_time has passed
-../src/___tests___/nvm_tests.cpp(137): info: check newest->wparam == ev.wparam has passed
-../src/___tests___/nvm_tests.cpp(110): Leaving test case "find_first_oldest_newest____not_filled_completely"; testing time: 109us
-../src/___tests___/nvm_tests.cpp(140): Entering test case "find_first_oldest_newest____overruned"
-../src/___tests___/nvm_tests.cpp(173): info: check res == NVM_EVENT_OVERRUN has passed
-../src/___tests___/nvm_tests.cpp(175): info: check oldest->lparam == startTimesync.lparam has passed
-../src/___tests___/nvm_tests.cpp(176): info: check oldest->lparam2 == startTimesync.lparam2 has passed
-../src/___tests___/nvm_tests.cpp(178): info: check newest->event_master_time == pre.event_master_time has passed
-../src/___tests___/nvm_tests.cpp(179): info: check newest->wparam == pre.wparam has passed
-../src/___tests___/nvm_tests.cpp(140): Leaving test case "find_first_oldest_newest____overruned"; testing time: 107us
-../src/___tests___/nvm_tests.cpp(186): Entering test case "find_first_oldest_newest____no_timestamps"
-../src/___tests___/nvm_tests.cpp(205): info: check res == NVM_EVENT_OVERRUN_NO_TS has passed
-../src/___tests___/nvm_tests.cpp(207): info: check oldest->lparam == first_in_stub->lparam has passed
-../src/___tests___/nvm_tests.cpp(208): info: check oldest->lparam2 == first_in_stub->lparam2 has passed
-../src/___tests___/nvm_tests.cpp(210): info: check newest->event_master_time == ev.event_master_time has passed
-../src/___tests___/nvm_tests.cpp(211): info: check newest->wparam == ev.wparam has passed
-../src/___tests___/nvm_tests.cpp(186): Leaving test case "find_first_oldest_newest____no_timestamps"; testing time: 106us
-../src/___tests___/nvm_tests.cpp(218): Entering test case "find_first_oldest_newest____overruned_w_unprog_gap"
-../src/___tests___/nvm_tests.cpp(251): info: check res == NVM_EVENT_OVERRUN has passed
-../src/___tests___/nvm_tests.cpp(253): info: check oldest->lparam == startTimesync.lparam has passed
-../src/___tests___/nvm_tests.cpp(254): info: check oldest->lparam2 == startTimesync.lparam2 has passed
-../src/___tests___/nvm_tests.cpp(256): info: check newest->event_master_time == pre.event_master_time has passed
-../src/___tests___/nvm_tests.cpp(257): info: check newest->wparam == pre.wparam has passed
-../src/___tests___/nvm_tests.cpp(218): Leaving test case "find_first_oldest_newest____overruned_w_unprog_gap"; testing time: 106us
-../src/___tests___/nvm_tests.cpp(260): Entering test case "find_first_oldest_newest____empty"
-../src/___tests___/nvm_tests.cpp(271): info: check res == NVM_EVENT_EMPTY has passed
-../src/___tests___/nvm_tests.cpp(260): Leaving test case "find_first_oldest_newest____empty"; testing time: 93us
-../src/___tests___/nvm_tests.cpp(299): Entering test case "push_new_event_single_timesync"
+../src/___tests___/nvm_tests.cpp(82): Entering test case "find_first_oldest_newest____no_overrun"
+../src/___tests___/nvm_tests.cpp(103): info: check res == NVM_EVENT_OK has passed
+../src/___tests___/nvm_tests.cpp(105): info: check oldest->lparam == startTimesync.lparam has passed
+../src/___tests___/nvm_tests.cpp(106): info: check oldest->lparam2 == startTimesync.lparam2 has passed
+../src/___tests___/nvm_tests.cpp(108): info: check newest->event_master_time == ev.event_master_time has passed
+../src/___tests___/nvm_tests.cpp(109): info: check newest->wparam == ev.wparam has passed
+../src/___tests___/nvm_tests.cpp(82): Leaving test case "find_first_oldest_newest____no_overrun"; testing time: 76us
+../src/___tests___/nvm_tests.cpp(112): Entering test case "find_first_oldest_newest____not_filled_completely"
+../src/___tests___/nvm_tests.cpp(133): info: check res == NVM_EVENT_OK has passed
+../src/___tests___/nvm_tests.cpp(135): info: check oldest->lparam == startTimesync.lparam has passed
+../src/___tests___/nvm_tests.cpp(136): info: check oldest->lparam2 == startTimesync.lparam2 has passed
+../src/___tests___/nvm_tests.cpp(138): info: check newest->event_master_time == ev.event_master_time has passed
+../src/___tests___/nvm_tests.cpp(139): info: check newest->wparam == ev.wparam has passed
+../src/___tests___/nvm_tests.cpp(112): Leaving test case "find_first_oldest_newest____not_filled_completely"; testing time: 65us
+../src/___tests___/nvm_tests.cpp(142): Entering test case "find_first_oldest_newest____overruned"
+../src/___tests___/nvm_tests.cpp(176): info: check res == NVM_EVENT_OVERRUN has passed
+../src/___tests___/nvm_tests.cpp(178): info: check oldest->lparam == expected_oldest.lparam has passed
+../src/___tests___/nvm_tests.cpp(179): info: check oldest->lparam2 == expected_oldest.lparam2 has passed
+../src/___tests___/nvm_tests.cpp(181): info: check newest->event_master_time == pre.event_master_time has passed
+../src/___tests___/nvm_tests.cpp(182): info: check newest->wparam == pre.wparam has passed
+../src/___tests___/nvm_tests.cpp(142): Leaving test case "find_first_oldest_newest____overruned"; testing time: 64us
+../src/___tests___/nvm_tests.cpp(189): Entering test case "find_first_oldest_newest____no_timestamps"
+../src/___tests___/nvm_tests.cpp(208): info: check res == NVM_EVENT_OK has passed
+../src/___tests___/nvm_tests.cpp(210): info: check oldest->lparam == first_in_stub->lparam has passed
+../src/___tests___/nvm_tests.cpp(211): info: check oldest->lparam2 == first_in_stub->lparam2 has passed
+../src/___tests___/nvm_tests.cpp(213): info: check newest->event_master_time == ev.event_master_time has passed
+../src/___tests___/nvm_tests.cpp(214): info: check newest->wparam == ev.wparam has passed
+../src/___tests___/nvm_tests.cpp(189): Leaving test case "find_first_oldest_newest____no_timestamps"; testing time: 63us
+../src/___tests___/nvm_tests.cpp(221): Entering test case "find_first_oldest_newest____overruned_w_unprog_gap"
+../src/___tests___/nvm_tests.cpp(254): info: check res == NVM_EVENT_OVERRUN has passed
+../src/___tests___/nvm_tests.cpp(256): info: check oldest->lparam == startTimesync.lparam has passed
+../src/___tests___/nvm_tests.cpp(257): info: check oldest->lparam2 == startTimesync.lparam2 has passed
+../src/___tests___/nvm_tests.cpp(259): info: check newest->event_master_time == pre.event_master_time has passed
+../src/___tests___/nvm_tests.cpp(260): info: check newest->wparam == pre.wparam has passed
+../src/___tests___/nvm_tests.cpp(221): Leaving test case "find_first_oldest_newest____overruned_w_unprog_gap"; testing time: 64us
+../src/___tests___/nvm_tests.cpp(263): Entering test case "find_first_oldest_newest____empty"
+../src/___tests___/nvm_tests.cpp(274): info: check res == NVM_EVENT_EMPTY has passed
+../src/___tests___/nvm_tests.cpp(263): Leaving test case "find_first_oldest_newest____empty"; testing time: 56us
+../src/___tests___/nvm_tests.cpp(278): Entering test case "random_event_ids"
+../src/___tests___/nvm_tests.cpp(295): info: check res == NVM_EVENT_AREA_ERROR has passed
+../src/___tests___/nvm_tests.cpp(278): Leaving test case "random_event_ids"; testing time: 61us
+../src/___tests___/nvm_tests.cpp(322): Entering test case "push_new_event_single_timesync"
 push_new_event_two_timesync, Inserting event, iteration: 0
-../src/___tests___/nvm_tests.cpp(352): info: check res == NVM_EVENT_OVERRUN has passed
-../src/___tests___/nvm_tests.cpp(360): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_ptr has passed
-../src/___tests___/nvm_tests.cpp(361): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_ptr has passed
-called address: 0x50F9C6E0, start 0x50F9C6A0, end 0x50F9C7E0, index 4
-../src/___tests___/nvm_tests.cpp(374): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(375): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(376): info: check oldest_not_erased_ev.event_id == oldest_postinst_event_type_ptr->event_id has passed
-../src/___tests___/nvm_tests.cpp(377): info: check oldest_not_erased_ev.event_master_time == oldest_postinst_event_type_ptr->event_master_time has passed
-../src/___tests___/nvm_tests.cpp(381): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(382): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(375): info: check res == NVM_EVENT_OVERRUN has passed
+../src/___tests___/nvm_tests.cpp(383): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_ptr has passed
+../src/___tests___/nvm_tests.cpp(384): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_ptr has passed
+called address: 0xD7832720, start 0xD78326C0, end 0xD78328A0, index 4
+../src/___tests___/nvm_tests.cpp(397): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(398): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(399): info: check oldest_not_erased_ev.event_id == oldest_postinst_event_type_ptr->event_id has passed
+../src/___tests___/nvm_tests.cpp(400): info: check oldest_not_erased_ev.event_master_time == oldest_postinst_event_type_ptr->event_master_time has passed
+../src/___tests___/nvm_tests.cpp(404): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(405): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
 push_new_event_two_timesync, Inserting event, iteration: 1
-../src/___tests___/nvm_tests.cpp(357): info: check res == NVM_EVENT_OVERRUN_NO_TS has passed
-../src/___tests___/nvm_tests.cpp(360): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_ptr has passed
-../src/___tests___/nvm_tests.cpp(361): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_ptr has passed
-../src/___tests___/nvm_tests.cpp(374): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(375): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(376): info: check oldest_not_erased_ev.event_id == oldest_postinst_event_type_ptr->event_id has passed
-../src/___tests___/nvm_tests.cpp(377): info: check oldest_not_erased_ev.event_master_time == oldest_postinst_event_type_ptr->event_master_time has passed
-../src/___tests___/nvm_tests.cpp(381): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(382): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(380): info: check res == NVM_EVENT_OVERRUN has passed
+../src/___tests___/nvm_tests.cpp(383): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_ptr has passed
+../src/___tests___/nvm_tests.cpp(384): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_ptr has passed
+../src/___tests___/nvm_tests.cpp(397): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(398): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(399): info: check oldest_not_erased_ev.event_id == oldest_postinst_event_type_ptr->event_id has passed
+../src/___tests___/nvm_tests.cpp(400): info: check oldest_not_erased_ev.event_master_time == oldest_postinst_event_type_ptr->event_master_time has passed
+../src/___tests___/nvm_tests.cpp(404): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(405): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
 push_new_event_two_timesync, Inserting event, iteration: 2
-../src/___tests___/nvm_tests.cpp(357): info: check res == NVM_EVENT_OVERRUN_NO_TS has passed
-../src/___tests___/nvm_tests.cpp(360): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_ptr has passed
-../src/___tests___/nvm_tests.cpp(361): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_ptr has passed
-../src/___tests___/nvm_tests.cpp(374): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(375): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(376): info: check oldest_not_erased_ev.event_id == oldest_postinst_event_type_ptr->event_id has passed
-../src/___tests___/nvm_tests.cpp(377): info: check oldest_not_erased_ev.event_master_time == oldest_postinst_event_type_ptr->event_master_time has passed
-../src/___tests___/nvm_tests.cpp(381): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(382): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(299): Leaving test case "push_new_event_single_timesync"; testing time: 194us
-../src/___tests___/nvm_tests.cpp(387): Entering test case "push_new_event_two_timesync"
+../src/___tests___/nvm_tests.cpp(380): info: check res == NVM_EVENT_OVERRUN has passed
+../src/___tests___/nvm_tests.cpp(383): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_ptr has passed
+../src/___tests___/nvm_tests.cpp(384): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_ptr has passed
+../src/___tests___/nvm_tests.cpp(397): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(398): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(399): info: check oldest_not_erased_ev.event_id == oldest_postinst_event_type_ptr->event_id has passed
+../src/___tests___/nvm_tests.cpp(400): info: check oldest_not_erased_ev.event_master_time == oldest_postinst_event_type_ptr->event_master_time has passed
+../src/___tests___/nvm_tests.cpp(404): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(405): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(322): Leaving test case "push_new_event_single_timesync"; testing time: 116us
+../src/___tests___/nvm_tests.cpp(410): Entering test case "push_new_event_two_timesync"
 push_new_event_two_timesync, Inserting event, iteration: 0
-../src/___tests___/nvm_tests.cpp(437): info: check res == NVM_EVENT_OVERRUN has passed
-../src/___tests___/nvm_tests.cpp(439): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_ptr has passed
-../src/___tests___/nvm_tests.cpp(440): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_ptr has passed
-called address: 0x50F9C6E0, start 0x50F9C6A0, end 0x50F9C7E0, index 4
-../src/___tests___/nvm_tests.cpp(454): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(455): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(456): info: check oldest_not_erased_ev.event_id == oldest_postinst_event_type_ptr->event_id has passed
-../src/___tests___/nvm_tests.cpp(457): info: check oldest_not_erased_ev.event_master_time == oldest_postinst_event_type_ptr->event_master_time has passed
-../src/___tests___/nvm_tests.cpp(461): info: check res_postinst == NVM_EVENT_OVERRUN has passed
-../src/___tests___/nvm_tests.cpp(464): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(465): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(460): info: check res == NVM_EVENT_OVERRUN has passed
+../src/___tests___/nvm_tests.cpp(462): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_ptr has passed
+../src/___tests___/nvm_tests.cpp(463): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_ptr has passed
+called address: 0xD7832720, start 0xD78326C0, end 0xD78328A0, index 4
+../src/___tests___/nvm_tests.cpp(477): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(478): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(479): info: check oldest_not_erased_ev.event_id == oldest_postinst_event_type_ptr->event_id has passed
+../src/___tests___/nvm_tests.cpp(480): info: check oldest_not_erased_ev.event_master_time == oldest_postinst_event_type_ptr->event_master_time has passed
+../src/___tests___/nvm_tests.cpp(484): info: check res_postinst == NVM_EVENT_OVERRUN has passed
+../src/___tests___/nvm_tests.cpp(487): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(488): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
 push_new_event_two_timesync, Inserting event, iteration: 1
-../src/___tests___/nvm_tests.cpp(437): info: check res == NVM_EVENT_OVERRUN has passed
-../src/___tests___/nvm_tests.cpp(439): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_ptr has passed
-../src/___tests___/nvm_tests.cpp(440): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_ptr has passed
-../src/___tests___/nvm_tests.cpp(454): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(455): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(456): info: check oldest_not_erased_ev.event_id == oldest_postinst_event_type_ptr->event_id has passed
-../src/___tests___/nvm_tests.cpp(457): info: check oldest_not_erased_ev.event_master_time == oldest_postinst_event_type_ptr->event_master_time has passed
-../src/___tests___/nvm_tests.cpp(461): info: check res_postinst == NVM_EVENT_OVERRUN has passed
-../src/___tests___/nvm_tests.cpp(464): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(465): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(460): info: check res == NVM_EVENT_OVERRUN has passed
+../src/___tests___/nvm_tests.cpp(462): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_ptr has passed
+../src/___tests___/nvm_tests.cpp(463): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_ptr has passed
+../src/___tests___/nvm_tests.cpp(477): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(478): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(479): info: check oldest_not_erased_ev.event_id == oldest_postinst_event_type_ptr->event_id has passed
+../src/___tests___/nvm_tests.cpp(480): info: check oldest_not_erased_ev.event_master_time == oldest_postinst_event_type_ptr->event_master_time has passed
+../src/___tests___/nvm_tests.cpp(484): info: check res_postinst == NVM_EVENT_OVERRUN has passed
+../src/___tests___/nvm_tests.cpp(487): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(488): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
 push_new_event_two_timesync, Inserting event, iteration: 2
-../src/___tests___/nvm_tests.cpp(437): info: check res == NVM_EVENT_OVERRUN has passed
-../src/___tests___/nvm_tests.cpp(439): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_ptr has passed
-../src/___tests___/nvm_tests.cpp(440): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_ptr has passed
-../src/___tests___/nvm_tests.cpp(454): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(455): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(456): info: check oldest_not_erased_ev.event_id == oldest_postinst_event_type_ptr->event_id has passed
-../src/___tests___/nvm_tests.cpp(457): info: check oldest_not_erased_ev.event_master_time == oldest_postinst_event_type_ptr->event_master_time has passed
-../src/___tests___/nvm_tests.cpp(461): info: check res_postinst == NVM_EVENT_OVERRUN has passed
-../src/___tests___/nvm_tests.cpp(464): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(465): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(460): info: check res == NVM_EVENT_OVERRUN has passed
+../src/___tests___/nvm_tests.cpp(462): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_ptr has passed
+../src/___tests___/nvm_tests.cpp(463): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_ptr has passed
+../src/___tests___/nvm_tests.cpp(477): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(478): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(479): info: check oldest_not_erased_ev.event_id == oldest_postinst_event_type_ptr->event_id has passed
+../src/___tests___/nvm_tests.cpp(480): info: check oldest_not_erased_ev.event_master_time == oldest_postinst_event_type_ptr->event_master_time has passed
+../src/___tests___/nvm_tests.cpp(484): info: check res_postinst == NVM_EVENT_OVERRUN has passed
+../src/___tests___/nvm_tests.cpp(487): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(488): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
 push_new_event_two_timesync, Inserting event, iteration: 3
-../src/___tests___/nvm_tests.cpp(437): info: check res == NVM_EVENT_OVERRUN has passed
-../src/___tests___/nvm_tests.cpp(439): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_ptr has passed
-../src/___tests___/nvm_tests.cpp(440): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_ptr has passed
-../src/___tests___/nvm_tests.cpp(454): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(455): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(456): info: check oldest_not_erased_ev.event_id == oldest_postinst_event_type_ptr->event_id has passed
-../src/___tests___/nvm_tests.cpp(457): info: check oldest_not_erased_ev.event_master_time == oldest_postinst_event_type_ptr->event_master_time has passed
-../src/___tests___/nvm_tests.cpp(461): info: check res_postinst == NVM_EVENT_OVERRUN has passed
-../src/___tests___/nvm_tests.cpp(464): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(465): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
-../src/___tests___/nvm_tests.cpp(387): Leaving test case "push_new_event_two_timesync"; testing time: 262us
-Leaving test module "NVM"; testing time: 1191us
+../src/___tests___/nvm_tests.cpp(460): info: check res == NVM_EVENT_OVERRUN has passed
+../src/___tests___/nvm_tests.cpp(462): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_ptr has passed
+../src/___tests___/nvm_tests.cpp(463): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_ptr has passed
+../src/___tests___/nvm_tests.cpp(477): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(478): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(479): info: check oldest_not_erased_ev.event_id == oldest_postinst_event_type_ptr->event_id has passed
+../src/___tests___/nvm_tests.cpp(480): info: check oldest_not_erased_ev.event_master_time == oldest_postinst_event_type_ptr->event_master_time has passed
+../src/___tests___/nvm_tests.cpp(484): info: check res_postinst == NVM_EVENT_OVERRUN has passed
+../src/___tests___/nvm_tests.cpp(487): info: check (uint8_t*)nvm_event_oldestFlash == oldest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(488): info: check (uint8_t*)nvm_event_newestFlash == newest_buf_postinst_ptr has passed
+../src/___tests___/nvm_tests.cpp(410): Leaving test case "push_new_event_two_timesync"; testing time: 139us
+Leaving test module "NVM"; testing time: 748us
