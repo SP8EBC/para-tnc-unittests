@@ -11,7 +11,6 @@
 #include <stdint.h>
 #include "nvm_t.h"
 
-
 /// ==================================================================================================
 ///	GLOBAL DEFINES
 /// ==================================================================================================
@@ -54,9 +53,11 @@ typedef struct __attribute__((packed)) nvm_measurement_t {
 }nvm_measurement_t;
 
 
+
 /// ==================================================================================================
 ///	GLOBAL FUNCTIONS
 /// ==================================================================================================
+
 
 /**
  *
@@ -68,7 +69,7 @@ void nvm_measurement_init(void);
  * @param data
  * @return
  */
-nvm_state_result_t nvm_measurement_store(nvm_measurement_t * data);
+nvm_state_after_last_oper_t nvm_measurement_store(nvm_measurement_t * data);
 
 /**
  *

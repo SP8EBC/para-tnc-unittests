@@ -5,6 +5,8 @@
  *      Author: mateusz
  */
 
+// TODO: Make a test where an empty area will be completely filled by inserted events
+
 extern "C" {
 #include <___stubs___/other_stubs.h>
 #include <___stubs___/stdperiph_stubs.h>
@@ -83,6 +85,8 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____no_overrun)
 {
 	event_log_t ev;
 
+	uint16_t nvm_event_fill_rate;
+
 	// initialize to all FFs, which is default memory content in erase state
 	memset(EventLogStub, 0xFF, LOG_ENTRY_SIZE * LOG_ENTRIES);
 
@@ -98,7 +102,7 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____no_overrun)
 	event_log_t* oldest;
 	event_log_t* newest;
 
-	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE);
+	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE, &nvm_event_fill_rate);
 
 	BOOST_CHECK_EQUAL(res, NVM_EVENT_OK);
 
@@ -112,6 +116,8 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____no_overrun)
 BOOST_AUTO_TEST_CASE(find_first_oldest_newest____not_filled_completely)
 {
 	event_log_t ev;
+
+	uint16_t nvm_event_fill_rate;
 
 	// initialize to all FFs, which is default memory content in erase state
 	memset(EventLogStub, 0xFF, LOG_ENTRY_SIZE * LOG_ENTRIES);
@@ -128,7 +134,7 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____not_filled_completely)
 	event_log_t* oldest;
 	event_log_t* newest;
 
-	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE);
+	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE, &nvm_event_fill_rate);
 
 	BOOST_CHECK_EQUAL(res, NVM_EVENT_OK);
 
@@ -145,6 +151,8 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____overruned)
 
 	event_log_t expected_oldest;
 
+	uint16_t nvm_event_fill_rate;
+
 	memset(&expected_oldest, 0x00, sizeof(event_log_t));
 
 	// initialize to all FFs, which is default memory content in erase state
@@ -153,15 +161,15 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____overruned)
 	for (int i = 0; i < LOG_ENTRIES; i++) {
 
 		if (i == EMULATED_PAGE_EVENTS_NUM) {
-			ev = EventLogTimesyncFactory(23 * i, 123, 456);;
+			ev = EventLogTimesyncFactory(23 * (i + 2), 123, 456);;
 			expected_oldest = ev;
 		}
 		else if (i < EMULATED_PAGE_EVENTS_NUM) {
-			pre = EventLogEventFactory(234 * i, 234 * i, 11);
+			pre = EventLogEventFactory(234 * (i + 2), 234 * i, 11);
 			ev = pre;
 		}
 		else if (i > EMULATED_PAGE_EVENTS_NUM) {
-			aft = EventLogEventFactory(23 * i, 23 * i, 1);
+			aft = EventLogEventFactory(23 * (i + 2), 23 * i, 1);
 			ev = aft;
 		}
 
@@ -171,7 +179,7 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____overruned)
 	event_log_t* oldest;
 	event_log_t* newest;
 
-	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE);
+	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE, &nvm_event_fill_rate);
 
 	BOOST_CHECK_EQUAL(res, NVM_EVENT_OVERRUN);
 
@@ -190,11 +198,13 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____no_timestamps)
 {
 	event_log_t ev;
 
+	uint16_t nvm_event_fill_rate;
+
 	// initialize to all FFs, which is default memory content in erase state
 	memset(EventLogStub, 0xFF, LOG_ENTRY_SIZE * LOG_ENTRIES);
 
 	for (int i = 0; i < LOG_ENTRIES; i++) {
-		ev = EventLogEventFactory(234 * i, 234 * i, 1+i);
+		ev = EventLogEventFactory(234 * i + 2, 234 * i, 1+i);
 		memcpy(EventLogStub + i * sizeof(event_log_t), (void*)&ev, sizeof(event_log_t));
 	}
 
@@ -203,7 +213,7 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____no_timestamps)
 
 	event_log_t* first_in_stub = (event_log_t*)EventLogStub;
 
-	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE);
+	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE, &nvm_event_fill_rate);
 
 	BOOST_CHECK_EQUAL(res, NVM_EVENT_OK);
 
@@ -222,6 +232,8 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____overruned_w_unprog_gap)
 {
 	event_log_t ev, pre, aft;
 
+	uint16_t nvm_event_fill_rate;
+
 	// initialize to all FFs, which is default memory content in erase state
 	memset(EventLogStub, 0xFF, LOG_ENTRY_SIZE * LOG_ENTRIES);
 
@@ -235,11 +247,11 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____overruned_w_unprog_gap)
 			ev = startTimesync;
 		}
 		else if (i < EMULATED_PAGE_EVENTS_NUM) {
-			pre = EventLogEventFactory(234 * i, 234 * i, 11);
+			pre = EventLogEventFactory(234 * i + 2, 234 * i, 11);
 			ev = pre;
 		}
 		else if (i > EMULATED_PAGE_EVENTS_NUM * 2) {
-			aft = EventLogEventFactory(23 * i, 23 * i, 1);
+			aft = EventLogEventFactory(23 * i + 2, 23 * i, 1);
 			ev = aft;
 		}
 
@@ -249,7 +261,7 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____overruned_w_unprog_gap)
 	event_log_t* oldest;
 	event_log_t* newest;
 
-	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE);
+	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE, &nvm_event_fill_rate);
 
 	BOOST_CHECK_EQUAL(res, NVM_EVENT_OVERRUN);
 
@@ -262,6 +274,7 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____overruned_w_unprog_gap)
 
 BOOST_AUTO_TEST_CASE(find_first_oldest_newest____empty)
 {
+	uint16_t nvm_event_fill_rate;
 
 	// initialize to all FFs, which is default memory content in erase state
 	memset(EventLogStub, 0xFF, LOG_ENTRY_SIZE * LOG_ENTRIES);
@@ -269,7 +282,7 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____empty)
 	event_log_t* oldest;
 	event_log_t* newest;
 
-	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE);
+	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE, &nvm_event_fill_rate);
 
 	BOOST_CHECK_EQUAL(res, NVM_EVENT_EMPTY);
 
@@ -279,6 +292,8 @@ BOOST_AUTO_TEST_CASE(random_event_ids)
 {
 	// initialize to all FFs, which is default memory content in erase state
 	memset(EventLogStub, 0x00, LOG_ENTRY_SIZE * LOG_ENTRIES);
+
+	uint16_t nvm_event_fill_rate;
 
 	for (int i = 0; i < LOG_ENTRIES; i++) {
 
@@ -290,7 +305,7 @@ BOOST_AUTO_TEST_CASE(random_event_ids)
 	event_log_t* oldest;
 	event_log_t* newest;
 
-	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE);
+	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE, &nvm_event_fill_rate);
 
 	BOOST_CHECK_EQUAL(res, NVM_EVENT_AREA_ERROR);
 }
@@ -323,6 +338,7 @@ BOOST_AUTO_TEST_CASE(push_new_event_single_timesync)
 {
 	event_log_t ev, pre, aft, newly_inserted;
 	event_log_t oldest_not_erased_ev;
+	uint16_t nvm_event_fill_rate;
 
 	EraseTestCallback_index = 0;
 
@@ -341,11 +357,11 @@ BOOST_AUTO_TEST_CASE(push_new_event_single_timesync)
 			ev = startTimesync;
 		}
 		else if (i < EMULATED_PAGE_EVENTS_NUM) {
-			pre = EventLogEventFactory(234 * i, 234 * i, 11);
+			pre = EventLogEventFactory(234 * (i + 2), 234 * i, 11);
 			ev = pre;
 		}
 		else if (i > EMULATED_PAGE_EVENTS_NUM) {
-			aft = EventLogEventFactory(23 * i, 23 * i, 1);
+			aft = EventLogEventFactory(23 * (i + 2), 23 * i, 1);
 			ev = aft;
 		}
 
@@ -365,7 +381,7 @@ BOOST_AUTO_TEST_CASE(push_new_event_single_timesync)
 		std::stringstream msg_log;
 		msg_log << "push_new_event_two_timesync, Inserting event, iteration: " << i;
 		BOOST_TEST_MESSAGE(msg_log.str());
-		const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&nvm_event_oldestFlash, &nvm_event_newestFlash, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE);
+		const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&nvm_event_oldestFlash, &nvm_event_newestFlash, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE, &nvm_event_fill_rate);
 
 		const uint8_t* oldest_buf_ptr = (uint8_t*)&EventLogStub[(i == 0) ? (EMULATED_PAGE_EVENTS_NUM * sizeof(event_log_t)) : (EMULATED_PAGE_EVENTS_NUM * 2 * sizeof(event_log_t))];
 		const uint8_t* newest_buf_ptr = (uint8_t*)&EventLogStub[(i == 0) ? ((EMULATED_PAGE_EVENTS_NUM - 1) * sizeof(event_log_t)) : ((EMULATED_PAGE_EVENTS_NUM - 1 + i) * sizeof(event_log_t))];
@@ -399,7 +415,7 @@ BOOST_AUTO_TEST_CASE(push_new_event_single_timesync)
 		BOOST_CHECK_EQUAL(oldest_not_erased_ev.event_id, oldest_postinst_event_type_ptr->event_id);
 		BOOST_CHECK_EQUAL(oldest_not_erased_ev.event_master_time, oldest_postinst_event_type_ptr->event_master_time);
 
-		/*const nvm_event_result_t res_postinst = */(void)nvm_event_log_find_first_oldest_newest(&nvm_event_oldestFlash, &nvm_event_newestFlash, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE);
+		/*const nvm_event_result_t res_postinst = */(void)nvm_event_log_find_first_oldest_newest(&nvm_event_oldestFlash, &nvm_event_newestFlash, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE, &nvm_event_fill_rate);
 
 		BOOST_CHECK_EQUAL((uint8_t*)nvm_event_oldestFlash, oldest_buf_postinst_ptr);
 		BOOST_CHECK_EQUAL((uint8_t*)nvm_event_newestFlash, newest_buf_postinst_ptr);
@@ -411,6 +427,7 @@ BOOST_AUTO_TEST_CASE(push_new_event_two_timesync)
 {
 	event_log_t ev, pre, aft, newly_inserted;
 	event_log_t oldest_not_erased_ev;
+	uint16_t nvm_event_fill_rate;
 
 	EraseTestCallback_index = 0;
 
@@ -429,11 +446,11 @@ BOOST_AUTO_TEST_CASE(push_new_event_two_timesync)
 			ev = startTimesync;
 		}
 		else if (i < EMULATED_PAGE_EVENTS_NUM) {
-			pre = EventLogEventFactory(234 * i, 234 * i, 11);
+			pre = EventLogEventFactory(234 * i + 2, 234 * i, 11);
 			ev = pre;
 		}
 		else if (i > EMULATED_PAGE_EVENTS_NUM && i != EMULATED_PAGE_EVENTS_NUM * 2) {
-			aft = EventLogEventFactory(23 * i, 23 * i, 1);
+			aft = EventLogEventFactory(23 * i + 2, 23 * i, 1);
 			ev = aft;
 		}
 
@@ -452,7 +469,7 @@ BOOST_AUTO_TEST_CASE(push_new_event_two_timesync)
 		std::stringstream msg_log;
 		msg_log << "push_new_event_two_timesync, Inserting event, iteration: " << i;
 		BOOST_TEST_MESSAGE(msg_log.str());
-		const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&nvm_event_oldestFlash, &nvm_event_newestFlash, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE);
+		const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&nvm_event_oldestFlash, &nvm_event_newestFlash, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE, &nvm_event_fill_rate);
 
 		const uint8_t* oldest_buf_ptr = (uint8_t*)&EventLogStub[(i == 0) ? (EMULATED_PAGE_EVENTS_NUM * sizeof(event_log_t)) : (EMULATED_PAGE_EVENTS_NUM * 2 * sizeof(event_log_t))];
 		const uint8_t* newest_buf_ptr = (uint8_t*)&EventLogStub[(i == 0) ? ((EMULATED_PAGE_EVENTS_NUM - 1) * sizeof(event_log_t)) : ((EMULATED_PAGE_EVENTS_NUM - 1 + i) * sizeof(event_log_t))];
@@ -479,7 +496,7 @@ BOOST_AUTO_TEST_CASE(push_new_event_two_timesync)
 		BOOST_CHECK_EQUAL(oldest_not_erased_ev.event_id, oldest_postinst_event_type_ptr->event_id);
 		BOOST_CHECK_EQUAL(oldest_not_erased_ev.event_master_time, oldest_postinst_event_type_ptr->event_master_time);
 
-		const nvm_event_result_t res_postinst = nvm_event_log_find_first_oldest_newest(&nvm_event_oldestFlash, &nvm_event_newestFlash, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE);
+		const nvm_event_result_t res_postinst = nvm_event_log_find_first_oldest_newest(&nvm_event_oldestFlash, &nvm_event_newestFlash, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE, &nvm_event_fill_rate);
 
 		BOOST_CHECK_EQUAL(res_postinst, NVM_EVENT_OVERRUN);
 

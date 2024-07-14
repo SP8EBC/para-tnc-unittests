@@ -13,7 +13,7 @@
 #define NULL	0
 
 #define MEMORY_MAP_EVENT_LOG_START	&EventLogStub[0]
-#define MEMORY_MAP_EVENT_LOG_END	&EventLogStub[LOG_ENTRY_SIZE * LOG_ENTRIES]
+#define MEMORY_MAP_EVENT_LOG_END	&EventLogStub[LOG_ENTRY_SIZE * LOG_ENTRIES - 1]
 
 /**
  * How many events firs in one page of emulated flash page
