@@ -33,6 +33,11 @@ int16_t rte_wx_average_winddirection = 0;
 
 uint8_t rte_wx_tx20_excessive_slew_rate = 0;
 
+uint8_t rte_wx_analog_anemometer_counter_timer_has_been_fired = 0u;
+uint8_t rte_wx_analog_anemometer_counter_slew_limit_fired = 0u;
+uint8_t rte_wx_analog_anemometer_counter_deboucing_fired = 0u;
+uint8_t rte_wx_analog_anemometer_counter_direction_doesnt_work = 0u;
+
 int8_t rte_wx_humidity = 0, rte_wx_humidity_valid = 0;
 
 dallas_qf_t rte_wx_current_dallas_qf, rte_wx_error_dallas_qf = DALLAS_QF_UNKNOWN;

@@ -20,5 +20,7 @@ void status_send_powersave_registers(void);
 void status_send_gsm(void);
 void status_send_aprsis_timeout(uint8_t unsuccessfull_conn_cntr);
 
+void status_send_from_string();
+
 
 #endif /* INCLUDE_APRS_STATUS_H_ */

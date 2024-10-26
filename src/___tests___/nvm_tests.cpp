@@ -54,7 +54,8 @@ static event_log_t EventLogEventFactory(uint32_t ev_counter_id, uint32_t master_
 
 	const event_log_severity_t 	severity 	= EVENT_INFO;
 	const event_log_source_t 	source  	= EVENT_SRC_WX_HANDLER;
-	out.severity_and_source = (((uint8_t)severity & 0xF) << 4) | ((uint8_t)source & 0xF);
+	out.severity = severity & 0xF;
+	out.source = source & 0xF;
 
 	out.event_counter_id = ev_counter_id;
 	out.event_master_time = master_time;

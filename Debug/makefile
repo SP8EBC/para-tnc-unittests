@@ -10,7 +10,6 @@ RM := rm -rf
 -include sources.mk
 -include src/ve_direct_protocol/subdir.mk
 -include src/nvm/subdir.mk
--include src/http_client/subdir.mk
 -include src/aprs/subdir.mk
 -include src/___tests___/subdir.mk
 -include src/___stubs___/subdir.mk

@@ -23,6 +23,9 @@
 #include "LedConfig.h"
 #include "io.h"
 
+#include <event_log.h>
+#include <events_definitions/events_drv_anemometer.h>
+
 #ifdef STM32F10X_MD_VL
 #include <stm32f10x_tim.h>
 #include <stm32f10x_dma.h>
@@ -365,6 +368,8 @@ void analog_anemometer_deinit(void) {
  */
 void analog_anemometer_timer_irq(void) {
 	analog_anemometer_timer_has_been_fired = 1;
+
+	rte_wx_analog_anemometer_counter_timer_has_been_fired++;
 }
 
 /**
@@ -387,6 +392,14 @@ void analog_anemometer_dma_irq(void) {
 
 	// checking if timer overflowed (raised an iterrupt)
 	if (analog_anemometer_timer_has_been_fired == 1) {
+
+	    event_log_sync(EVENT_WARNING, EVENT_SRC_DRV_ANEMOMETER,
+	    		  EVENTS_DRV_ANEMOMETER_WARN_NO_PULSES_INT_FIRED,
+				  0, 0, rte_wx_windspeed_pulses,
+				  analog_anemometer_windspeed_pulses_time[0],
+				  analog_anemometer_windspeed_pulses_time[1],
+				  analog_anemometer_windspeed_pulses_time[2]);
+
 		rte_wx_windspeed_pulses = 1;
 
 		analog_anemometer_timer_has_been_fired = 0;
@@ -417,6 +430,7 @@ void analog_anemometer_dma_irq(void) {
 		if (analog_anemometer_time_between_pulses[i] < MINUM_PULSE_LN) {
 			analog_anemometer_time_between_pulses[i] = 0;
 			analog_anemometer_deboucing_fired = 1;
+			rte_wx_analog_anemometer_counter_deboucing_fired++;
 		}
 	}
 
@@ -454,13 +468,22 @@ void analog_anemometer_dma_irq(void) {
 
 		// if current inter-pulse time is much longer than previous (some pulse is missing?)
 		if ( diff > slew_rate_limit ) {
+
+		    event_log_sync(EVENT_WARNING, EVENT_SRC_DRV_ANEMOMETER,
+		    		  EVENTS_DRV_ANEMOMETER_WARN_EXCESIVE_SLEW,
+					  0, 0,
+					  pulse_ln, previous_pulse_ln,
+					  diff, slew_rate_limit);
+
 			analog_anemometer_time_between_pulses[i] = previous_pulse_ln + ((uint32_t)slew_rate_limit);
 			analog_anemometer_slew_limit_fired = 1;
+			rte_wx_analog_anemometer_counter_slew_limit_fired++;
 		}
 		// if previous inter-pulse time is much longer than current
 		else if (diff < -slew_rate_limit){
 			analog_anemometer_time_between_pulses[i - 1] = pulse_ln + ((uint32_t)slew_rate_limit);
 			analog_anemometer_slew_limit_fired = 1;
+			rte_wx_analog_anemometer_counter_slew_limit_fired++;
 		}
 		// if this pulse time is ok do nothing.
 		else {
@@ -610,11 +633,19 @@ int16_t analog_anemometer_direction_handler(void) {
 
 	// if the counter value is zero it means that probably U/f converter isn't running
 	if (current_value == 0) {
+	    event_log_sync(EVENT_ERROR, EVENT_SRC_DRV_ANEMOMETER,
+	    		  EVENTS_DRV_ANEMOMETER_ERROR_UF_CONV_NOT_WORKING,
+				  analog_anemometer_timer_has_been_fired, analog_anemometer_slew_limit_fired,
+				  analog_anemometer_windspeed_pulses_time[0], analog_anemometer_windspeed_pulses_time[1],
+				  analog_anemometer_windspeed_pulses_time[2], analog_anemometer_windspeed_pulses_time[3]);
+
 		LL_TIM_SetCounter(TIM3, 0);
 
 		LL_TIM_EnableCounter(TIM3);
 
 		analog_anemometer_direction_doesnt_work = 1;
+
+		rte_wx_analog_anemometer_counter_direction_doesnt_work++;
 
 		return rte_wx_winddirection_last;
 	}
@@ -630,6 +661,12 @@ int16_t analog_anemometer_direction_handler(void) {
 
 	// if the value is greater than maximum one just ignore
 	if (current_value > UF_MAXIMUM_FREQUENCY) {
+
+	    event_log_sync(EVENT_ERROR, EVENT_SRC_DRV_ANEMOMETER,
+	    		EVENTS_DRV_ANEMOMETER_ERROR_UF_FREQ_TOO_HI,
+				current_value, 0,
+				analog_anemometer_windspeed_pulses_time[0], analog_anemometer_windspeed_pulses_time[1],
+				analog_anemometer_windspeed_pulses_time[2], analog_anemometer_windspeed_pulses_time[3]);
 
 		// and reinitialize the timer before returning from the function
 		analog_anemometer_direction_reset();
@@ -788,6 +825,14 @@ analog_wind_qf_t analog_anemometer_get_qf(void) {
 	else {
 		out = AN_WIND_QF_UNKNOWN;
 
+	}
+
+	if (out != AN_WIND_QF_FULL) {
+	    event_log_sync(EVENT_WARNING, EVENT_SRC_DRV_ANEMOMETER,
+	    		EVENTS_DRV_ANEMOMETER_WARN_QF_NOT_FULL,
+				analog_anemometer_slew_limit_fired, analog_anemometer_deboucing_fired,
+				analog_anemometer_direction_doesnt_work, 0,
+				0, 0);
 	}
 
 	// reseting flags

@@ -11,7 +11,7 @@
 
 #include <stdint.h>
 
-#define LOG_ENTRY_SIZE		24
+#define LOG_ENTRY_SIZE		32
 
 #define LOG_ENTRIES			20
 
