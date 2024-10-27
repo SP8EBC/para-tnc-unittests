@@ -27,6 +27,7 @@ src/___stubs___ \
 src/___tests___ \
 src \
 src/aprs \
+src/crc \
 src/nvm \
 src/ve_direct_protocol \
 

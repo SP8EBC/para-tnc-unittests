@@ -14,6 +14,7 @@ extern "C" {
 #include "./nvm/nvm_event.h"
 #include "memory_map.h"
 #include "nvm_configuration.h"
+#include "crc/crc_.h"
 }
 
 #include "memory_map_stubs.h"
@@ -44,6 +45,10 @@ static event_log_t EventLogTimesyncFactory(uint32_t ev_counter_id, uint32_t time
 	out.event_id = EVENT_TIMESYNC;
 	out.wparam = EVENT_LOG_TIMESYNC_BOOTUP_WPARAM;
 
+	const uint32_t crc = calcCRC32std(&out, sizeof(event_log_t) - 1, 0x04C11DB7, 0xFFFFFFFF, 0, 0, 0);
+
+	out.crc_checksum = (uint8_t)(crc & 0xFF);
+
 	return out;
 }
 
@@ -60,6 +65,10 @@ static event_log_t EventLogEventFactory(uint32_t ev_counter_id, uint32_t master_
 	out.event_counter_id = ev_counter_id;
 	out.event_master_time = master_time;
 	out.wparam = wParam;
+
+	const uint32_t crc = calcCRC32std(&out, sizeof(event_log_t) - 1, 0x04C11DB7, 0xFFFFFFFF, 0, 0, 0);
+
+	out.crc_checksum = (uint8_t)(crc & 0xFF);
 
 	return out;
 }
@@ -107,6 +116,11 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____no_overrun)
 
 	BOOST_CHECK_EQUAL(res, NVM_EVENT_OK);
 
+	BOOST_CHECK_EQUAL(nvm_event_get_crc_errors(), 0);
+
+	BOOST_CHECK(oldest);
+	BOOST_CHECK(newest);
+
 	BOOST_CHECK_EQUAL(oldest->lparam, startTimesync.lparam);
 	BOOST_CHECK_EQUAL(oldest->lparam2, startTimesync.lparam2);
 
@@ -138,6 +152,11 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____not_filled_completely)
 	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE, &nvm_event_fill_rate);
 
 	BOOST_CHECK_EQUAL(res, NVM_EVENT_OK);
+
+	BOOST_CHECK_EQUAL(nvm_event_get_crc_errors(), 0);
+
+	BOOST_CHECK(oldest);
+	BOOST_CHECK(newest);
 
 	BOOST_CHECK_EQUAL(oldest->lparam, startTimesync.lparam);
 	BOOST_CHECK_EQUAL(oldest->lparam2, startTimesync.lparam2);
@@ -184,6 +203,11 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____overruned)
 
 	BOOST_CHECK_EQUAL(res, NVM_EVENT_OVERRUN);
 
+	BOOST_CHECK_EQUAL(nvm_event_get_crc_errors(), 0);
+
+	BOOST_CHECK(oldest);
+	BOOST_CHECK(newest);
+
 	BOOST_CHECK_EQUAL(oldest->lparam, expected_oldest.lparam);
 	BOOST_CHECK_EQUAL(oldest->lparam2, expected_oldest.lparam2);
 
@@ -217,6 +241,11 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____no_timestamps)
 	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE, &nvm_event_fill_rate);
 
 	BOOST_CHECK_EQUAL(res, NVM_EVENT_OK);
+
+	BOOST_CHECK_EQUAL(nvm_event_get_crc_errors(), 0);
+
+	BOOST_CHECK(oldest);
+	BOOST_CHECK(newest);
 
 	BOOST_CHECK_EQUAL(oldest->lparam, first_in_stub->lparam);
 	BOOST_CHECK_EQUAL(oldest->lparam2, first_in_stub->lparam2);
@@ -265,6 +294,11 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____overruned_w_unprog_gap)
 	const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&oldest, &newest, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE, &nvm_event_fill_rate);
 
 	BOOST_CHECK_EQUAL(res, NVM_EVENT_OVERRUN);
+
+	BOOST_CHECK_EQUAL(nvm_event_get_crc_errors(), 0);
+
+	BOOST_CHECK(oldest);
+	BOOST_CHECK(newest);
 
 	BOOST_CHECK_EQUAL(oldest->lparam, startTimesync.lparam);
 	BOOST_CHECK_EQUAL(oldest->lparam2, startTimesync.lparam2);
@@ -401,10 +435,14 @@ BOOST_AUTO_TEST_CASE(push_new_event_single_timesync)
 		BOOST_CHECK_EQUAL((uint8_t*)nvm_event_newestFlash, newest_buf_ptr);
 
 		newly_inserted.event_counter_id = 123456 + i;
+		newly_inserted.crc_checksum = calcCRC32std(&newly_inserted, sizeof(event_log_t) - 1, 0x04C11DB7, 0xFFFFFFFF, 0, 0, 0) & 0xFF;
 
 		checkFunction = erase_test_callback;
 
 		nvm_event_log_push_new_event(&newly_inserted);
+
+		const uint16_t nvm_errors = nvm_event_get_crc_errors();
+		BOOST_CHECK_EQUAL(nvm_errors, 0);
 
 		const uint8_t* oldest_buf_postinst_ptr = (uint8_t*)&EventLogStub[(EMULATED_PAGE_EVENTS_NUM * 2) * sizeof(event_log_t)];
 		const uint8_t* newest_buf_postinst_ptr = (uint8_t*)&EventLogStub[((EMULATED_PAGE_EVENTS_NUM + i) * sizeof(event_log_t))];
@@ -482,6 +520,7 @@ BOOST_AUTO_TEST_CASE(push_new_event_two_timesync)
 
 
 		newly_inserted.event_counter_id = 123456 + i;
+		newly_inserted.crc_checksum = calcCRC32std(&newly_inserted, sizeof(event_log_t) - 1, 0x04C11DB7, 0xFFFFFFFF, 0, 0, 0) & 0xFF;
 
 		checkFunction = erase_test_callback;
 
@@ -501,6 +540,7 @@ BOOST_AUTO_TEST_CASE(push_new_event_two_timesync)
 
 		BOOST_CHECK_EQUAL(res_postinst, NVM_EVENT_OVERRUN);
 
+		BOOST_CHECK_EQUAL(nvm_event_get_crc_errors(), 0);
 
 		BOOST_CHECK_EQUAL((uint8_t*)nvm_event_oldestFlash, oldest_buf_postinst_ptr);
 		BOOST_CHECK_EQUAL((uint8_t*)nvm_event_newestFlash, newest_buf_postinst_ptr);
