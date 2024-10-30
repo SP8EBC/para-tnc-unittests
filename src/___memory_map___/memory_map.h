@@ -16,7 +16,7 @@
 #define MEMORY_MAP_EVENT_LOG_END	&EventLogStub[LOG_ENTRY_SIZE * LOG_ENTRIES - 1]
 
 /**
- * How many events firs in one page of emulated flash page
+ * How many events fits in one page of emulated flash page
  */
 #define EMULATED_PAGE_EVENTS_NUM	4
 

@@ -30,6 +30,16 @@ extern "C" {
 #include <sstream>
 #include <cstdlib>
 
+#define PUSH_TESTS_TIMESYNC_FIRST_IDX	(EMULATED_PAGE_EVENTS_NUM)
+#define PUSH_TESTS_TIMESYNC_SECOND_IDX	(EMULATED_PAGE_EVENTS_NUM * 2)
+
+
+extern uint32_t nvm_fix_broken_event_ids (event_log_t **oldest, event_log_t **newest, void *area_start,
+									  void *area_end, event_log_t * current_broken,
+									  FLASH_Status (*erase_fn) (uint32_t), int16_t page_size);
+
+static const int pushTests_oldestIndexBeforeFirstInsert = (PUSH_TESTS_TIMESYNC_FIRST_IDX * sizeof(event_log_t));
+static const int pushTests_newestIndexBeforeFirstInsert = ((PUSH_TESTS_TIMESYNC_FIRST_IDX - 1) * sizeof(event_log_t));
 
 static uint32_t EraseTestCallback_index = 0;
 
@@ -91,6 +101,21 @@ struct MyConfig
 
 BOOST_GLOBAL_FIXTURE (MyConfig);
 
+BOOST_AUTO_TEST_CASE(fix_broken_event_ids)
+{
+	event_log_t ev;
+
+	uint16_t nvm_event_fill_rate;
+
+	// initialize to all FFs, which is default memory content in erase state
+	memset(EventLogStub, 0xFF, LOG_ENTRY_SIZE * LOG_ENTRIES);
+
+
+	for (int i = 0; i < LOG_ENTRIES; i++) {
+
+	}
+}
+
 BOOST_AUTO_TEST_CASE(find_first_oldest_newest____no_overrun)
 {
 	event_log_t ev;
@@ -100,10 +125,13 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____no_overrun)
 	// initialize to all FFs, which is default memory content in erase state
 	memset(EventLogStub, 0xFF, LOG_ENTRY_SIZE * LOG_ENTRIES);
 
+	// create artificial event log with event_log_severity_t set to EVENT_TIMESYNC
 	const event_log_t startTimesync = EventLogTimesyncFactory(1, 123, 456);
 
+	// place this EVENT_TIMESYNC at the begining of stubbed event log area
 	memcpy(EventLogStub, (void*)&startTimesync, sizeof(event_log_t));
 
+	// push some more "normal" (non TIMESYNC)events into stubbed log area
 	for (int i = 1; i < LOG_ENTRIES; i++) {
 		ev = EventLogEventFactory(i + 1, 234 * (i + 1), 1);
 		memcpy(EventLogStub + i * sizeof(event_log_t), (void*)&ev, sizeof(event_log_t));
@@ -121,6 +149,7 @@ BOOST_AUTO_TEST_CASE(find_first_oldest_newest____no_overrun)
 	BOOST_CHECK(oldest);
 	BOOST_CHECK(newest);
 
+	// oldest entry is the EVENT_TIMESYNC placed at the begining
 	BOOST_CHECK_EQUAL(oldest->lparam, startTimesync.lparam);
 	BOOST_CHECK_EQUAL(oldest->lparam2, startTimesync.lparam2);
 
@@ -418,8 +447,8 @@ BOOST_AUTO_TEST_CASE(push_new_event_single_timesync)
 		BOOST_TEST_MESSAGE(msg_log.str());
 		const nvm_event_result_t res = nvm_event_log_find_first_oldest_newest(&nvm_event_oldestFlash, &nvm_event_newestFlash, (void*)MEMORY_MAP_EVENT_LOG_START, (void*)MEMORY_MAP_EVENT_LOG_END, NVM_PAGE_SIZE, &nvm_event_fill_rate);
 
-		const uint8_t* oldest_buf_ptr = (uint8_t*)&EventLogStub[(i == 0) ? (EMULATED_PAGE_EVENTS_NUM * sizeof(event_log_t)) : (EMULATED_PAGE_EVENTS_NUM * 2 * sizeof(event_log_t))];
-		const uint8_t* newest_buf_ptr = (uint8_t*)&EventLogStub[(i == 0) ? ((EMULATED_PAGE_EVENTS_NUM - 1) * sizeof(event_log_t)) : ((EMULATED_PAGE_EVENTS_NUM - 1 + i) * sizeof(event_log_t))];
+		const uint8_t* oldest_buf_ptr = (uint8_t*)&EventLogStub[(i == 0) ? pushTests_oldestIndexBeforeFirstInsert : (EMULATED_PAGE_EVENTS_NUM * 2 * sizeof(event_log_t))];
+		const uint8_t* newest_buf_ptr = (uint8_t*)&EventLogStub[(i == 0) ? pushTests_newestIndexBeforeFirstInsert : ((EMULATED_PAGE_EVENTS_NUM - 1 + i) * sizeof(event_log_t))];
 
 		if (i == 0)
 		{
@@ -481,19 +510,19 @@ BOOST_AUTO_TEST_CASE(push_new_event_two_timesync)
 	// 4 * sizeof(event_log_t), which equals to 4 * LOG_ENTRY_SIZE = 64
 	for (int i = 0; i < LOG_ENTRIES; i++) {
 
-		if (i == EMULATED_PAGE_EVENTS_NUM || i == EMULATED_PAGE_EVENTS_NUM * 2) {
+		if (i == PUSH_TESTS_TIMESYNC_FIRST_IDX || i == PUSH_TESTS_TIMESYNC_SECOND_IDX) {
 			ev = startTimesync;
 		}
-		else if (i < EMULATED_PAGE_EVENTS_NUM) {
+		else if (i < PUSH_TESTS_TIMESYNC_FIRST_IDX) {
 			pre = EventLogEventFactory(234 * i + 2, 234 * i, 11);
 			ev = pre;
 		}
-		else if (i > EMULATED_PAGE_EVENTS_NUM && i != EMULATED_PAGE_EVENTS_NUM * 2) {
+		else if (i > PUSH_TESTS_TIMESYNC_FIRST_IDX && i != PUSH_TESTS_TIMESYNC_SECOND_IDX) {
 			aft = EventLogEventFactory(23 * i + 2, 23 * i, 1);
 			ev = aft;
 		}
 
-		if (i == (EMULATED_PAGE_EVENTS_NUM * 2)) {
+		if (i == (PUSH_TESTS_TIMESYNC_SECOND_IDX)) {
 			oldest_not_erased_ev = ev;
 		}
 
